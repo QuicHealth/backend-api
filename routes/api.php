@@ -22,6 +22,8 @@ Route::prefix('v1')->group(function (){
 
     Route::namespace('Patient')->group(function(){
         //pascal api code goes here
+        Route::resource('patient', 'PatientController');
+
     });
 
 
