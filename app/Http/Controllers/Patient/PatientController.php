@@ -67,7 +67,7 @@ class PatientController extends BaseController
         $patient = Patient::find($patient->id);
 
         if (is_null($patient)) {
-            return $this->sendError('Product not found.');
+            return $this->sendError('Patient not found.');
         }
 
         return $this->sendResponse($patient->toArray(), 'Patient retrieved successfully.');
