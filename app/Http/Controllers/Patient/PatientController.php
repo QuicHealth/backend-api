@@ -39,21 +39,21 @@ class PatientController extends BaseController
      */
     public function store(Request $request)
     {
-        $input = $request->all();
+        // $input = $request->all();
 
-        $validator = Validator::make($input, [
-            'fullname' => 'required',
-            'email' => 'required',
-            'phone_number' => 'required'
-        ]);
+        // $validator = Validator::make($input, [
+        //     'fullname' => 'required',
+        //     'email' => 'required',
+        //     'phone_number' => 'required'
+        // ]);
 
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
+        // if($validator->fails()){
+        //     return $this->sendError('Validation Error.', $validator->errors());
+        // }
 
-        $patient = Patient::create($input);
+        // $patient = Patient::create($input);
 
-        return $this->sendResponse($patient->toArray(), 'A new Patient has been created successfully.');
+        // return $this->sendResponse($patient->toArray(), 'A new Patient has been created successfully.');
     }
 
     /**
@@ -104,7 +104,6 @@ class PatientController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
         $patient->name = $input['name'];
         $patient->detail = $input['detail'];
         $patient->save();
