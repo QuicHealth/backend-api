@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Hospital;
 use App\User;
+use App\Doctor;
 use App\Http\Controllers\helpController;
 
 class AdminController extends Controller
@@ -105,4 +106,93 @@ class AdminController extends Controller
         helpController::flashSession(false, 'Hospital deleted successfully');
         return redirect('admin/hospitals');
     }
+
+    public function doctors(){
+        $doc = Doctor::all();
+        $hos = Hospital::all();
+        return view('admin.doctors', ['doctors'=>$doc, 'hospitals'=>$hos]);
+    }
+
+    public function doctor($id){
+        $doc = Doctor::find($id);
+        if(!$doc){
+            helpController::flashSession(false, 'Doctor not found');
+            return redirect('admin/doctors');
+        }
+        return view('admin.doctor', ['doctor'=>$doc]);
+    }
+
+    public function addDoctor(Request $request){
+        $this->validate($request, [
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'hospital'=>'required',
+            'address'=>'required|string',
+            'city'=>'required|string',
+        ]);
+
+        $hos = new Doctor();
+        $hos->name = $request->name;
+        $hos->email = $request->email;
+        $hos->ho = $request->address;
+        $hos->city = $request->city;
+        $hos->hospital_id = $request->hospital;
+
+        if(!$hos->save()){
+            helpController::flashSession(false, 'Error saving doctor');
+            return back();
+        }
+        helpController::flashSession(true, 'Doctor saved successfully');
+        return back();
+    }
+
+    public function updateDoctor(Request $request){
+        $this->validate($request, [
+            'doctor'=>'required|integer',
+            'hospital'=>'required|integer',
+            'name'=>'required|string',
+            'email'=>'required|email',
+            'address'=>'required|string',
+            'city'=>'required|string',
+        ]);
+
+        $hos = Doctor::find($request->doctor);
+        if(!$hos){
+            helpController::flashSession(false, 'Doctor not found');
+            return redirect('admin/doctors');
+        }
+        $hos->name = $request->name;
+        $hos->email = $request->email;
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->hospital_id = $request->hospital;
+
+        if(!$hos->save()){
+            helpController::flashSession(false, 'Error updating doctor');
+            return back();
+        }
+        helpController::flashSession(true, 'Doctor updated successfully');
+        return back();
+    }
+
+    public function deleteDoctor(Request $request){
+        $this->validate($request, [
+            'doctor'=>'required|integer'
+        ]);
+
+        $hos = Doctor::find($request->doctor);
+        if(!$hos){
+            helpController::flashSession(false, 'Doctor not found');
+            return redirect('admin/doctors');
+        }
+
+        if(!$hos->delete()){
+            helpController::flashSession(false, 'Error deleting doctor');
+            return back();
+        }
+        helpController::flashSession(false, 'Doctor deleted successfully');
+        return redirect('admin/doctors');
+    }
+
+
 }

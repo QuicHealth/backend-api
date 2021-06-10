@@ -21,6 +21,11 @@ Route::namespace('Admin')->prefix('admin')->group(function(){
         Route::post('add-hospital', 'AdminController@addHospital');
         Route::post('update-hospital', 'AdminController@updateHospital');
         Route::post('delete-hospital', 'AdminController@deleteHospital');
+
+        Route::get('doctors', 'AdminController@doctors');
+        Route::get('doctor/{id}', 'AdminController@doctor');
+        Route::post('update-doctor', 'AdminController@updateDoctor');
+        Route::get('delete-doctor', 'AdminController@deleteDoctor');
     });
 
 });
