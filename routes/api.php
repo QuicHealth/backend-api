@@ -22,8 +22,15 @@ Route::prefix('v1')->group(function (){
 
     Route::namespace('Patient')->group(function(){
         //pascal api code goes here
-        Route::resource('patient', 'PatientController');
+//        Route::resource('patient', 'PatientController');
+        Route::post('register', 'LoginController@register');
+        Route::post('login', 'LoginController@login');
+        Route::post('forget-password', 'LoginController@forget_password');
+        Route::post('reset-password', 'LoginController@reset_password');
+        Route::get('verify-reset-token', 'LoginController@verify_password');
 
+        Route::get('get-dashboard', 'PatientController@getDashboard');
+        Route::post('update-profile', 'PatientController@updateProfile');
     });
 
 
