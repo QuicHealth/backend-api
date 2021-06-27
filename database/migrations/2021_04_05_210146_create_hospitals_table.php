@@ -16,10 +16,12 @@ class CreateHospitalsTable extends Migration
         Schema::create('hospitals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('email')->unique();
             $table->string('address');
             $table->string('city');
             $table->string('state');
-            $table->string('Country');
+            $table->string('country');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
