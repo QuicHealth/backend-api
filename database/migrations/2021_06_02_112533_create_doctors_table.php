@@ -17,9 +17,12 @@ class CreateDoctorsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('unique_id')->unique();
             $table->integer('hospital_id');
             $table->string('phone');
             $table->string('image')->nullable();
+            $table->integer('featured')->default(0);
+            $table->string('specialty');
             $table->string('address');
             $table->softDeletes();
             $table->timestamps();

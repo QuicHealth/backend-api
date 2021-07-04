@@ -29,8 +29,18 @@ Route::prefix('v1')->group(function (){
         Route::post('reset-password', 'LoginController@reset_password');
         Route::get('verify-reset-token', 'LoginController@verify_password');
 
+        // patient auth route
+        Route::get('get-featured-doctors', 'PatientController@getFeaturedDoctors');
+        Route::get('get-featured-hospitals', 'PatientController@getFeaturedHospitals');
+
+        Route::get('get-doctors', 'PatientController@getDoctors');
+        Route::get('get-doctor/{unique_id}', 'PatientController@getDoctor');
+        Route::get('get-hospital', 'PatientController@getHospital');
+        Route::get('get-hospital/{unique_id}', 'PatientController@getHospital');
+
         Route::get('get-dashboard', 'PatientController@getDashboard');
         Route::post('update-profile', 'PatientController@updateProfile');
+
     });
 
 

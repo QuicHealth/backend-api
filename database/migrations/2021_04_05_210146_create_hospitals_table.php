@@ -17,10 +17,15 @@ class CreateHospitalsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('unique_id')->unique();
             $table->string('address');
+            $table->string('image')->nullable();
+            $table->string('latitude')->nullable();
             $table->string('city');
             $table->string('state');
             $table->string('country');
+            $table->integer('featured')->default(0);
+            $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
