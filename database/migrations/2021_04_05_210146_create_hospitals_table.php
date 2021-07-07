@@ -25,6 +25,7 @@ class CreateHospitalsTable extends Migration
             $table->string('state');
             $table->string('country');
             $table->integer('featured')->default(0);
+            $table->integer('status')->default(1);
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();

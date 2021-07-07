@@ -8,6 +8,8 @@ use App\Hospital;
 use App\User;
 use App\Doctor;
 use App\Http\Controllers\helpController;
+use App\Jobs\MailSendingJob;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -34,19 +36,43 @@ class AdminController extends Controller
     public function addHospital(Request $request){
         $this->validate($request, [
             'name'=>'required|string|unique:hospitals',
-            'email'=>'required|email',
+            'email'=>'required|email|unique:hospitals',
+            'phone'=>'required',
             'address'=>'required|string',
             'city'=>'required|string',
             'state'=>'required|string',
             'country'=>'required|string',
         ]);
 
+        $password = rand(111111,999999);
+        $data = [
+            'email'=>$request->email,
+            'subject'=>'Welcome Mail',
+            'name'=>'Welcome',
+            'view'=>'mail.mail',
+            'content'=>
+                'Welcome to Quichealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
+                Name: '. $request->name.
+                '<br> Email: '.$request->email.
+                '<br> Password: '.$password.
+                '<br> Phone: '.$request->phone.
+                '<br> Address: '.$request->address.
+                '<br> City: '.$request->city.
+                '<br> State: '.$request->state.
+                '<br> Country: '.$request->country
+        ];
+
+        MailSendingJob::dispatch($data);
+
         $hos = new Hospital();
         $hos->name = $request->name;
         $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->unique_id = uniqid();
         $hos->address = $request->address;
         $hos->city = $request->city;
         $hos->state = $request->state;
+        $hos->password = bcrypt($password);
         $hos->country = $request->country;
 
         if(!$hos->save()){
@@ -62,6 +88,7 @@ class AdminController extends Controller
             'hospital'=>'required|integer',
             'name'=>'required|string',
             'email'=>'required|email',
+            'phone'=>'required',
             'address'=>'required|string',
             'city'=>'required|string',
             'state'=>'required|string',
@@ -75,6 +102,7 @@ class AdminController extends Controller
         }
         $hos->name = $request->name;
         $hos->email = $request->email;
+        $hos->phone = $request->phone;
         $hos->address = $request->address;
         $hos->city = $request->city;
         $hos->state = $request->state;
@@ -110,38 +138,64 @@ class AdminController extends Controller
     public function doctors(){
         $doc = Doctor::all();
         $hos = Hospital::all();
-        return view('admin.doctors', ['doctors'=>$doc, 'hospitals'=>$hos]);
+        $spec = DB::table('specialties')->get();
+        return view('admin.doctors', ['doctors'=>$doc, 'hospitals'=>$hos, 'specialties'=>$spec]);
     }
 
     public function doctor($id){
         $doc = Doctor::find($id);
+        $spec = DB::table('specialties')->get();
+        $hos = Hospital::all();
         if(!$doc){
             helpController::flashSession(false, 'Doctor not found');
             return redirect('admin/doctors');
         }
-        return view('admin.doctor', ['doctor'=>$doc]);
+        return view('admin.doctor', ['doctor'=>$doc, 'specialties'=>$spec,'hospitals'=>$hos]);
     }
 
     public function addDoctor(Request $request){
         $this->validate($request, [
             'name'=>'required|string',
-            'email'=>'required|email',
+            'email'=>'required|email|unique:doctors',
             'hospital'=>'required',
+            'phone'=>'required',
             'address'=>'required|string',
-            'city'=>'required|string',
+            'specialty'=>'required|integer',
         ]);
+
+        $password = rand(111111,999999);
+        
 
         $hos = new Doctor();
         $hos->name = $request->name;
+        $hos->phone = $request->phone;
+        $hos->password = bcrypt($password);
         $hos->email = $request->email;
-        $hos->ho = $request->address;
-        $hos->city = $request->city;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->specialty = $request->specialty;
         $hos->hospital_id = $request->hospital;
 
         if(!$hos->save()){
             helpController::flashSession(false, 'Error saving doctor');
             return back();
         }
+        $data = [
+            'email'=>$request->email,
+            'subject'=>'Welcome Mail',
+            'name'=>'Welcome',
+            'view'=>'mail.mail',
+            'content'=>
+                'Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
+                Name: '. $request->name.
+                '<br> Email: '.$request->email.
+                '<br> Hospital: '.$hos->hospital->name.
+                '<br> Password: '.$password.
+                '<br> Phone: '.$request->phone.
+                '<br> Address: '.$request->address
+        ];
+        MailSendingJob::dispatch($data);
+
         helpController::flashSession(true, 'Doctor saved successfully');
         return back();
     }
@@ -152,8 +206,9 @@ class AdminController extends Controller
             'hospital'=>'required|integer',
             'name'=>'required|string',
             'email'=>'required|email',
+            'phone'=>'required',
+            'specialty'=>'required|integer',
             'address'=>'required|string',
-            'city'=>'required|string',
         ]);
 
         $hos = Doctor::find($request->doctor);
@@ -164,7 +219,7 @@ class AdminController extends Controller
         $hos->name = $request->name;
         $hos->email = $request->email;
         $hos->address = $request->address;
-        $hos->city = $request->city;
+        $hos->phone = $request->phone;
         $hos->hospital_id = $request->hospital;
 
         if(!$hos->save()){

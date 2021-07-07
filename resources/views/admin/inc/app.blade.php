@@ -50,10 +50,10 @@
                                 <a href="/admin/users" class="iq-waves-effect"><i class="fa fa-user"></i><span>Users</span></a>
                             </li>
                             <li class="@yield('hospitals')">
-                                <a href="/admin/hospitals" class="iq-waves-effect"><i class="fa fa-folder"></i><span>Hospital</span></a>
+                                <a href="/admin/hospitals" class="iq-waves-effect"><i class="fa fa-hospital-o"></i><span>Hospital</span></a>
                             </li>
                             <li class="@yield('doctors')">
-                                <a href="/admin/doctors" class="iq-waves-effect"><i class="fa fa-folder"></i><span>Doctors</span></a>
+                                <a href="/admin/doctors" class="iq-waves-effect"><i class="fa fa-stethoscope"></i><span>Doctors</span></a>
                             </li>
                             {{-- <li class="@yield('products')">
                                 <a href="/admin/products" class="iq-waves-effect"><i class="las la-gift"></i><span>Products</span></a>

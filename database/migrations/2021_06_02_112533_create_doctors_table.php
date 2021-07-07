@@ -22,6 +22,7 @@ class CreateDoctorsTable extends Migration
             $table->string('phone');
             $table->string('image')->nullable();
             $table->integer('featured')->default(0);
+            $table->integer('status')->default(1);
             $table->string('specialty');
             $table->string('address');
             $table->softDeletes();

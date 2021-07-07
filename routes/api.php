@@ -30,12 +30,12 @@ Route::prefix('v1')->group(function (){
         Route::get('verify-reset-token', 'LoginController@verify_password');
 
         // patient auth route
-        Route::get('get-featured-doctors', 'PatientController@getFeaturedDoctors');
-        Route::get('get-featured-hospitals', 'PatientController@getFeaturedHospitals');
+        Route::get('get-random-doctors', 'PatientController@getRandomDoctors');
+        Route::get('get-random-hospitals', 'PatientController@getRandomHospitals');
 
         Route::get('get-doctors', 'PatientController@getDoctors');
         Route::get('get-doctor/{unique_id}', 'PatientController@getDoctor');
-        Route::get('get-hospital', 'PatientController@getHospital');
+        Route::get('get-hospitals', 'PatientController@getHospitals');
         Route::get('get-hospital/{unique_id}', 'PatientController@getHospital');
 
         Route::get('get-dashboard', 'PatientController@getDashboard');
@@ -46,5 +46,10 @@ Route::prefix('v1')->group(function (){
 
     Route::namespace('Hospital')->group(function(){
         //abass api code goes here
+        
+        Route::post('login', 'LoginController@login');
+        Route::post('forget-password', 'LoginController@forget_password');
+        Route::post('reset-password', 'LoginController@reset_password');
+        Route::get('verify-reset-token', 'LoginController@verify_password');
     });
 });
