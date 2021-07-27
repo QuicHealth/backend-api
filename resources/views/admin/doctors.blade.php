@@ -11,7 +11,7 @@
                     <div class="iq-card">
                         <div class="iq-card-header d-flex justify-content-between align-items-center">
                             <div class="iq-header-title">
-                                <h4 class="card-title font-weight-bold">Hospitals</h4>
+                                <h4 class="card-title font-weight-bold">Doctors</h4>
                             </div>
                             <div class="iq-header-title">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">
@@ -26,21 +26,21 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Hospital</th>
+                                            <th>Specialty</th>
+                                            <th>Phone</th>
                                             <th>Address</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                            <th>Country</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($hospitals as $hospital)
-                                            <tr onclick="window.location.href='/admin/hospital/{{$hospital->id}}'">
-                                                <td>{{$hospital->name}}</td>
-                                                <td>{{$hospital->email}}</td>
-                                                <td>{{$hospital->address}}</td>
-                                                <td>{{$hospital->city}}</td>
-                                                <td>{{$hospital->state}}</td>
-                                                <td>{{$hospital->country}}</td>
+                                        @foreach ($doctors as $doctors)
+                                            <tr onclick="window.location.href='/admin/doctor/{{$doctors->id}}'">
+                                                <td>{{$doctors->name}}</td>
+                                                <td>{{$doctors->email}}</td>
+                                                <td>{{$doctors->hospital->name}}</td>
+                                                <td>{{$doctors->specialties->name}}</td>
+                                                <td>{{$doctors->phone}}</td>
+                                                <td>{{$doctors->address}}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -48,10 +48,10 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Hospital</th>
+                                            <th>Specialty</th>
+                                            <th>Phone</th>
                                             <th>Address</th>
-                                            <th>City</th>
-                                            <th>State</th>
-                                            <th>Country</th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -70,7 +70,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/admin/add-hospital" enctype="multipart/form-data">
+                            <form method="post" action="/admin/add-doctor" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Name:</label>
@@ -82,10 +82,20 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="hos" class="d-block">Hospital:</label>
-                                    <select class="form-control selectpicker" id="hos">
+                                    <select class="form-control selectpicker" name="hospital" id="hos">
                                        @foreach($hospitals as $hospital)
                                            <option value="{{$hospital->id}}">
                                                {{$hospital->name}}
+                                           </option>
+                                       @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="hos" class="d-block">Specialty:</label>
+                                    <select class="form-control selectpicker" name="specialty" id="hos">
+                                       @foreach($specialties as $spec)
+                                           <option value="{{$spec->id}}">
+                                               {{$spec->name}}
                                            </option>
                                        @endforeach
                                     </select>

@@ -98,7 +98,7 @@
                                         <tbody>
                                         <tr>
                                             <td class="text-center pdb-2-5x" style="text-align: center">
-                                                <a href="#"><img class="email-logo" src="{{asset('tokenized/images/logo2x.png')}}" alt="logo"></a>
+                                                <a href="#"><img class="email-logo" src="https://quichealth.com.ng/Images/QuicHealth%20logo.png" alt="logo"></a>
                                             </td>
                                         </tr>
                                         </tbody>

@@ -22,14 +22,34 @@ Route::prefix('v1')->group(function (){
 
     Route::namespace('Patient')->group(function(){
         //pascal api code goes here
-        Route::post('/login', 'PatientAuthController@login');
-        Route::post('/register', 'PatientAuthController@register');
-        Route::resource('patient', 'PatientController');
+//        Route::resource('patient', 'PatientController');
+        Route::post('register', 'LoginController@register');
+        Route::post('login', 'LoginController@login');
+        Route::post('forget-password', 'LoginController@forget_password');
+        Route::post('reset-password', 'LoginController@reset_password');
+        Route::get('verify-reset-token', 'LoginController@verify_password');
+
+        // patient auth route
+        Route::get('get-random-doctors', 'PatientController@getRandomDoctors');
+        Route::get('get-random-hospitals', 'PatientController@getRandomHospitals');
+
+        Route::get('get-doctors', 'PatientController@getDoctors');
+        Route::get('get-doctor/{unique_id}', 'PatientController@getDoctor');
+        Route::get('get-hospitals', 'PatientController@getHospitals');
+        Route::get('get-hospital/{unique_id}', 'PatientController@getHospital');
+
+        Route::get('get-dashboard', 'PatientController@getDashboard');
+        Route::post('update-profile', 'PatientController@updateProfile');
 
     });
 
 
     Route::namespace('Hospital')->group(function(){
         //abass api code goes here
+
+        Route::post('login', 'LoginController@login');
+        Route::post('forget-password', 'LoginController@forget_password');
+        Route::post('reset-password', 'LoginController@reset_password');
+        Route::get('verify-reset-token', 'LoginController@verify_password');
     });
 });

@@ -6,12 +6,12 @@
                 <ul class="d-flex nav nav-pills">
                     <li>
                         <a class="nav-link active" data-toggle="pill" href="#personal-information">
-                            Hospital
+                            Doctor
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link" data-toggle="pill" href="#doctors">
-                            Doctors
+                        <a class="nav-link" data-toggle="pill" href="#appointment">
+                            Appointments
                         </a>
                     </li>
                 </ul>
@@ -28,43 +28,54 @@
                                             <div class="iq-card-header d-flex justify-content-between">
                                                 <div class="iq-header-title">
                                                     <h4 class="card-title font-weight-bold">
-                                                        Edit Hospital
+                                                        Edit Doctor
                                                     </h4>
                                                 </div>
                                                 <button data-toggle="modal" data-target="#delete" class="btn btn-danger d-block"><i class="fa fa-trash mr-0"></i></button>
                                             </div>
                                             <div class="iq-card-body">
-                                                <form method="POST" action="/admin/update-hospital" enctype="multipart/form-data">
+                                                <form method="POST" action="/admin/update-doctor" enctype="multipart/form-data">
                                                     @csrf
-                                                    <input type="hidden" name="hospital" id="" value="{{$hospital->id}}">
+                                                    <input type="hidden" name="doctor" id="" value="{{$doctor->id}}">
                                                     <div class="form-group">
                                                         <label for="fname">Name:</label>
-                                                        <input type="text" class="form-control" id="fname" name="name" value="{{$hospital->name}}">
+                                                        <input type="text" class="form-control" id="fname" name="name" value="{{$doctor->name}}">
                                                     </div>
                                                     
                                                     <div class="form-group">
                                                         <label for="email">Email:</label>
-                                                        <input type="email" class="form-control" id="email" name="email" value="{{$hospital->email}}">
+                                                        <input type="email" class="form-control" id="email" name="email" value="{{$doctor->email}}">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="phone">Phone:</label>
-                                                        <input type="text" class="form-control" id="phone" name="phone" value="{{$hospital->phone}}">
+                                                        <label for="state">Phone:</label>
+                                                        <input type="text" class="form-control" id="state" name="phone" value="{{$doctor->phone}}">
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="city">City:</label>
-                                                        <input type="text" class="form-control" id="city" name="city" value="{{$hospital->city}}">
+                                                        <label for="city">Hospital:</label>
+                                                        <select class="form-control selectpicker" name="hospital" id="hos">
+                                                            @foreach($hospitals as $hos)
+                                                                <option value="{{$hos->id}}" {{$doctor->hospital->id == $hos->id ? 'selected' : ''}}>
+                                                                    {{$hos->name}}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        {{-- <input type="text" class="form-control" id="city" name="city" value="{{$doctor->hospital->name}}"> --}}
                                                     </div>
+                                                    
                                                     <div class="form-group">
-                                                        <label for="state">State:</label>
-                                                        <input type="text" class="form-control" id="state" name="state" value="{{$hospital->state}}">
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="add">Country:</label>
-                                                        <input type="text" class="form-control" id="add" name="country" value="{{$hospital->country}}">
+                                                        <label for="add">Specialty:</label>
+                                                        <select class="form-control selectpicker" name="specialty" id="hos">
+                                                            @foreach($specialties as $spec)
+                                                                <option value="{{$spec->id}}" {{$doctor->specialties->id == $spec->id ? 'selected' : ''}}>
+                                                                    {{$spec->name}}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        {{-- <input type="text" class="form-control" id="add" name="country" value="{{$doctor->specialties->name}}"> --}}
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="add">Address:</label>
-                                                        <input type="text" class="form-control" id="add" name="address" value="{{$hospital->address}}">
+                                                        <input type="text" class="form-control" id="add" name="address" value="{{$doctor->address}}">
                                                     </div>
                                                     <button type="submit" class="btn btn-primary px-5 py-2">Update</button>
                                                 </form>
@@ -77,7 +88,7 @@
                                                 <div class="iq-card mx-sm-5">
                                                     <div class="iq-card-body proCount">
                                                         <div class="text-center">
-                                                            <h3>{{count($hospital->doctors)}}</h3>
+                                                            <h3>0</h3>
                                                             <span>Doctors</span>
                                                         </div>
                                                     </div>
@@ -87,44 +98,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="doctors" role="tabpanel">
+                            <div class="tab-pane fade" id="appointment" role="tabpanel">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="iq-card">
                                             <div class="iq-card-body">
                                                 <div class="iq-todo-page">
-                                                    <div class="table-responsive mt-3">
-                                                        <table id="datatableF" class="table table-striped table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    {{-- <th>S/N</th> --}}
-                                                                    <th>Name</th>
-                                                                    <th>Email</th>
-                                                                    <th>Phone</th>
-                                                                    <th>Address</th>
-                                                                    <th>Date</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @if($hospital->doctors)
-                                                                    @foreach($hospital->doctors as $doc)
-                                                                        <tr>
-                                                                            <td>{{$doc->name}}</td>
-                                                                            <td>{{$doc->email}}</td>
-                                                                            <td>{{$doc->phone}}</td>
-                                                                            <td>{{$doc->address}}</td>
-                                                                            <td>{{$doc->created_at->format('d, M Y H:i a')}}</td>
-                                                                            
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @else
-                                                                    <tr>
-                                                                        <td colspan="4"><p>No doctor available</p></td>
-                                                                    </tr>
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -143,7 +123,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content pb-3">
                 <div class="modal-header border-0">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Delete Hospital</h5>
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Delete Doctor</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -151,9 +131,9 @@
                 <div class="modal-body text-center">
                     <i class="fa fa-trash text-danger" style="font-size: 90px"></i>
                     <h5 class="mt-3 mb-1">Are you sure?</h5>
-                    <form action="/admin/delete-hospital" method="POST">
+                    <form action="/admin/delete-doctor" method="POST">
                         @csrf
-                        <input type="hidden" name="hospital" value="{{$hospital->id}}">
+                        <input type="hidden" name="doctor" value="{{$doctor->id}}">
                         <button type="submit" class="btn btn-danger px-5 py-2">Delete</button>
                     </form>
 

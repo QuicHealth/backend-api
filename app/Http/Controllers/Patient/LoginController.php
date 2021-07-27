@@ -42,7 +42,7 @@ class LoginController extends Controller
             'view'=>'mail.mail',
             'content'=>'Welcome to Quichealth, we are happy to have you here.'
         ];
-//        return env('MAIL_USERNAME');
+    //        return env('MAIL_USERNAME');
         MailSendingJob::dispatch($data);
 
         $user->save();

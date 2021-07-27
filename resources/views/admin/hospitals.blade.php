@@ -26,6 +26,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Address</th>
                                             <th>City</th>
                                             <th>State</th>
@@ -37,6 +38,7 @@
                                             <tr onclick="window.location.href='/admin/hospital/{{$hospital->id}}'">
                                                 <td>{{$hospital->name}}</td>
                                                 <td>{{$hospital->email}}</td>
+                                                <td>{{$hospital->phone}}</td>
                                                 <td>{{$hospital->address}}</td>
                                                 <td>{{$hospital->city}}</td>
                                                 <td>{{$hospital->state}}</td>
@@ -48,6 +50,7 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Address</th>
                                             <th>City</th>
                                             <th>State</th>
@@ -79,6 +82,10 @@
                                 <div class="form-group">
                                     <label for="email">Email:</label>
                                     <input type="email" class="form-control" id="email" name="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone:</label>
+                                    <input type="text" class="form-control" id="phone" name="phone">
                                 </div>
                                 <div class="form-group">
                                     <label for="city">City:</label>

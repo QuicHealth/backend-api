@@ -12,10 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('admins')->insert([
-            'username'=>'admin',
-            'password'=>bcrypt('123456')
-        ]);
+        // DB::table('admins')->insert([
+        //     'username'=>'admin',
+        //     'password'=>bcrypt('123456')
+        // ]);
         // $this->call(UserSeeder::class);
+
+        // DB::table('specialties')->insert([
+        //     'name'=>'Infectious diseases'
+        // ]);
     }
 }
