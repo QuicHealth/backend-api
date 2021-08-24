@@ -23,7 +23,7 @@ class LoginController extends Controller
             'gender'=>'required|string',
             'phone'=>'required|string',
             'dob'=>'required|string',
-            'password'=>'required|string|confirmed'
+            'password'=>'required|string'
         ]);
 
         $user = new User();
@@ -42,8 +42,8 @@ class LoginController extends Controller
             'view'=>'mail.mail',
             'content'=>'Welcome to Quichealth, we are happy to have you here.'
         ];
-    //        return env('MAIL_USERNAME');
-        MailSendingJob::dispatch($data);
+        // return env('MAIL_USERNAME');
+        // MailSendingJob::dispatch($data);
 
         $user->save();
 
@@ -67,7 +67,8 @@ class LoginController extends Controller
         }
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required'

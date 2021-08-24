@@ -2,24 +2,40 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\User;
-use App\Hospital;
 use App\Doctor;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Hospital;
 use App\Http\Controllers\Controller;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
-    public function updateProfile(Request $request){
+    /**
+     * success response method.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sendResponse($result, $message)
+    {
+        $response = [
+            'success' => true,
+            'data' => $result,
+            'message' => $message,
+        ];
+
+        return response()->json($response, 200);
+    }
+
+    public function updateProfile(Request $request)
+    {
         $this->validate($request, [
-            'firstname'=>'required|string',
-            'lastname'=>'required|string',
-            'email'=>'required',
-            'gender'=>'required|string',
-            'phone'=>'required|string',
-            'dob'=>'required|string',
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required',
+            'gender' => 'required|string',
+            'phone' => 'required|string',
+            'dob' => 'required|string',
         ]);
         $user = User::where('id', Auth::user($request->token)->id)->first();
         //        $user->email = $request->email;
@@ -29,14 +45,15 @@ class PatientController extends Controller
         $user->dob = $request->dob;
         $user->phone = $request->phone;
 
-        if (!$user->save()) {
+        if ($user->save()) {
+            return $this->sendResponse($user->toArray(), 'Patient Updated successfully.');
+        } else {
             return response([
                 'status' => false,
                 'msg' => 'Error updating profile, pls try again',
             ]);
         }
 
-        return $this->sendResponse($patient->toArray(), 'Patient retrieved successfully.');
     }
 
     /**
@@ -48,33 +65,6 @@ class PatientController extends Controller
     public function edit(Patient $patient)
     {
         //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Patient  $patient
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Patient $patient)
-    {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
-            'fullname' => 'required',
-            'email' => 'required',
-            'phone_number' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
-        $patient->name = $input['name'];
-        $patient->detail = $input['detail'];
-        $patient->save();
-
-        return $this->sendResponse($patient->toArray(), 'updated successfully.');
     }
 
     /**
@@ -90,61 +80,67 @@ class PatientController extends Controller
         return $this->sendResponse($patient->toArray(), 'Deleted successfully.');
     }
 
-    public function getHospitals(){
+    public function getHospitals()
+    {
         $hospitals = Hospital::all();
         return response([
             'status' => true,
-            'hospitals' => $hospitals
+            'hospitals' => $hospitals,
         ]);
     }
-    public function getHospital($id){
+    public function getHospital($id)
+    {
         $hospital = Hospital::where('unique_id', $id)->first();
-        if(!$hospital){
+        if (!$hospital) {
             return response([
                 'status' => false,
-                'msg' => 'Hospital not found'
-            ],404);
+                'msg' => 'Hospital not found',
+            ], 404);
         }
         return response([
             'status' => true,
-            'hospital' => $hospital
+            'hospital' => $hospital,
         ]);
     }
-    public function getRandomHospitals(){
-        $hospitals = Hospital::inRandomOrder()->limit(4)->get();;
+    public function getRandomHospitals()
+    {
+        $hospitals = Hospital::inRandomOrder()->limit(4)->get();
         return response([
             'status' => true,
-            'hospitals' => $hospitals
+            'hospitals' => $hospitals,
         ]);
     }
 
-    public function getRandomDoctors(){
-        $doctors = Doctor::inRandomOrder()->limit(4)->get();;
+    public function getRandomDoctors()
+    {
+        $doctors = Doctor::inRandomOrder()->limit(4)->get();
         return response([
             'status' => true,
-            'doctors' => $doctors
+            'doctors' => $doctors,
         ]);
     }
 
-    public function getDoctors(){
+    public function getDoctors()
+    {
         $doctors = Doctor::where('status', 1)->paginate(12);
         return response([
             'status' => true,
-            'doctors' => $doctors
+            'doctors' => $doctors,
         ]);
     }
 
-    public function getDoctor($id){
+    public function getDoctor($id)
+    {
         $doctor = Doctor::where('unique_id', $id)->first();
-        if(!$doctor){
+        if (!$doctor) {
             return response([
                 'status' => false,
-                'msg' => 'Doctor not found'
-            ],404);
+                'msg' => 'Doctor not found',
+            ], 404);
         }
         return response([
             'status' => true,
-            'doctor' => $doctor
+            'doctor' => $doctor,
         ]);
     }
 }

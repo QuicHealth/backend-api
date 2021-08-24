@@ -12,17 +12,21 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(function (){
+Route::prefix('v1')->group(function () {
 
-    Route::namespace('Patient')->group(function(){
+    Route::get('/test', function () {
+        return "pascal";
+    });
+
+    Route::namespace ('Patient')->group(function () {
         //pascal api code goes here
-//        Route::resource('patient', 'PatientController');
+        //        Route::resource('patient', 'PatientController');
         Route::post('register', 'LoginController@register');
         Route::post('login', 'LoginController@login');
         Route::post('forget-password', 'LoginController@forget_password');
@@ -43,13 +47,12 @@ Route::prefix('v1')->group(function (){
 
     });
 
-
-    Route::namespace('Hospital')->group(function(){
+    Route::namespace ('Hospital')->group(function () {
         //abass api code goes here
 
-        Route::post('login', 'LoginController@login');
-        Route::post('forget-password', 'LoginController@forget_password');
-        Route::post('reset-password', 'LoginController@reset_password');
-        Route::get('verify-reset-token', 'LoginController@verify_password');
+        Route::post('hospital_login', 'LoginController@login');
+        Route::post('hospital-forget-password', 'LoginController@forgetPassword');
+        Route::post('hospital-reset-password', 'LoginController@resetPassword');
+        Route::post('hospital/update/{id}', 'Hospital\HospitalController@UpdateProfile');
     });
 });
