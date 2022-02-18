@@ -16,15 +16,27 @@ class LoginController extends Controller
 {
     public function register(Request $request)
     {
-        $this->validate($request, [
-            'firstname'=>'required|string',
-            'lastname'=>'required|string',
-            'email'=>'required|unique:users',
-            'gender'=>'required|string',
-            'phone'=>'required|string',
-            'dob'=>'required|string',
-            'password'=>'required|string'
+        $validator = Validator::make($request->all(), [
+            'firstname' => 'required|string|between:2,100',
+            'lastname' => 'required|string|between:2,100',
+            'email' => 'required|string|email|max:100|unique:users',
+            'gender' => 'required|string',
+            'phone' => 'required|string|unique:users',
+            'dob' => 'required|string',
+            'password' => 'required|string|confirmed|min:6',
         ]);
+
+        if ($validator->fails()) {
+
+            return response(
+                [
+                    'status' => true,
+                    'message' => 'error',
+                    'data' => $validator->errors()->toArray(),
+                ],
+                RES::HTTP_BAD_REQUEST
+            );
+        }
 
         $user = new User();
         $user->email = $request->email;
@@ -35,15 +47,16 @@ class LoginController extends Controller
         $user->phone = $request->phone;
         $user->password = bcrypt($request->password);
 
-        $data = [
-            'email'=>$request->email,
-            'subject'=>'Welcome Mail',
-            'name'=>'Welcome Mail',
-            'view'=>'mail.mail',
-            'content'=>'Welcome to Quichealth, we are happy to have you here.'
-        ];
-        // return env('MAIL_USERNAME');
-        // MailSendingJob::dispatch($data);
+        // $data = [
+        //     'email' => $request->email,
+        //     'subject' => 'Welcome Mail',
+        //     'name' => 'Welcome Mail',
+        //     'view' => 'mail.mail',
+        //     'content' =>
+        //     'Welcome to Quichealth, we are happy to have you here.',
+        // ];
+        // // //  return env( 'MAIL_USERNAME' );
+        // // MailSendingJob::dispatch($data);
 
         $user->save();
 
@@ -51,18 +64,20 @@ class LoginController extends Controller
 
         if ($token = JWTAuth::attempt($credentials)) {
             $user = User::where('id', auth::user($token)->id)->first();
+
             return response()->json([
                 'status' => true,
-                'msg' => "Registration Successful",
+                'message' => 'Registration Successful',
                 'token' => $token,
-                'user' => $user
+                'user' => $user,
             ]);
         } else {
             return response()->json(
                 [
-                    "status" => false,
-                    "message" => "Invalid login details"
-                ]
+                    'status' => false,
+                    'message' => 'Invalid login details'
+                ],
+                401
             );
         }
     }
