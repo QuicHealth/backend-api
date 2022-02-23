@@ -2,32 +2,18 @@
 
 namespace App\Http\Controllers\Patient;
 
+use App\User;
 use App\Doctor;
 use App\Hospital;
-use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\helpController;
+use Symfony\Component\HttpFoundation\Response as RES;
 
 class PatientController extends Controller
 {
-    /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function sendResponse($result, $message)
-    {
-        $response = [
-            'success' => true,
-            'data' => $result,
-            'message' => $message,
-        ];
-
-        return response()->json($response, 200);
-    }
-
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request, $unique_id)
     {
         $this->validate($request, [
             'firstname' => 'required|string',
@@ -37,7 +23,7 @@ class PatientController extends Controller
             'phone' => 'required|string',
             'dob' => 'required|string',
         ]);
-        $user = User::where('id', Auth::user($request->token)->id)->first();
+        $user = User::where('unique_id', $unique_id)->first();
         //        $user->email = $request->email;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
@@ -45,48 +31,62 @@ class PatientController extends Controller
         $user->dob = $request->dob;
         $user->phone = $request->phone;
 
-        if ($user->save()) {
-            return $this->sendResponse($user->toArray(), 'Patient Updated successfully.');
-        } else {
+        if (!$user->save()) {
             return response([
                 'status' => false,
-                'msg' => 'Error updating profile, pls try again',
-            ]);
+                'message' => 'Error updating profile, pls try again',
+            ], 400);
         }
 
+        return response([
+            'status' => true,
+            'message' => 'Profile updated successfully',
+            'data' => $user,
+        ]);
+
+        $status = true;
+        $message = 'Login Successful';
+        $code = RES::HTTP_OK;
+        $data = [
+            'id' => $user->id,
+            'name' => $user->firstname,
+            'name' => $user->lastname,
+            'email' => $user->email,
+            'phone_number' => $user->phone,
+        ];
+        return helpController::getResponse($status, $message, $code, $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Patient  $patient
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Patient $patient)
+    public function getDashboard(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Patient  $patient
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Patient $patient)
-    {
-        $patient->delete();
-
-        return $this->sendResponse($patient->toArray(), 'Deleted successfully.');
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Token expired, pls login again',
+            ], 401);
+        }
+        return response([
+            'status' => true,
+            'data' => array_merge(collect($user)->toArray()),
+        ], 200);
     }
 
     public function getHospitals()
     {
-        $hospitals = Hospital::all();
-        return response([
-            'status' => true,
-            'hospitals' => $hospitals,
-        ]);
+        $hospitals = Hospital::get()->toArray();
+        if (!$hospitals || !count($hospitals)) {
+            $status = false;
+            $message = 'No hospital has added yet';
+            $code = RES::HTTP_OK;
+            return helpController::getResponse($status, $message, $code);
+        }
+
+        $status = true;
+        $message = 'List of all the hospitals';
+        $code = RES::HTTP_NO_CONTENT;
+        $data = $hospitals;
+        return helpController::getResponse($status, $message, $code, $data);
     }
     public function getHospital($id)
     {
@@ -94,13 +94,16 @@ class PatientController extends Controller
         if (!$hospital) {
             return response([
                 'status' => false,
-                'msg' => 'Hospital not found',
+                'message' => 'Hospital not found',
             ], 404);
         }
-        return response([
-            'status' => true,
-            'hospital' => $hospital,
-        ]);
+
+        $status = true;
+        $message = 'Hospital found';
+        $code = RES::HTTP_OK;
+        $data = $hospital;
+
+        return helpController::getResponse($status, $message, $code, $data);
     }
     public function getRandomHospitals()
     {
@@ -135,7 +138,7 @@ class PatientController extends Controller
         if (!$doctor) {
             return response([
                 'status' => false,
-                'msg' => 'Doctor not found',
+                'message' => 'Doctor not found',
             ], 404);
         }
         return response([
@@ -143,4 +146,10 @@ class PatientController extends Controller
             'doctor' => $doctor,
         ]);
     }
+
+
+
+    //5MC4j689zQriZVsyar8otChFyoQ74smLnIcjwPJJq9qyGR9syv7MFwy3OuBN
+
+    // NlyErEeDRNGsmnUDsgMJ2DAOA7TucjilDHSdn6rlCgp8eNDFD2lFFHCceo9p
 }

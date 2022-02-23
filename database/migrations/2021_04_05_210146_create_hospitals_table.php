@@ -21,6 +21,7 @@ class CreateHospitalsTable extends Migration
             $table->string('address');
             $table->string('image')->nullable();
             $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
             $table->string('city');
             $table->string('state');
             $table->string('country');

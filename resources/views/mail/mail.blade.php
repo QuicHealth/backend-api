@@ -41,7 +41,7 @@
             padding: 0px;
             margin: 0px;
         }
-        .pdr-2x {
+        .pdr-2x { 
             padding-right: 20px;
         }
         .pdl-2x {
@@ -110,7 +110,7 @@
                                                 <h3 class="card-title" style="text-align: center">{{$subject}}</h3>
 
                                                 <p class="mgb-1x">{!! $content !!}</p>
-                                            </td>
+                                            </td> 
                                         </tr>
                                         </tbody>
                                     </table>

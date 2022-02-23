@@ -1,0 +1,68 @@
+swagger: "2.0"
+info:
+  title: QuicHealth API
+  description: Move your app forward with the QuicHealth API
+  version: "1.0.0"
+host: http://127.0.0.1:8000
+
+schemes:
+  - http
+basePath: /api/v1
+
+produces:
+  - application/json
+
+tags:
+  - name: "User"
+  - name: "Authentication"
+    description: "API Authentication related calls"
+paths:
+  "/auth/login":
+    post:
+      summary: Login user
+      description:
+      tags:
+        - Authentication
+      parameters:
+        - $ref: "params.yaml#/EmailPost"
+        - $ref: "params.yaml#/PasswordPost"
+
+  /user:
+    post:
+      summary: Create a new user
+      description:
+      tags:
+        - User
+      parameters:
+        - $ref: "params.yaml#/NamePost"
+        - $ref: "params.yaml#/EmailPost"
+        - $ref: "params.yaml#/PasswordPost"
+      responses:
+        200:
+          $ref: "responses.yaml#/BasicSuccess"
+  /user/{id}:
+    post:
+      summary: update a user
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - $ref: "params.yaml#/NamePost"
+      responses:
+        200:
+          description: OK
+
+  /user/forgotPassword:
+    post:
+      summary: forgot password
+      description:
+      tags:
+        - User
+      parameters:
+        - $ref: "params.yaml#/EmailPost"
+      responses:
+        200:
+          $ref: "responses.yaml#/BasicSuccess"

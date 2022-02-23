@@ -15,6 +15,7 @@ class AddPasswordToDoctorsTable extends Migration
     {
         Schema::table('doctors', function (Blueprint $table) {
             $table->string('password');
+            $table->rememberToken();
         });
     }
 

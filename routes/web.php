@@ -4,10 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Hospital;
 
 Route::get('/', function () {
-    dd(rand(111111,999999));
+//     dd(rand(111111,999999));
 //     $hospitals = Hospital::where('status', 1)->paginate(12);
 //    dd($hospitals);
-    // return view('welcome');
+//     return view('welcome');
 });
 
 Auth::routes();
@@ -31,6 +31,8 @@ Route::namespace('Admin')->prefix('admin')->group(function(){
         Route::get('doctor/{id}', 'AdminController@doctor');
         Route::post('update-doctor', 'AdminController@updateDoctor');
         Route::get('delete-doctor', 'AdminController@deleteDoctor');
+
+        Route::post('logout','AdminController@logout');
     });
 
 });

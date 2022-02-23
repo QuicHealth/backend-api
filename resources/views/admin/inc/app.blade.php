@@ -59,7 +59,7 @@
                                 <a href="/admin/products" class="iq-waves-effect"><i class="las la-gift"></i><span>Products</span></a>
                             </li> --}}
                             <li>
-                                <a href="/admin/logout" class="iq-waves-effect" onclick="event.preventDefault();
+                                <a href="javascript:void()" class="iq-waves-effect" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     <i class="las la-power-off"></i>  <span>Logout</span>
 
@@ -73,7 +73,6 @@
                     <div class="p-3"></div>
                 </div>
             </div>
-
             @include('admin.inc.navbar')
             @include('admin.inc.notification')
             @yield('content')
