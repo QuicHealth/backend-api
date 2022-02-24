@@ -174,7 +174,7 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json(['status' => true, 'msg' => "correct token"]);
+        return response()->json(['status' => true, 'msg' => "correct token, redirect to reset password page"]);
     }
 
     public function reset_password(Request $request)
@@ -198,6 +198,23 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json(['status' => true, 'msg' => "Password reset was successful"]);
+    }
+
+    /**
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout()
+    {
+        if (auth()->check()) {
+
+            auth()->logout();
+
+            return response()->json([
+                'message' => 'Successfully logged out'
+            ]);
+        }
     }
 
 

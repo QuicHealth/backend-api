@@ -35,13 +35,14 @@ Route::prefix('v1')->group(function () {
                 'get-random-hospitals',
                 'PatientController@getRandomHospitals'
             );
+            Route::post('logout', 'AuthController@logout');
             Route::get('get-doctors', 'PatientController@getDoctors');
             Route::get('get-doctor/{unique_id}', 'PatientController@getDoctor');
             Route::get('get-hospitals', 'PatientController@getHospitals');
             Route::get('get-hospital/{unique_id}', 'PatientController@getHospital');
 
             Route::get('get-dashboard', 'PatientController@getDashboard');
-            Route::post('update-profile', 'PatientController@updateProfile');
+            Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
 
             // appointment APIs
             Route::post('create-appointment', 'AppointmentController@createAppointment');

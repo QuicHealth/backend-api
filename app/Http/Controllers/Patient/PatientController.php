@@ -90,7 +90,7 @@ class PatientController extends Controller
     }
     public function getHospital($id)
     {
-        $hospital = Hospital::where('unique_id', $id)->first();
+        $hospital = Hospital::where('unique_id', $id)->first()->toArray();
         if (!$hospital) {
             return response([
                 'status' => false,

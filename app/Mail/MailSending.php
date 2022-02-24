@@ -24,6 +24,6 @@ class MailSending extends Mailable
      */
     public function build()
     {
-        return $this->from(['address' => env('MAIL_USERNAME'), 'name' => $this->data['name']])->view($this->data['view'])->subject($this->data['subject'])->with($this->data);
+        return $this->from(['address' => env('MAIL_FROM_ADDRESS'), 'name' => $this->data['name']])->view($this->data['view'])->subject($this->data['subject'])->with($this->data);
     }
 }
