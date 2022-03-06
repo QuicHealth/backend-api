@@ -18,7 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 Route::prefix('v1')->group(function () {
+
     Route::namespace('Patient')->group(function () {
         //pascal api code goes here
 
@@ -44,6 +46,9 @@ Route::prefix('v1')->group(function () {
             Route::get('get-dashboard', 'PatientController@getDashboard');
             Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
 
+            // Payment APIs
+            Route::post('make-payment', 'PaymentController@makePayment');
+
             // appointment APIs
             Route::post('create-appointment', 'AppointmentController@createAppointment');
             Route::get('appointments', 'AppointmentController@getAll');
@@ -57,6 +62,8 @@ Route::prefix('v1')->group(function () {
     Route::namespace('Doctor')->prefix('doctor')->group(function () {
 
         Route::Post('doctor-login', 'DoctorAuthController@doctorsLogin');
+
+        Route::post('add-test-Doctor', 'DoctorController@testDoctor');
 
         Route::middleware('auth:api')->group(function () {
             Route::Post(
@@ -74,6 +81,8 @@ Route::prefix('v1')->group(function () {
     Route::namespace('Hospital')->prefix('hospital')->group(function () {
         //abass api code goes here
         Route::post('login', 'HospitalAuthController@hospitalLogin');
+
+        Route::post('add-test-Hospital', 'HospitalController@testHospital');
 
         Route::middleware('auth:api')->group(function () {
             Route::post('add-doctor', 'HospitalController@addDoctor');

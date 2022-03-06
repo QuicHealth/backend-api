@@ -88,6 +88,55 @@ class HospitalController extends Controller
         ]);
     }
 
+    public function testHospital(Request $request)
+    {
+
+        $this->validate($request, [
+            'name' => 'required|string|unique:hospitals',
+            'email' => 'required|email|unique:hospitals',
+            'phone' => 'required',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'state' => 'required|string',
+            'country' => 'required|string',
+        ]);
+
+        $password = rand(111111, 999999);
+
+
+        $hos = new Hospital();
+        $hos->name = $request->name;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->state = $request->state;
+        $hos->password = bcrypt($password);
+        $hos->country = $request->country;
+
+        if ($request['longitude']) {
+            $hos->longitude = $request['longitude'];
+        }
+        if ($request['latitude']) {
+            $hos->latitude = $request['latitude'];
+        }
+
+        if (!$hos->save()) {
+            return response([
+                'status' => false,
+                'msg' => 'Error saving Hospital'
+            ]);
+        }
+
+        return response([
+            'status' => true,
+            'msg' => 'Hospital saved successfully',
+            'data' => $hos
+        ]);
+    }
+
+
     public function addDoctor(Request $request)
     {
         $this->validate($request, [

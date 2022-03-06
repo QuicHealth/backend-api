@@ -88,10 +88,18 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required|',
         ]);
+
+        if ($validator->fails()) {
+            $status = false;
+            $message = 'error';
+            $data = $validator->errors()->toArray();
+            $code = RES::HTTP_BAD_REQUEST;
+            return helpController::getResponse($status, $message, $code, $data);
+        }
 
         $credentials = $request->only('email', 'password');
 

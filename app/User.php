@@ -18,7 +18,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'firstname','lastname','email', 'password','gender','phone','dob'
+        'firstname', 'lastname', 'email', 'password', 'gender', 'phone', 'dob'
     ];
     protected $hidden = [
         'password', 'remember_token',
@@ -35,5 +35,13 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * Get the Health Profile associated with the user.
+     */
+    public function HealthProfile()
+    {
+        return $this->hasOne(HealthProfile::class);
     }
 }

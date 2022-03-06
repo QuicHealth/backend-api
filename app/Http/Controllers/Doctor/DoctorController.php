@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Http\Controllers\Controller;
+use App\Doctor;
+use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Appointment;
+use App\Http\Controllers\Controller;
 
 class DoctorController extends Controller
 {
@@ -50,5 +51,42 @@ class DoctorController extends Controller
     public function getDoctorsDashboard(Request $request)
     {
         # code...
+    }
+
+    public function testDoctor(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:doctors',
+            'phone' => 'required',
+            'address' => 'required|string',
+            'specialty' => 'required|integer',
+        ]);
+
+        $password = rand(111111, 999999);
+
+
+        $hos = new Doctor();
+        $hos->name = $request->name;
+        $hos->phone = $request->phone;
+        $hos->password = bcrypt($password);
+        $hos->email = $request->email;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->specialty = $request->specialty;
+        $hos->hospital_id = $request->hospital_id;
+
+        if (!$hos->save()) {
+            return response([
+                'status' => true,
+                'msg' => 'Error saving doctor'
+            ]);
+        }
+
+        return response([
+            'status' => true,
+            'msg' => 'Doctor saved successfully',
+            'data' => $hos
+        ]);
     }
 }

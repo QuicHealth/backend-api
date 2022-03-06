@@ -3,20 +3,32 @@
 namespace App\Http\Controllers\Hospital;
 
 use App\Hospital;
-use App\Http\Controllers\Controller;
 use App\Mail\resetMail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\helpController;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response as RES;
 
 class HospitalAuthController extends Controller
 {
     public function hospitalLogin(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required',
-            'password' => 'required',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|',
         ]);
+
+        if ($validator->fails()) {
+            $status = false;
+            $message = 'error';
+            $data = $validator->errors()->toArray();
+            $code = RES::HTTP_BAD_REQUEST;
+            return helpController::getResponse($status, $message, $code, $data);
+        }
+
         $credentials = [
             'email' => $request->email,
             'password' => $request->password,

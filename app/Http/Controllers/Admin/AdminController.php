@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Hospital;
-use App\Doctor;
 use App\User;
-use App\Http\Controllers\helpController;
+use App\Doctor;
+use App\Hospital;
 use App\Jobs\MailSendingJob;
+use Illuminate\Http\Request;
 use App\Mail\newHospitalMail;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\helpController;
 
 class AdminController extends Controller
 {
@@ -20,13 +20,13 @@ class AdminController extends Controller
         $hos = Hospital::all()->count();
         $user = User::all()->count();
         $doctor = Doctor::all()->count();
-        return view('admin.dashboard', ['hospitals'=>$hos, 'user'=>$user,'doctors'=>$doctor]);
+        return view('admin.dashboard', ['hospitals' => $hos, 'user' => $user, 'doctors' => $doctor]);
     }
 
     public function hospitals()
     {
         $hos = Hospital::all();
-        return view('admin.hospital.index', ['hospitals'=>$hos]);
+        return view('admin.hospital.index', ['hospitals' => $hos]);
     }
 
     public function hospital($id)
@@ -36,7 +36,7 @@ class AdminController extends Controller
             helpController::flashSession(false, 'Hospital not found');
             return redirect('admin/hospitals');
         }
-        return view('admin.hospital.hospital', ['hospital'=>$hos]);
+        return view('admin.hospital.hospital', ['hospital' => $hos]);
     }
 
     public function addHospital(Request $request)
@@ -58,7 +58,7 @@ class AdminController extends Controller
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-                'Welcome to Quichealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
+            'Welcome to Quichealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
@@ -90,14 +90,14 @@ class AdminController extends Controller
         $hos->password = bcrypt($password);
         $hos->country = $request->country;
 
-        if($request['longitude']){
+        if ($request['longitude']) {
             $hos->longitude = $request['longitude'];
         }
-        if($request['latitude']){
+        if ($request['latitude']) {
             $hos->latitude = $request['latitude'];
         }
 
-        if(!$hos->save()){
+        if (!$hos->save()) {
             helpController::flashSession(false, 'Error saving hospital');
             return back();
         }
@@ -131,14 +131,14 @@ class AdminController extends Controller
         $hos->state = $request->state;
         $hos->country = $request->country;
 
-        if($request['longitude']){
+        if ($request['longitude']) {
             $hos->longitude = $request['longitude'];
         }
-        if($request['latitude']){
+        if ($request['latitude']) {
             $hos->latitude = $request['latitude'];
         }
 
-        if(!$hos->save()){
+        if (!$hos->save()) {
             helpController::flashSession(false, 'Error updating hospital');
             return back();
         }
@@ -171,7 +171,7 @@ class AdminController extends Controller
         $doc = Doctor::all();
         $hos = Hospital::all();
         $spec = DB::table('specialties')->get();
-        return view('admin.doctor.index', ['doctors'=>$doc, 'hospitals'=>$hos, 'specialties'=>$spec]);
+        return view('admin.doctor.index', ['doctors' => $doc, 'hospitals' => $hos, 'specialties' => $spec]);
     }
 
     public function doctor($id)
@@ -183,7 +183,7 @@ class AdminController extends Controller
             helpController::flashSession(false, 'Doctor not found');
             return redirect('admin/doctors');
         }
-        return view('admin.doctor.doctor', ['doctor'=>$doc, 'specialties'=>$spec,'hospitals'=>$hos]);
+        return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
     }
 
     public function addDoctor(Request $request)
@@ -219,7 +219,7 @@ class AdminController extends Controller
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-                'Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
+            'Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
@@ -306,7 +306,8 @@ class AdminController extends Controller
         return view('admin.users.user')->with('user', $user);
     }
 
-    public function logout() {
+    public function logout()
+    {
         session()->flush();
         Auth::logout();
         return redirect()->route('admin.login');
