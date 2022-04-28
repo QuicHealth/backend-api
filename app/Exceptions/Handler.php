@@ -2,13 +2,22 @@
 
 namespace App\Exceptions;
 
+use App\Events\NotifyTeamMembersOfServerErrorEvent;
+use App\Traits\HasResponse;
+use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use HasResponse;
     /**
      * A list of the exception types that are not reported.
      *
@@ -24,47 +33,58 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
 
     /**
-     * Report or log an exception.
+     * Register the exception handling callbacks for the application.
      *
-     * @param  \Throwable  $exception
      * @return void
-     *
-     * @throws \Throwable
      */
-    public function report(Throwable $exception)
+    public function register()
     {
-        parent::report($exception);
+        $this->reportable(function (Throwable $e) {
+            $report = [
+                "message" => $e->getMessage(),
+                "file" => $e->getFile(),
+                "line" => $e->getLine(),
+                "code" => $e->getCode(),
+            ];
+        });
     }
 
     /**
-     * Render an exception into an HTTP response.
+     * Handles all throwable exceptions
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param $request
+     * @param \Throwable $e
      *
-     * @throws \Throwable
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        return parent::render($request, $exception);
-    }
-    protected function unauthenticated($request, AuthenticationException $exception){
-        $guard = Arr::get($exception->guards(),0);
-        switch ($guard) {
-//            case 'admin':
-//                $login='/admin/login';
-//                break;
-
-            default:
-                $login='/admin/login';
-                break;
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return $this->notAllowedResponse(__('errors.method_not_allowed'));
         }
-        return redirect()->guest($login);
+
+        if ($e instanceof NotFoundHttpException) {
+            return $this->notFoundResponse($e->getMessage() ? $e->getMessage() : __('errors.not_found'));
+        }
+
+        if ($e instanceof ValidationException) {
+            return $this->formValidationResponse(__('errors.validation_failed'), $e->errors());
+        }
+
+        if ($e instanceof AuthenticationException) {
+            return $this->notAllowedResponse($e->getMessage());
+        }
+
+        if ($e instanceof AuthorizationException) {
+            return $this->notAllowedResponse($e->getMessage());
+        }
+
+        return $this->serverErrorResponse(__('errors.server_error'), new Exception($e->getMessage()));
     }
 }
