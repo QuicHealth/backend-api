@@ -1,0 +1,15 @@
+NamePost:
+    name: name
+    in: formData
+    description: description
+    type: string
+PasswordPost:
+    name: password
+    in: formData
+    required: true
+    type: string
+EmailPost:
+    name: email
+    in: formData
+    description: description
+    type: string
