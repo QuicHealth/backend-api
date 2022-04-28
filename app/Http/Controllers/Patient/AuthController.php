@@ -56,7 +56,7 @@ class AuthController extends Controller
             'Welcome to Quichealth, we are happy to have you here.',
         ];
 
-        MailSendingJob::dispatch($data);
+        // MailSendingJob::dispatch($data);
 
         $user->save();
 
@@ -154,7 +154,7 @@ class AuthController extends Controller
             'content' => '<p>Click on the below link to reset your password <p><a href="' . $link . '">' . $link . '</a></p></p>'
         ];
 
-        MailSendingJob::dispatch($data);
+        // MailSendingJob::dispatch($data);
 
         return response()->json([
             'status' => true,
