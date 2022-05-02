@@ -93,18 +93,16 @@ class LoginController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+        // if ($token = Auth::attempt($credentials)) {
         if ($token = JWTAuth::attempt($credentials)) {
             $user = User::where('email', $request->email)->first();
 
-            return response(
-                [
-                    'status' => true,
-                    'message' => 'Login Successful',
-                    'token' => $token,
-                    'data' => $user,
-                ],
-                200
-            );
+            return response([
+                'status' => true,
+                'message' => 'Login Successful',
+                'token' => $token,
+                'data' => $user,
+            ], 200);
         } else {
             return response([
                 'status' => false,

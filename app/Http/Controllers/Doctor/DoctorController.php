@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Doctor;
-use App\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Schedule;
 
 class DoctorController extends Controller
 {
@@ -22,29 +22,42 @@ class DoctorController extends Controller
     public function setSchedule(Request $request)
     {
         $this->validate($request, [
-            'day' => 'required|integer',
-            'from' => 'required|string',
-            'to' => 'required|string',
+            'day_id' => 'required|integer', // monday
+            'from' => 'required|date_format:H:i|unique:schedules', // 8.00am
+            'to' => 'required|date_format:H:i|after:from|unique:schedules', // 4.00pm
         ]);
-        $app = new Appointment();
-        $app->day_id = $request['day'];
-        $app->from = $request['from'];
-        $app->to = $request['to'];
-        $app->doctor_id = 1;
 
-        $app->save();
+        $hourdiff = (strtotime($request->to) - strtotime($request->from)) / 3600;
+
+        // return $hourdiff;
+
+        if ($hourdiff == 1) {
+            $schedule = new Schedule();
+            $schedule->doctor_id = $request->doctor_id;
+            $schedule->day_id = $request->day_id;
+            $schedule->from = $request->from;
+            $schedule->to = $request->to;
+
+            $schedule->save();
+
+            return response([
+                'status' => true,
+                'msg' => 'Schedule saved successfully'
+            ]);
+        }
+
         return response([
-            'status' => true,
-            'msg' => 'Schedule saved successfully'
-        ]);
+            'status' => false,
+            'message' => 'Time must be one hour',
+        ], 402);
     }
 
     public function getSchedule()
     {
-        $app = Appointment::where('doctor_id', 1)->get();
+        $schedule = Schedule::where('doctor_id', 1)->get();
         return response([
             'status' => true,
-            'data' => $app
+            'data' => $schedule
         ]);
     }
 
@@ -63,13 +76,13 @@ class DoctorController extends Controller
             'specialty' => 'required|integer',
         ]);
 
-        $password = rand(111111, 999999);
+        // $password = rand(111111, 999999);
 
 
         $hos = new Doctor();
         $hos->name = $request->name;
         $hos->phone = $request->phone;
-        $hos->password = bcrypt($password);
+        $hos->password = bcrypt($request->password);
         $hos->email = $request->email;
         $hos->unique_id = uniqid();
         $hos->address = $request->address;

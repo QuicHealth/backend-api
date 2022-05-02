@@ -87,10 +87,12 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:api')->group(function () {
             Route::post('add-doctor', 'HospitalController@addDoctor');
             Route::get('dashboard', 'HospitalController@getDashboard');
-            Route::get('update', 'HospitalController@update');
+            Route::put('update', 'HospitalController@update');
             Route::post('forget-password', 'HospitalAuthController@hospitalForgetPassword');
             Route::post('reset-password', 'HospitalAuthController@hospitalResetPassword');
             Route::get('verify-reset-token', 'HospitalAuthController@hospitalVerifyPassword');
+
+            Route::post('setting', 'HospitalController@settings');
         });
     });
 });

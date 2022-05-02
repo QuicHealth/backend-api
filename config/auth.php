@@ -44,6 +44,10 @@ return [
             'driver' => 'jwt',
             'provider' => 'hospitals',
         ],
+        'doctor' => [
+            'driver' => 'jwt',
+            'provider' => 'doctors',
+        ],
         'admin' => [
             'driver' => 'session',
             'provider' => 'admins',
@@ -73,6 +77,7 @@ return [
     */
 
     'providers' => [
+
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
@@ -84,6 +89,10 @@ return [
         'hospitals' => [
             'driver' => 'eloquent',
             'model' => App\Hospital::class,
+        ],
+        'doctors' => [
+            'driver' => 'eloquent',
+            'model' => App\Doctor::class,
         ],
 
         // 'users' => [

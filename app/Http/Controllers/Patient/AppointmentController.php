@@ -15,32 +15,56 @@ class AppointmentController extends Controller
         $this->validate($request, [
             'doctor_id' => 'required',
             'day_id' => 'required',
-            'to' => 'required',
-            'from' => 'required',
+            'from' => 'required|date_format:H:i', // 8.00
+            'to' => 'required|date_format:H:i|after:from', // 9.00
         ]);
 
-        $appointment = new Appointment();
+        $hourdiff = (strtotime($request->to) - strtotime($request->from)) / 3600;
 
-        $appointment->user_id = Auth::user($request->token)->id;
-        $appointment->doctor_id = $request->doctor_id;
-        $appointment->day_id = $request->day_id;
-        $appointment->from = $request->from;
-        $appointment->to = $request->to;
-        $appointment->status = 0;
-        $appointment->unique_id = Str::random(16);
+        // return $hourdiff;
 
-        if ($appointment->save()) {
-            return response([
-                'status' => true,
-                'message' => 'Success! Appointment created',
-                'Appointments' => $appointment,
-            ], http_response_code());
-        } else {
-            return response([
-                'status' => false,
-                'message' => 'Error rescheduling, pls try again',
-            ], http_response_code());
+        if ($hourdiff == 1) {
+            $appointment = new Appointment();
+
+            $checkifAvailable = $appointment->where('doctor_id', $request->doctor_id)
+                ->where('day_id', $request->day_id)
+                ->where('from', $request->from)
+                ->where('to', $request->to)
+                ->first();
+
+            if ($checkifAvailable) {
+                return response([
+                    'status' => false,
+                    'message' => 'Time slot have already been booked',
+                ], 403);
+            }
+
+            $appointment->user_id = Auth::user($request->token)->id;
+            $appointment->doctor_id = $request->doctor_id;
+            $appointment->day_id = $request->day_id;
+            $appointment->from = $request->from;
+            $appointment->to = $request->to;
+            $appointment->status = 0;
+            $appointment->unique_id = Str::random(16);
+
+            if ($appointment->save()) {
+                return response([
+                    'status' => true,
+                    'message' => 'Success! Appointment created',
+                    'Appointments' => $appointment,
+                ], http_response_code());
+            } else {
+                return response([
+                    'status' => false,
+                    'message' => 'Error rescheduling, pls try again',
+                ], http_response_code());
+            }
         }
+
+        return response([
+            'status' => false,
+            'message' => 'Time must be one hour',
+        ], 406);
     }
 
 

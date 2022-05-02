@@ -18,24 +18,24 @@ class DoctorAuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
+        // return $token = JWTAuth::attempt($credentials);
 
-        if ($token = JWTAuth::attempt($credentials)) {
-            $user = Doctor::where('email', $request->email)->first();
+        if ($token = Auth('doctor')->attempt($credentials)) {
+            // if ($token = JWTAuth::attempt($credentials)) {
+            $user = Auth('doctor')->user();
 
-            return response(
-                [
-                    'status' => true,
-                    'message' => 'Login Successful',
-                    'token' => $token,
-                    'data' => $user,
-                ],
-                200
-            );
+            return response([
+                'status' => true,
+                'message' => 'Login Successful',
+                'token' => $token,
+                'data' => $user,
+            ], 200);
         } else {
             return response([
                 'status' => false,
-                'message' => 'Invalid login detail'
-            ], 401);
+                'message' => 'Invalid login detail',
+                'data' => $credentials
+            ], 404);
         }
     }
 
