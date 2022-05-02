@@ -20,8 +20,8 @@ class DoctorAuthController extends Controller
         $credentials = $request->only('email', 'password');
         // return $token = JWTAuth::attempt($credentials);
 
-        if ($token = Auth('doctor')->attempt($credentials)) {
-            // if ($token = JWTAuth::attempt($credentials)) {
+        // if ($token = Auth('doctor')->attempt($credentials)) {
+        if ($token = JWTAuth::attempt($credentials)) {
             $user = Auth('doctor')->user();
 
             return response([
