@@ -65,28 +65,22 @@ class PaymentController extends Controller
 
     public function txnCompletion(Request $request)
     {
-        // $request->validate([
-        //     'eventData.transactionReference' => 'required',
-        //     'eventData.paymentReference' => 'required',
-        //     'eventData.amountPaid' => 'required',
-        //     'eventData.totalPayable' => 'required',
-        //     'eventData.paidOn' => 'required',
-        //     'eventData.paymentStatus' => 'required',
-        //     'eventData.paymentDescription' => 'required',
-        //     'eventData.currency' => 'required',
-        //     'eventData.paymentMethod' => 'required',
-        // ]);
-        // $data = array(
-        //     "email" => $request->email,
-        //     "password" => $request->password
-        // );
+        $request->input('eventData');
 
         $request->validate([
-            'email' => 'required',
-            'password' => 'required',
+            'eventData.transactionReference' => 'required',
+            'eventData.paymentReference' => 'required',
+            'eventData.amountPaid' => 'required',
+            'eventData.totalPayable' => 'required',
+            'eventData.paidOn' => 'required',
+            'eventData.paymentStatus' => 'required',
+            'eventData.paymentDescription' => 'required',
+            'eventData.currency' => 'required',
+            'eventData.paymentMethod' => 'required',
         ]);
 
-        // dd($request->headers);
+        logger($request->input('eventData'));
+
         $isValidHash = false;
         $webHookCall = $this->initRequest($request, $isValidHash);
         event(new NewWebHookCallReceived($webHookCall, $isValidHash, NewWebHookCallReceived::WEB_HOOK_EVENT_TXN_COMPLETION_CALL));
