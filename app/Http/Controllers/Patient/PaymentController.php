@@ -65,9 +65,6 @@ class PaymentController extends Controller
 
     public function txnCompletion(Request $request)
     {
-
-        error_log($request->input('eventData'));
-
         $request->validate([
             'eventData.transactionReference' => 'required',
             'eventData.paymentReference' => 'required',
@@ -81,8 +78,6 @@ class PaymentController extends Controller
         ]);
 
         logger($request->input('eventData'));
-        error_log($request->input('eventData'));
-
 
         $isValidHash = false;
         $webHookCall = $this->initRequest($request, $isValidHash);
