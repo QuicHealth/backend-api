@@ -77,8 +77,6 @@ class PaymentController extends Controller
             'eventData.paymentMethod' => 'required',
         ]);
 
-        logger($request->input('eventData'));
-
         $isValidHash = false;
         $webHookCall = $this->initRequest($request, $isValidHash);
         event(new NewWebHookCallReceived($webHookCall, $isValidHash, NewWebHookCallReceived::WEB_HOOK_EVENT_TXN_COMPLETION_CALL));

@@ -72,6 +72,7 @@ class MonnifyNotificationListener
                                         //This successful payment is not a reserved account payment
                                         // Extract payment information and process, some of the information available on payload is as highlighted below:
                                         $payment = Payment::where('paymentReference', $payload->paymentReference)->get()->first();
+                                        logger($payment);
 
                                         $payment->transactionReference = $payload->transactionReference;
                                         $payment->paymentReference = $payload->paymentReference;
