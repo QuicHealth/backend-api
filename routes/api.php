@@ -57,7 +57,7 @@ Route::prefix('v1')->group(function () {
         //https://127.0.0.1:8080/webhook/transaction-completion
         Route::post('payment', 'PaymentController@makePayment');
         Route::get('payment/status/{txnReference}', 'PaymentController@payment_status');
-        Route::post('webhook-receiving-url', 'PaymentController@webhook');
+        Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
         // Route::get('transaction/confirm', 'PaymentController@payment_status');
 
     });
