@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Facades\Monnify;
 use Illuminate\Http\Request;
 use App\Classes\StringGenerator;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Events\NewWebHookCallReceived;
 use App\Models\Payment as WebHookCall;
@@ -64,18 +65,28 @@ class PaymentController extends Controller
 
     public function txnCompletion(Request $request)
     {
+        // $request->validate([
+        //     'eventData.transactionReference' => 'required',
+        //     'eventData.paymentReference' => 'required',
+        //     'eventData.amountPaid' => 'required',
+        //     'eventData.totalPayable' => 'required',
+        //     'eventData.paidOn' => 'required',
+        //     'eventData.paymentStatus' => 'required',
+        //     'eventData.paymentDescription' => 'required',
+        //     'eventData.currency' => 'required',
+        //     'eventData.paymentMethod' => 'required',
+        // ]);
+        // $data = array(
+        //     "email" => $request->email,
+        //     "password" => $request->password
+        // );
+
         $request->validate([
-            'eventData.transactionReference' => 'required',
-            'eventData.paymentReference' => 'required',
-            'eventData.amountPaid' => 'required',
-            'eventData.totalPayable' => 'required',
-            'eventData.paidOn' => 'required',
-            'eventData.paymentStatus' => 'required',
-            'eventData.paymentDescription' => 'required',
-            'eventData.currency' => 'required',
-            'eventData.paymentMethod' => 'required',
+            'email' => 'required',
+            'password' => 'required',
         ]);
 
+        // dd($request->headers);
         $isValidHash = false;
         $webHookCall = $this->initRequest($request, $isValidHash);
         event(new NewWebHookCallReceived($webHookCall, $isValidHash, NewWebHookCallReceived::WEB_HOOK_EVENT_TXN_COMPLETION_CALL));
@@ -93,6 +104,8 @@ class PaymentController extends Controller
 
         $stringifiedData = json_encode($request->all());
         $payload = $request->input('eventData');
+
+        logger($payload);
 
         $webHookCall = new WebHookCall($payload);
         $webHookCall->transactionHash = $monnifySignature;
