@@ -2,9 +2,10 @@
 
 namespace App\Events;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Payment as WebHookCall;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
 
 class NewWebHookCallReceived
 {
@@ -27,5 +28,6 @@ class NewWebHookCallReceived
         $this->webhookType = $webhookType;
 
         logger('I came here');
+        Log::info("I was here");
     }
 }
