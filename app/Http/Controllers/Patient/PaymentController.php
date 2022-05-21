@@ -95,8 +95,6 @@ class PaymentController extends Controller
         $stringifiedData = json_encode($request->all());
         $payload = $request->input('eventData');
 
-        logger($payload);
-
         $webHookCall = new WebHookCall($payload);
         $webHookCall->transactionHash = $monnifySignature;
         $webHookCall->stringifiedData = $stringifiedData;
