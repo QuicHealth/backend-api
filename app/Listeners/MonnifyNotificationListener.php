@@ -31,18 +31,25 @@ class MonnifyNotificationListener
      */
     public function handle(NewWebHookCallReceived $event)
     {
+        logger("i got to handle");
         $payload = $event->webHookCall;
+        logger("i got to handle");
+        logger($event->webhookType);
+
         switch ($event->webhookType) {
             case NewWebHookCallReceived::WEB_HOOK_EVENT_TXN_COMPLETION_CALL: {
                     if ($payload->paymentStatus == 'PAID') {
                         $payloadHash = $payload->transactionHash;
+                        logger("inside switch case NewWebHookCallReceived");
 
                         $computedHash = Monnify::Transactions()->calculateHash($payload->paymentReference, $payload->amountPaid, $payload->paidOn, $payload->transactionReference);
+
+                        logger($payload);
 
                         if ($payloadHash === $computedHash) { //Validate hash to make sure this call is from monnify server
                             try {
                                 $transactionObject = Monnify::Transactions()->getTransactionStatus($payload->transactionReference);
-
+                                logger("inside try case NewWebHookCallReceived");
                                 //                    Confirm that this is a successfully paid transaction, or log other transactions in else block
                                 if (($payload->paymentStatus == $transactionObject->paymentStatus) &&
                                     ($payload->amountPaid == $transactionObject->amountPaid)

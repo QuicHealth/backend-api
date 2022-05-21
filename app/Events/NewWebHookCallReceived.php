@@ -4,12 +4,13 @@ namespace App\Events;
 
 use Illuminate\Support\Facades\Log;
 use App\Models\Payment as WebHookCall;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class NewWebHookCallReceived
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public const WEB_HOOK_LEGACY_CALL = "legacy";
     public const WEB_HOOK_EVENT_TXN_COMPLETION_CALL = "txn_completion";
@@ -26,7 +27,5 @@ class NewWebHookCallReceived
         $this->webHookCall = $webHookCall;
         $this->isValidTransactionHash = $isValidTransactionHash;
         $this->webhookType = $webhookType;
-
-        logger("I fired this event");
     }
 }
