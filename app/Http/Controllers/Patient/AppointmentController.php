@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\Appointment;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Hospital;
 
-use App\Doctor;
-use App\Hospital;
+use App\Models\Doctor;
+use App\Models\Hospital;
 use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

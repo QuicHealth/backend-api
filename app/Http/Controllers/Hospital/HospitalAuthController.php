@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Hospital;
 
-use App\Hospital;
+use App\Models\Hospital;
 use App\Mail\resetMail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;

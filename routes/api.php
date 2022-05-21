@@ -18,11 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::prefix('v1')->group(function () {
 
     Route::namespace('Patient')->group(function () {
-        //pascal api code goes here
 
         Route::post('register', 'AuthController@register');
         Route::post('login', 'AuthController@login');
@@ -46,9 +44,6 @@ Route::prefix('v1')->group(function () {
             Route::get('get-dashboard', 'PatientController@getDashboard');
             Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
 
-            // Payment APIs
-            Route::post('make-payment', 'PaymentController@makePayment');
-
             // appointment APIs
             Route::post('create-appointment', 'AppointmentController@createAppointment');
             Route::get('appointments', 'AppointmentController@getAll');
@@ -57,7 +52,18 @@ Route::prefix('v1')->group(function () {
             Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
         });
+
+        // Payment APIs
+        //https://127.0.0.1:8080/webhook/transaction-completion
+        Route::post('payment', 'PaymentController@makePayment');
+        Route::get('payment/status/{txnReference}', 'PaymentController@payment_status');
+        Route::post('webhook-receiving-url', 'PaymentController@webhook');
+        // Route::get('transaction/confirm', 'PaymentController@payment_status');
+
     });
+
+    // Route::webhooks('webhook-receiving-url');
+
 
     Route::namespace('Doctor')->prefix('doctor')->group(function () {
 

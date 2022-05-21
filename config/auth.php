@@ -80,19 +80,19 @@ return [
 
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Admin::class,
+            'model' => App\Models\Admin::class,
         ],
         'hospitals' => [
             'driver' => 'eloquent',
-            'model' => App\Hospital::class,
+            'model' => App\Models\Hospital::class,
         ],
         'doctors' => [
             'driver' => 'eloquent',
-            'model' => App\Doctor::class,
+            'model' => App\Models\Doctor::class,
         ],
 
         // 'users' => [

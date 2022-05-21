@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Doctor;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Schedule;
+use App\Models\Schedule;
 
 class DoctorController extends Controller
 {

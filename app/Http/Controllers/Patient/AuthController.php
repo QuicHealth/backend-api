@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
@@ -10,7 +10,6 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Database\Eloquent\Model;
 use App\Http\Controllers\helpController;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as RES;
