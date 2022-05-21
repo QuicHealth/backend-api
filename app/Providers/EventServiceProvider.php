@@ -31,9 +31,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
         NewWebHookCallReceived::class => [
             MonnifyNotificationListener::class,
-            //    ... Other Listener you wish to also receive the WebHook call event
         ],
 
     ];

@@ -99,7 +99,7 @@ class PaymentController extends Controller
         $webHookCall->stringifiedData = $stringifiedData;
 
         $calculatedHash = Monnify::computeRequestValidationHash($stringifiedData);
-        //        Log::info("$transactionHash\n\r{$webHookCall->stringifiedData}\n\r$calculatedHash");
+        //    Log::info("$transactionHash\n\r{$webHookCall->stringifiedData}\n\r$calculatedHash");
         $isValidHash = $calculatedHash == $monnifySignature;
         return $webHookCall;
     }

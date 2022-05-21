@@ -25,5 +25,7 @@ class NewWebHookCallReceived
         $this->webHookCall = $webHookCall;
         $this->isValidTransactionHash = $isValidTransactionHash;
         $this->webhookType = $webhookType;
+
+        logger('I came here');
     }
 }
