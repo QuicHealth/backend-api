@@ -2,10 +2,7 @@
 
 namespace App\Handlers;
 
-use Spatie\WebhookClient\Jobs\ProcessWebhookJob;
-
-
-class WebhookHandler extends ProcessWebhookJob
+class WebhookHandler
 {
     public function handler()
     {

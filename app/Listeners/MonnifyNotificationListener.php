@@ -68,11 +68,21 @@ class MonnifyNotificationListener
 
 
                                         }
-                                    } else { //This successful payment is not a reserved account payment
-                                        //                            Extract payment information and process, some of the information available on payload is as highlighted below:
-                                        //                            $payload->transactionReference, $payload->paymentReference, $payload->paymentStatus,
-                                        //                            $payload->paymentMethod, $payload->paidOn, $payload->amountPaid
+                                    } else {
+                                        //This successful payment is not a reserved account payment
+                                        // Extract payment information and process, some of the information available on payload is as highlighted below:
+                                        $payment = Payment::where('paymentReference', $payload->paymentReference)->get()->first();
 
+                                        $payment->transactionReference = $payload->transactionReference;
+                                        $payment->paymentReference = $payload->paymentReference;
+                                        $payment->paymentStatus = $payload->paymentStatus;
+                                        $payment->paymentMethod = $payload->paymentMethod;
+                                        $payment->paidOn = $payload->paidOn;
+                                        $payment->amountPaid = $payload->amountPaid;
+                                        $payment->totalPayable = $payload->totalPayable;
+                                        $payment->transactionHash = $payload->transactionHash;
+
+                                        $payment->save();
                                     }
                                 }
                             } catch (MonnifyFailedRequestException $exception) {

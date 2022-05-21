@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Doctor;
+use App\Modles\Doctor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;

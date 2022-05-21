@@ -16,7 +16,6 @@
         "laravel/framework": "^9.1.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4.4",
-        "spatie/laravel-webhook-client": "^3.1",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
