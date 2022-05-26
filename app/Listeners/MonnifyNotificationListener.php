@@ -40,9 +40,8 @@ class MonnifyNotificationListener
 
                         $computedHash = Monnify::Transactions()->calculateHash($payload->paymentReference, $payload->amountPaid, $payload->paidOn, $payload->transactionReference);
 
-                        logger("i got to computed Hash");
-                        logger($computedHash);
-                        logger($payloadHash);
+                        logger('computedHash ' . $computedHash);
+                        logger('payloadHash ' . $payloadHash);
 
 
                         if ($payloadHash === $computedHash) { //Validate hash to make sure this call is from monnify server
