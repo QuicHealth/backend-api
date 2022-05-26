@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Modles\Doctor;
-use App\Http\Controllers\Controller;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Config;
 
 
 class DoctorAuthController extends Controller
 {
+
     public function doctorsLogin(Request $request)
     {
         $this->validate($request, [

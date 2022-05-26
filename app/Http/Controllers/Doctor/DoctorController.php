@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Models\Doctor;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Schedule;
 
 class DoctorController extends Controller
 {
@@ -22,24 +23,22 @@ class DoctorController extends Controller
     public function setSchedule(Request $request)
     {
         $this->validate($request, [
-            'day_id' => 'required|integer', // monday
-            'from' => 'required|date_format:H:i|unique:schedules', // 8.00am
-            'to' => 'required|date_format:H:i|after:from|unique:schedules', // 4.00pm
+            "time_slots"    => "required",
+            "time_slots.*.*"  => "required|date_format:H:i|distinct",
         ]);
 
-        $hourdiff = (strtotime($request->to) - strtotime($request->from)) / 3600;
+        $schedule = new Schedule();
+        $schedule->doctor_id = $request->doctor_id;
+        $schedule->day_id = $request->day_id;
+        $schedule->time_slots = json_encode($request->time_slots, JSON_PRETTY_PRINT);
+        $schedule->date = Carbon::now();
 
-        // return $hourdiff;
+        $setSchedule = Schedule::updateOrCreate(
+            ['doctor_id' => $request->doctor_id, 'day_id' => $request->day_id],
+            ['time_slots' => json_encode($request->time_slots), 'date' =>  Carbon::now()]
+        );
 
-        if ($hourdiff == 1) {
-            $schedule = new Schedule();
-            $schedule->doctor_id = $request->doctor_id;
-            $schedule->day_id = $request->day_id;
-            $schedule->from = $request->from;
-            $schedule->to = $request->to;
-
-            $schedule->save();
-
+        if ($setSchedule) {
             return response([
                 'status' => true,
                 'msg' => 'Schedule saved successfully'
@@ -48,7 +47,7 @@ class DoctorController extends Controller
 
         return response([
             'status' => false,
-            'message' => 'Time must be one hour',
+            'message' => 'error',
         ], 402);
     }
 
@@ -57,7 +56,7 @@ class DoctorController extends Controller
         $schedule = Schedule::where('doctor_id', 1)->get();
         return response([
             'status' => true,
-            'data' => $schedule
+            'data' => $schedule,
         ]);
     }
 

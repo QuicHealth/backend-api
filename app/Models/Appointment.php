@@ -11,6 +11,7 @@ class Appointment extends Model
     // 0 - pending
     // 1 - Successful
     // 2 - Cancelled
+    protected $guarded = [];
 
     // protected $appends = ['day'];
 

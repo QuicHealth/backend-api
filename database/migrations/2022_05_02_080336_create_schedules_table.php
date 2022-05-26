@@ -8,8 +8,6 @@ class CreateSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -17,8 +15,8 @@ class CreateSchedulesTable extends Migration
             $table->id();
             $table->integer('doctor_id');
             $table->integer('day_id');
-            $table->string('from');
-            $table->string('to');
+            $table->json('time_slots');
+            $table->string('date');
             $table->timestamps();
         });
     }
