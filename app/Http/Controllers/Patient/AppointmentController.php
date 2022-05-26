@@ -48,7 +48,7 @@ class AppointmentController extends Controller
         $appointment->date = Carbon::now()->toFormattedDateString();
         $appointment->status = 'successfull';
         $appointment->payment_status = 'pending';
-        $appointment->payment_reference = '12345566788';
+        $appointment->payment_reference = '';
         $appointment->unique_id = Str::random(16);
 
         // $appointment = Appointment::create([
@@ -124,20 +124,38 @@ class AppointmentController extends Controller
     public function rescheduleAppointment(Request $request, $id)
     {
         $this->validate($request, [
-            'from' => 'required',
-            'to' => 'required',
+            'doctor_unique_id' => 'required',
+            'day_id' => 'required',
+            "time_slots.start"  => "required",
+            "time_slots.*"  => "required|date_format:H:i",
         ]);
 
         $appointment = Appointment::where('unique_id', $id)
             ->where('user_id', Auth::user($request->token)->id)
             ->first();
 
-        $appointment->user_id = $request->user_id;
-        $appointment->doctor_id = $request->doctor_id;
+        $checkAppointmentBooking = $appointment->where('doctor_unique_id', $request->doctor_unique_id)
+            ->where('day_id', $request->day_id)
+            ->whereJsonContains('time_slots->start', $request->time_slots['start'])
+            ->whereJsonContains('time_slots->end', $request->time_slots['end'])
+            ->first();
+
+        if ($checkAppointmentBooking) {
+            return response([
+                'status' => false,
+                'message' => 'Time slot have already been booked',
+            ], 403);
+        }
+
+        $appointment->user_id = Auth::user($request->token)->id;
+        $appointment->doctor_unique_id = $request->doctor_unique_id;
         $appointment->day_id = $request->day_id;
-        $appointment->from = $request->from;
-        $appointment->to = $request->to;
-        $appointment->status = 0;
+        $appointment->time_slots = json_encode($request->time_slots);
+        $appointment->date = Carbon::now()->toFormattedDateString();
+        $appointment->status = 'successfull';
+        $appointment->payment_status = 'pending';
+        $appointment->payment_reference = '';
+        $appointment->unique_id = Str::random(16);
 
         if ($appointment->save()) {
             return response([
@@ -158,7 +176,7 @@ class AppointmentController extends Controller
             ->where('user_id', Auth::user($request->token)->id)
             ->first();
 
-        $appointment->status = 2;
+        $appointment->status = "cancelled";
 
         if ($appointment->save()) {
             return response([
