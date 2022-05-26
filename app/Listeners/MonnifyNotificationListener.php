@@ -42,6 +42,7 @@ class MonnifyNotificationListener
 
                         logger("i got to computed Hash");
                         logger($computedHash);
+                        logger($payloadHash);
 
 
                         if ($payloadHash === $computedHash) { //Validate hash to make sure this call is from monnify server
