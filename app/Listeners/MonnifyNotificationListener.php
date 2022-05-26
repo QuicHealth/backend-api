@@ -47,8 +47,8 @@ class MonnifyNotificationListener
                         if ($payloadHash === $computedHash) { //Validate hash to make sure this call is from monnify server
                             try {
                                 $transactionObject = Monnify::Transactions()->getTransactionStatus($payload->transactionReference);
-                                logger("inside try case NewWebHookCallReceived");
-                                //                    Confirm that this is a successfully paid transaction, or log other transactions in else block
+
+                                // Confirm that this is a successfully paid transaction, or log other transactions in else block
                                 if (($payload->paymentStatus == $transactionObject->paymentStatus) &&
                                     ($payload->amountPaid == $transactionObject->amountPaid)
                                 ) {

@@ -125,7 +125,8 @@ abstract class Transactions
     public function calculateHash(string $paymentReference, $amountPaid, string $paidOn, string $transactionReference)
     {
         $clientSK = $this->config['secret_key'];
-        return hash('sha512', "$clientSK|$paymentReference|$amountPaid|$paidOn|$transactionReference");
+        return hash_hmac('sha512', "$paymentReference|$amountPaid|$paidOn|$transactionReference", $clientSK);
+        // return hash('sha512', "$clientSK|$paymentReference|$amountPaid|$paidOn|$transactionReference");
     }
 
 
