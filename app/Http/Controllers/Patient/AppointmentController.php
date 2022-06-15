@@ -8,85 +8,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use CodeZero\UniqueTranslation\UniqueTranslationRule;
+use App\Actions\CreateAppointmentAction;
+use App\Actions\AppointmentDetailsAction;
+use App\Http\Requests\CreateAppointmentRequest;
+
 
 class AppointmentController extends Controller
 {
-    public function createAppointment(Request $request)
+    public function createAppointment(CreateAppointmentRequest $request)
     {
-        $this->validate($request, [
-            'doctor_unique_id' => 'required',
-            'day_id' => 'required',
-            "time_slots.start"  => "required",
-            "time_slots.*"  => "required|date_format:H:i",
-        ]);
+        $validated = $request->validated();
 
-        // $hourdiff = (strtotime($request->to) - strtotime($request->from)) / 3600;
+        $user_id = Auth::user($request->token)->id;
+        $date = Carbon::now()->toFormattedDateString();
 
-        // return $hourdiff;
+        Appointment::truncate();
 
-        // if ($hourdiff == 1) {
-        $appointment = new Appointment();
-
-        $checkAppointmentBooking = $appointment->where('doctor_unique_id', $request->doctor_unique_id)
-            ->where('day_id', $request->day_id)
-            ->whereJsonContains('time_slots->start', $request->time_slots['start'])
-            ->whereJsonContains('time_slots->end', $request->time_slots['end'])
-            ->first();
-
-        if ($checkAppointmentBooking) {
-            return response([
-                'status' => false,
-                'message' => 'Time slot have already been booked',
-            ], 403);
-        }
-
-        $appointment->user_id = Auth::user($request->token)->id;
-        $appointment->doctor_unique_id = $request->doctor_unique_id;
-        $appointment->day_id = $request->day_id;
-        $appointment->time_slots = json_encode($request->time_slots);
-        $appointment->date = Carbon::now()->toFormattedDateString();
-        $appointment->status = 'successfull';
-        $appointment->payment_status = 'pending';
-        $appointment->payment_reference = '';
-        $appointment->unique_id = Str::random(16);
-
-        // $appointment = Appointment::create([
-        //     "user_id" => Auth::user($request->token)->id,
-        //     "doctor_id" => $request->doctor_id,
-        //     "day_id" => $request->day_id,
-        //     "time_slots" => json_encode($request->time_slots),
-        //     "date" => Carbon::now()->diffForHumans(),
-        //     "status" => 'successfull',
-        //     "payment_status" => 'pending',
-        //     "payment_reference" => '',
-        //     "unique_id" => Str::random(16),
-        // ]);
-
-        if ($appointment->save()) {
-            return response([
-                'status' => true,
-                'message' => 'Success! Appointment created',
-                'Appointments' => $appointment,
-            ], http_response_code());
-        } else {
-            return response([
-                'status' => false,
-                'message' => 'Error rescheduling, pls try again',
-            ], http_response_code());
-        }
-        // }
-
-        // return response([
-        //     'status' => false,
-        //     'message' => 'Time must be one hour',
-        // ], 406);
+        return CreateAppointmentAction::run($validated, $user_id, $date);
     }
 
 
     public function getAll(Request $request)
     {
-        $appointments = Appointment::where('user_id', Auth::user($request->token)->id)->get();
+        $appointments = Appointment::where('user_id', Auth::user($request->token)->id)
+            ->with('doctor')
+            ->get();
 
         if ($appointments) {
             return response([
@@ -106,6 +52,7 @@ class AppointmentController extends Controller
 
         $findAppointment = Appointment::where('unique_id', $id)
             ->where('user_id', Auth::user($request->token)->id)
+            ->with('doctor')
             ->first();
 
         if ($findAppointment) {
@@ -126,38 +73,43 @@ class AppointmentController extends Controller
         $this->validate($request, [
             'doctor_unique_id' => 'required',
             'day_id' => 'required',
-            "time_slots.start"  => "required",
-            "time_slots.*"  => "required|date_format:H:i",
+            "time_slots.start"  => "required|date_format:H:i",
+            "time_slots.end"  => "required|date_format:H:i",
         ]);
 
-        $appointment = Appointment::where('unique_id', $id)
-            ->where('user_id', Auth::user($request->token)->id)
-            ->first();
 
-        $checkAppointmentBooking = $appointment->where('doctor_unique_id', $request->doctor_unique_id)
+        // ->first()
+
+        $checkAppointmentBooking = Appointment::where('doctor_unique_id', $request->doctor_unique_id)
             ->where('day_id', $request->day_id)
-            ->whereJsonContains('time_slots->start', $request->time_slots['start'])
-            ->whereJsonContains('time_slots->end', $request->time_slots['end'])
+            ->where('start', $request->time_slots['start'])
+            ->where('end', $request->time_slots['end'])
             ->first();
 
         if ($checkAppointmentBooking) {
+
             return response([
                 'status' => false,
                 'message' => 'Time slot have already been booked',
             ], 403);
         }
 
-        $appointment->user_id = Auth::user($request->token)->id;
-        $appointment->doctor_unique_id = $request->doctor_unique_id;
-        $appointment->day_id = $request->day_id;
-        $appointment->time_slots = json_encode($request->time_slots);
-        $appointment->date = Carbon::now()->toFormattedDateString();
-        $appointment->status = 'successfull';
-        $appointment->payment_status = 'pending';
-        $appointment->payment_reference = '';
-        $appointment->unique_id = Str::random(16);
+        $appointment = Appointment::where('unique_id', $id)
+            ->where('user_id', Auth::user($request->token)->id)
+            ->update(['start' => $request->time_slots['start'], 'end' => $request->time_slots['end']]);
 
-        if ($appointment->save()) {
+
+        // $appointment->user_id = Auth::user($request->token)->id;
+        // $appointment->doctor_unique_id = $request->doctor_unique_id;
+        // $appointment->day_id = $request->day_id;
+        // $appointment->time_slots = json_encode($request->time_slots);
+        // $appointment->date = Carbon::now()->toFormattedDateString();
+        // $appointment->status = 'successfull';
+        // $appointment->payment_status = 'pending';
+        // $appointment->payment_reference = '';
+        // $appointment->unique_id = Str::random(16);
+
+        if ($appointment) {
             return response([
                 'status' => true,
                 'Appointments' => $appointment,
@@ -191,6 +143,10 @@ class AppointmentController extends Controller
         }
     }
 
+    public function appointmentDetails(Request $request, $id)
+    {
+        # code...
+    }
     public function completedAppointment(Request $request, $id)
     {
         # code...
@@ -200,4 +156,29 @@ class AppointmentController extends Controller
     {
         # code...
     }
+
+    function getTimeSlot($interval, $start_time, $end_time)
+    {
+        // $start = new DateTime($start_time);
+        // $end = new DateTime($end_time);
+        // $startTime = $start->format('H:i');
+        // $endTime = $end->format('H:i');
+        // $i = 0;
+        // $time = [];
+        // while (strtotime($startTime) <= strtotime($endTime)) {
+        //     $start = $startTime;
+        //     $end = date('H:i', strtotime('+' . $interval . ' minutes', strtotime($startTime)));
+        //     $startTime = date('H:i', strtotime('+' . $interval . ' minutes', strtotime($startTime)));
+        //     $i++;
+        //     if (strtotime($startTime) <= strtotime($endTime)) {
+        //         $time[$i]['slot_start_time'] = $start;
+        //         $time[$i]['slot_end_time'] = $end;
+        //     }
+        // }
+        // return $time;
+    }
+
+    //     $slots = getTimeSlot(30, '10:00', '13:00');
+    // echo '<pre>';
+    // print_r($slots);
 }

@@ -20,4 +20,14 @@ class Appointment extends Model
     //     $day = DB::table('days')->where('id', $this->day_id)->first();
     //     return $day->name;
     // }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Doctor::class, 'doctor_unique_id');
+    }
+
+    public function details()
+    {
+        return $this->hasOne(Details::class);
+    }
 }

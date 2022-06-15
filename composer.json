@@ -17,13 +17,15 @@
         "laravel/framework": "^9.1.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4.4",
+        "lorisleiva/laravel-actions": "^2.4",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^1.2.3",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.2.0",
-        "phpunit/phpunit": "^8.5.8|^9.5.8"
+        "phpunit/phpunit": "^8.5.8|^9.5.8",
+        "spatie/laravel-ignition": "^1.2.3",
+        "wulfheart/laravel-actions-ide-helper": "^0.3.0"
     },
     "config": {
         "optimize-autoloader": true,

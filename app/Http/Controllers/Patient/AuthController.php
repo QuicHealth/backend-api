@@ -33,7 +33,7 @@ class AuthController extends Controller
             $message = 'error';
             $data = $validator->errors()->toArray();
             $code = RES::HTTP_BAD_REQUEST;
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         }
 
         $user = new User();
@@ -75,13 +75,13 @@ class AuthController extends Controller
                 'phone_number' => $user->phone,
                 'token' => $this->createNewToken($token),
             ];
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         } else {
 
             $status = false;
             $message = 'Registration Unsuccessful';
             $code = RES::HTTP_UNAUTHORIZED;
-            return helpController::getResponse($status, $message, $code);
+            return helpController::getResponse($status, $code, $message);
         }
     }
 
@@ -97,7 +97,7 @@ class AuthController extends Controller
             $message = 'error';
             $data = $validator->errors()->toArray();
             $code = RES::HTTP_BAD_REQUEST;
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         }
 
         $credentials = $request->only('email', 'password');
@@ -116,7 +116,7 @@ class AuthController extends Controller
                 'phone_number' => $user->phone,
                 'token' => $this->createNewToken($token),
             ];
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         } else {
             return response([
                 'status' => false,

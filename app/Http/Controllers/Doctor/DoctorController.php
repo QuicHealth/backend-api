@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Models\Doctor;
 use App\Models\Schedule;
+use App\Models\Timeslot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ScheduleRequest;
 
 class DoctorController extends Controller
 {
@@ -20,45 +22,49 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function setSchedule(Request $request)
+    public function setSchedule(ScheduleRequest $request)
     {
-        $this->validate($request, [
-            "time_slots"    => "required",
-            "time_slots.*.*"  => "required|date_format:H:i|distinct",
-        ]);
-
-        $schedule = new Schedule();
-        $schedule->doctor_id = $request->doctor_id;
-        $schedule->day_id = $request->day_id;
-        $schedule->time_slots = json_encode($request->time_slots, JSON_PRETTY_PRINT);
-        $schedule->date = Carbon::now();
+        $validated = $request->validated();
 
         $setSchedule = Schedule::updateOrCreate(
-            ['doctor_id' => $request->doctor_id, 'day_id' => $request->day_id],
-            ['time_slots' => json_encode($request->time_slots), 'date' =>  Carbon::now()]
+            ['doctor_unique_id' => $validated['doctor_unique_id'], 'day_id' => $validated['day_id']],
+            ['date' =>  Carbon::now()->toFormattedDateString()]
         );
 
         if ($setSchedule) {
+            for ($i = 0; $i < count($validated['time_slots']); $i++) {
+                Timeslot::updateOrCreate(
+                    ['schedules_id' => $setSchedule->id, 'start' => $validated['time_slots'][$i]['start'], 'end' => $validated['time_slots'][$i]['end']],
+                    ['selected' =>  $validated['time_slots'][$i]['selected'], 'status' =>  $validated['time_slots'][$i]['status']]
+                );
+            }
+
             return response([
                 'status' => true,
-                'msg' => 'Schedule saved successfully'
+                'message' => 'Schedule saved successfully'
             ]);
         }
 
         return response([
             'status' => false,
-            'message' => 'error',
+            'message' => "Can not set schedules",
         ], 402);
     }
 
     public function getSchedule()
     {
-        $schedule = Schedule::where('doctor_id', 1)->get();
+        $schedule = Schedule::where('doctor_unique_id', 1)->with('timeslot')->get();
         return response([
             'status' => true,
-            'data' => $schedule,
+            'data' => $schedule
         ]);
     }
+
+    public function getavailble()
+    {
+        # code...
+    }
+
 
     public function getDoctorsDashboard(Request $request)
     {

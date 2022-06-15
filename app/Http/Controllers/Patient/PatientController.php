@@ -9,20 +9,26 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
+use App\Http\Requests\UpdatePatientRequest;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class PatientController extends Controller
 {
-    public function updateProfile(Request $request, $unique_id)
+    /**
+     * Update a user's record in the database.
+     *
+     * @param  \App\Http\Requests\UpdatePatientRequest  $request
+     * @param  \App\Models\User unique_id
+     *
+     * @return Illuminate\Http\Response
+     */
+
+    public function updateProfile(UpdatePatientRequest $request, $unique_id)
     {
-        $this->validate($request, [
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'email' => 'required',
-            'gender' => 'required|string',
-            'phone' => 'required|string',
-            'dob' => 'required|string',
-        ]);
+
+        // Retrieve the validated input data...
+        $validated = $request->validated();
+
         $user = User::where('unique_id', $unique_id)->first();
         //        $user->email = $request->email;
         $user->firstname = $request->firstname;
@@ -30,6 +36,8 @@ class PatientController extends Controller
         $user->gender = $request->gender;
         $user->dob = $request->dob;
         $user->phone = $request->phone;
+
+        //$user->update(['avatar' => $avatar]);
 
         if (!$user->save()) {
             return response([
