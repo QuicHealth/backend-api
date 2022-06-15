@@ -14,7 +14,7 @@ class UpdateTimeslotStatus
     {
         $schedule = $this->getScheduleID($doctor_unique_id, $day_id);
 
-        Timeslot::where('schedules_id', $schedule->id)
+        Timeslot::where('schedule_id', $schedule->id)
             ->where('start', $time_slots['start'])
             ->where('end', $time_slots['end'])
             ->update(['selected' => true]);
