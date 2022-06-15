@@ -34,7 +34,7 @@ class DoctorController extends Controller
         if ($setSchedule) {
             for ($i = 0; $i < count($validated['time_slots']); $i++) {
                 Timeslot::updateOrCreate(
-                    ['schedules_id' => $setSchedule->id, 'start' => $validated['time_slots'][$i]['start'], 'end' => $validated['time_slots'][$i]['end']],
+                    ['schedule_id' => $setSchedule->id, 'start' => $validated['time_slots'][$i]['start'], 'end' => $validated['time_slots'][$i]['end']],
                     ['selected' =>  $validated['time_slots'][$i]['selected'], 'status' =>  $validated['time_slots'][$i]['status']]
                 );
             }

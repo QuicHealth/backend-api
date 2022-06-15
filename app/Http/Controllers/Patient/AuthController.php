@@ -69,8 +69,7 @@ class AuthController extends Controller
             $code = RES::HTTP_OK;
             $data = [
                 'unique_id' => $user->unique_id,
-                'name' => $user->firstname,
-                'name' => $user->lastname,
+                'name' => $user->firstname . " " . $user->lastname,
                 'email' => $user->email,
                 'phone_number' => $user->phone,
                 'token' => $this->createNewToken($token),
