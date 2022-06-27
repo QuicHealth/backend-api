@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response as RES;
 use Illuminate\Support\Str;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class LoginController extends Controller
 {

@@ -46,6 +46,7 @@ Route::prefix('v1')->group(function () {
 
             // appointment APIs
             Route::post('create-appointment', 'AppointmentController@createAppointment');
+            Route::post('appointment/details', 'AppointmentController@appointmentDetails');
             Route::get('appointments', 'AppointmentController@getAll');
             Route::get('appointment/{id}', 'AppointmentController@findAppointment');
             Route::put('reschedule-appointment/{id}', 'AppointmentController@rescheduleAppointment');
@@ -68,7 +69,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('add-test-Doctor', 'DoctorController@testDoctor');
 
-        Route::middleware('auth:api')->group(function () {
+        Route::middleware('auth:doctor_api')->group(function () {
             Route::Post(
                 'doctor-forget-password',
                 'DoctorAuthController@doctorsForgetPassword'
@@ -83,11 +84,11 @@ Route::prefix('v1')->group(function () {
 
     Route::namespace('Hospital')->prefix('hospital')->group(function () {
         //abass api code goes here
-        Route::post('login', 'HospitalAuthController@hospitalLogin');
+        Route::post('hospital-login', 'HospitalAuthController@hospitalLogin');
 
         Route::post('add-test-Hospital', 'HospitalController@testHospital');
 
-        Route::middleware('auth:api')->group(function () {
+        Route::middleware('auth:hospital_api')->group(function () {
             Route::post('add-doctor', 'HospitalController@addDoctor');
             Route::get('dashboard', 'HospitalController@getDashboard');
             Route::put('update', 'HospitalController@update');

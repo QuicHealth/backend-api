@@ -6,12 +6,13 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\PatientResource;
 use App\Http\Controllers\helpController;
 use Illuminate\Support\Facades\Validator;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class AuthController extends Controller
@@ -68,10 +69,7 @@ class AuthController extends Controller
             $message = 'Registration Successful';
             $code = RES::HTTP_OK;
             $data = [
-                'unique_id' => $user->unique_id,
-                'name' => $user->firstname . " " . $user->lastname,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
+                'user' => new PatientResource($user),
                 'token' => $this->createNewToken($token),
             ];
             return helpController::getResponse($status, $code, $message,  $data);
@@ -108,11 +106,7 @@ class AuthController extends Controller
             $message = 'Login Successful';
             $code = RES::HTTP_OK;
             $data = [
-                'id' => $user->id,
-                'name' => $user->firstname,
-                'name' => $user->lastname,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
+                'user' => new PatientResource($user),
                 'token' => $this->createNewToken($token),
             ];
             return helpController::getResponse($status, $code, $message,  $data);

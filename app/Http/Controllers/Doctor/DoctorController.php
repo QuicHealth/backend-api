@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Actions\SetAvailablityAction;
 use App\Http\Requests\ScheduleRequest;
 
 class DoctorController extends Controller
@@ -26,29 +27,7 @@ class DoctorController extends Controller
     {
         $validated = $request->validated();
 
-        $setSchedule = Schedule::updateOrCreate(
-            ['doctor_unique_id' => $validated['doctor_unique_id'], 'day_id' => $validated['day_id']],
-            ['date' =>  Carbon::now()->toFormattedDateString()]
-        );
-
-        if ($setSchedule) {
-            for ($i = 0; $i < count($validated['time_slots']); $i++) {
-                Timeslot::updateOrCreate(
-                    ['schedule_id' => $setSchedule->id, 'start' => $validated['time_slots'][$i]['start'], 'end' => $validated['time_slots'][$i]['end']],
-                    ['selected' =>  $validated['time_slots'][$i]['selected'], 'status' =>  $validated['time_slots'][$i]['status']]
-                );
-            }
-
-            return response([
-                'status' => true,
-                'message' => 'Schedule saved successfully'
-            ]);
-        }
-
-        return response([
-            'status' => false,
-            'message' => "Can not set schedules",
-        ], 402);
+        return SetAvailablityAction::run($validated);
     }
 
     public function getSchedule()
@@ -79,6 +58,7 @@ class DoctorController extends Controller
             'phone' => 'required',
             'address' => 'required|string',
             'specialty' => 'required|integer',
+            'password' => 'required|min:6',
         ]);
 
         // $password = rand(111111, 999999);

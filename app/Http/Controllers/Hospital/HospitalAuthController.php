@@ -34,8 +34,8 @@ class HospitalAuthController extends Controller
             'password' => $request->password,
         ];
 
-        if ($token = Auth('hospital')->attempt($credentials)) {
-            $user = Auth('hospital')->user();
+        if ($token = Auth('hospital_api')->attempt($credentials)) {
+            $user = Auth('hospital_api')->user();
 
             return response()->json([
                 'status' => true,

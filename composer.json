@@ -18,7 +18,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4.4",
         "lorisleiva/laravel-actions": "^2.4",
-        "tymon/jwt-auth": "^1.0"
+        "php-open-source-saver/jwt-auth": "^1.4"
     },
     "require-dev": {
         "mockery/mockery": "^1.4.4",

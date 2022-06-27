@@ -82,7 +82,7 @@ class PatientController extends Controller
 
     public function getHospitals()
     {
-        $hospitals = Hospital::get()->toArray();
+        $hospitals = Hospital::get();
         if (!$hospitals || !count($hospitals)) {
             $status = false;
             $message = 'No hospital has added yet';
@@ -93,8 +93,9 @@ class PatientController extends Controller
         $status = true;
         $message = 'List of all the hospitals';
         $code = RES::HTTP_NO_CONTENT;
-        $data = $hospitals;
-        return helpController::getResponse($status, $message, $code, $data);
+        $data = $hospitals->toArray();
+        return $data;
+        // return helpController::getResponse($status,  $code, $message, $data);
     }
     public function getHospital($id)
     {

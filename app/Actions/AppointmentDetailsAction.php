@@ -2,31 +2,28 @@
 
 namespace App\Actions;
 
+use App\Models\Details;
+use App\Models\Appointment;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Http\Requests\AppointmentDetailsRequest;
-use App\Models\Details;
 
 class AppointmentDetailsAction
 {
     use AsAction;
 
-    public function handle(AppointmentDetailsRequest $request, $appointment_id)
+    public function handle($data)
     {
-        $validated = $request->validated();
+        $appointment = Appointment::find($data['appointment_id']);
 
-        $data = [
-            'purpose' =>  $validated['purpose'],
-            'length' =>  $validated['length'],
-            'treatments' =>  $validated['treatments'],
-            'others' =>  $validated['others']
-        ];
+        if ($appointment) {
 
-        $details = Details::updateOrCreate(
-            ['appointment_id' => $appointment_id],
-            [$data]
-        );
+            $details = Details::updateOrCreate(
+                ['appointment_id' => $data['appointment_id']],
+                [$data]
+            );
 
-        return $details;
+            return $details;
+        }
     }
 
     // public function addDetails($request, $appointment_id)

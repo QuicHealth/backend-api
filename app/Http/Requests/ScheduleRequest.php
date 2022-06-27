@@ -24,7 +24,7 @@ class ScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            'doctor_unique_id' => ['required'],
+            'doctor_id' => ['required'],
             'day_id' => ['required'],
             // 'date' => ['required'],
             'time_slots' => ['required'],

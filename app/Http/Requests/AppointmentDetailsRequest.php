@@ -24,7 +24,8 @@ class AppointmentDetailsRequest extends FormRequest
     public function rules()
     {
         return [
-            'purpose' => ['required', 'text'],
+            'appointment_id' => ['required'],
+            'purpose' => ['required'],
             'length' => ['required'],
             "treatments"  => ['required'],
             "others"  => ['required'],

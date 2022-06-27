@@ -30,4 +30,13 @@ class Appointment extends Model
     {
         return $this->hasOne(Details::class);
     }
+
+    /**
+     * Get the user that owns the appointment.
+     */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -27,11 +27,21 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
     public function getJWTCustomClaims()
     {
         return [];
@@ -43,5 +53,14 @@ class User extends Authenticatable implements JWTSubject
     public function HealthProfile()
     {
         return $this->hasOne(HealthProfile::class);
+    }
+
+    /**
+     * Get the Appointments associated with the user.
+     */
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
     }
 }

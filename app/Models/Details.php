@@ -9,6 +9,14 @@ class Details extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "appointment_id",
+        "purpose",
+        "length",
+        "treatments",
+        "others",
+    ];
+
     public function appointment()
     {
         return $this->belongsTo(Application::class);

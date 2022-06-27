@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Actions\CreateAppointmentAction;
 use App\Actions\AppointmentDetailsAction;
 use App\Http\Requests\CreateAppointmentRequest;
+use App\Http\Requests\AppointmentDetailsRequest;
 
 
 class AppointmentController extends Controller
@@ -27,6 +28,33 @@ class AppointmentController extends Controller
         return CreateAppointmentAction::run($validated, $user_id, $date);
     }
 
+    public function appointmentDetails(AppointmentDetailsRequest $request)
+    {
+        $validated = $request->validated();
+
+        $data = [
+            'appointment_id' =>  $validated['appointment_id'],
+            'purpose' =>  $validated['purpose'],
+            'length' =>  $validated['length'],
+            'treatments' =>  $validated['treatments'],
+            'others' =>  $validated['others']
+        ];
+
+        $details = AppointmentDetailsAction::run($data);
+
+        if ($details) {
+            return response([
+                'status' => true,
+                'message' => 'Success! Proceed to payment',
+                'Appointments' => $details,
+            ], http_response_code());
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'Sorry! this Appointment has not been created',
+            ], http_response_code());
+        }
+    }
 
     public function getAll(Request $request)
     {
@@ -143,10 +171,6 @@ class AppointmentController extends Controller
         }
     }
 
-    public function appointmentDetails(Request $request, $id)
-    {
-        # code...
-    }
     public function completedAppointment(Request $request, $id)
     {
         # code...
