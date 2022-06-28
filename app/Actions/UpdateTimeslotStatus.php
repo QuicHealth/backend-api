@@ -10,9 +10,9 @@ class UpdateTimeslotStatus
 {
     use AsAction;
 
-    public function handle($doctor_unique_id, $day_id, $time_slots)
+    public function handle($doctor_id, $day_id, $time_slots)
     {
-        $schedule = $this->getScheduleID($doctor_unique_id, $day_id);
+        $schedule = $this->getScheduleID($doctor_id, $day_id);
 
         Timeslot::where('schedule_id', $schedule->id)
             ->where('start', $time_slots['start'])
@@ -20,9 +20,9 @@ class UpdateTimeslotStatus
             ->update(['selected' => true]);
     }
 
-    public function getScheduleID($doctor_unique_id, $day_id)
+    public function getScheduleID($doctor_id, $day_id)
     {
-        $getSchedule = Schedule::where('doctor_unique_id', $doctor_unique_id)
+        $getSchedule = Schedule::where('doctor_id', $doctor_id)
             ->where('day_id', $day_id)
             ->first();
 

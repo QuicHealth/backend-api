@@ -42,7 +42,7 @@ class CreateAppointmentAction
 
         if ($appointment) {
 
-            UpdateTimeslotStatus::run($this->validated['doctor_unique_id'], $this->validated['day_id'], $this->validated['time_slots']);
+            UpdateTimeslotStatus::run($this->validated['doctor_id'], $this->validated['day_id'], $this->validated['time_slots']);
 
             return response([
                 'status' => true,
@@ -65,7 +65,7 @@ class CreateAppointmentAction
     {
         $appointment = new Appointment();
 
-        $checkAppointmentBooking = Appointment::where('doctor_unique_id', $this->validated['doctor_unique_id'])
+        $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
             ->where('day_id', $this->validated['day_id'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
@@ -80,7 +80,7 @@ class CreateAppointmentAction
     {
         $appointment = Appointment::create([
             "user_id" => $user_id,
-            "doctor_unique_id" => $this->validated['doctor_unique_id'],
+            "doctor_id" => $this->validated['doctor_id'],
             "day_id" => $this->validated['day_id'],
             "start" => $this->validated['time_slots']['start'],
             "end" => $this->validated['time_slots']['end'],

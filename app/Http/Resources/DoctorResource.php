@@ -17,19 +17,22 @@ class DoctorResource extends JsonResource
         // return parent::toArray($request);
         return
             [
-                'unique_id' => $this->resource->unique_id,
-                'name' => $this->resource->name,
-                'email' => $this->resource->email,
-                'gender' => $this->resource->gender,
-                'phone' => $this->resource->phone,
-                'image' => $this->resource->image,
-                'featured' => $this->resource->featured,
-                'status' => $this->resource->status,
-                'address' => $this->resource->address,
-                'specialty' => $this->resource->specialty,
-                'hospital' => new HospitalResource($this->whenLoaded('hospital')),
+                'unique_id' => $this->unique_id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'gender' => $this->gender,
+                'phone' => $this->phone,
+                'image' => $this->image,
+                'featured' => $this->featured,
+                'status' => $this->status,
+                'address' => $this->address,
+                'specialty' => $this->specialty,
+                'hospital' => $this->whenLoaded('hospital'),
+                // 'hospital' =>  HospitalResource::collection($this->whenLoaded('hospital')),
                 'appointments' => AppointmentResource::collection($this->whenLoaded('appointments')),
-                'availablity' => $this->whenLoaded('schedule'),
+                // 'availablity' => $this->whenLoaded('schedule'),
+                'availablity' => ScheduleResource::collection($this->whenLoaded('schedule')),
+
             ];
     }
 }

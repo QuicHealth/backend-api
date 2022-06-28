@@ -18,19 +18,19 @@ class HospitalResource extends JsonResource
 
         return
             [
-                'unique_id' => $this->resource->unique_id,
-                'name' => $this->resource->name,
-                'email' => $this->resource->email,
-                'phone' => $this->resource->phone,
-                'image' => $this->resource->image,
-                'featured' => $this->resource->featured,
-                'status' => $this->resource->status,
-                'latitude' => $this->resource->latitude,
-                'city' => $this->resource->city,
-                'state' => $this->resource->state,
-                'country' => $this->resource->country,
-                'address' => $this->resource->address,
-                'description' => $this->resource->description,
+                'unique_id' => $this->unique_id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'image' => $this->image,
+                'featured' => $this->featured,
+                'status' => $this->status,
+                'latitude' => $this->latitude,
+                'city' => $this->city,
+                'state' => $this->state,
+                'country' => $this->country,
+                'address' => $this->address,
+                'description' => $this->description,
                 'doctors' => DoctorResource::collection($this->whenLoaded('doctors')),
             ];
     }
