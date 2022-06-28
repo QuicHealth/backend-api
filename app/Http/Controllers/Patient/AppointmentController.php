@@ -23,7 +23,7 @@ class AppointmentController extends Controller
         $user_id = Auth::user($request->token)->id;
         $date = Carbon::now()->toFormattedDateString();
 
-        Appointment::truncate();
+        // Appointment::truncate();
 
         return CreateAppointmentAction::run($validated, $user_id, $date);
     }
