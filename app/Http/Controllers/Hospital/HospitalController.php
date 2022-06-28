@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Hospital;
 
-use App\Doctor;
-use App\Hospital;
+use App\Models\Doctor;
+use App\Models\Hospital;
 use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -99,10 +99,8 @@ class HospitalController extends Controller
             'city' => 'required|string',
             'state' => 'required|string',
             'country' => 'required|string',
+            'password' => 'required|min:6',
         ]);
-
-        $password = rand(111111, 999999);
-
 
         $hos = new Hospital();
         $hos->name = $request->name;
@@ -112,7 +110,7 @@ class HospitalController extends Controller
         $hos->address = $request->address;
         $hos->city = $request->city;
         $hos->state = $request->state;
-        $hos->password = bcrypt($password);
+        $hos->password = bcrypt($request->password);;
         $hos->country = $request->country;
 
         if ($request['longitude']) {

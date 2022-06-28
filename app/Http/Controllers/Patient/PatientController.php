@@ -2,27 +2,33 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\User;
-use App\Doctor;
-use App\Hospital;
+use App\Models\User;
+use App\Models\Doctor;
+use App\Models\Hospital;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
+use App\Http\Requests\UpdatePatientRequest;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class PatientController extends Controller
 {
-    public function updateProfile(Request $request, $unique_id)
+    /**
+     * Update a user's record in the database.
+     *
+     * @param  \App\Http\Requests\UpdatePatientRequest  $request
+     * @param  \App\Models\User unique_id
+     *
+     * @return Illuminate\Http\Response
+     */
+
+    public function updateProfile(UpdatePatientRequest $request, $unique_id)
     {
-        $this->validate($request, [
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'email' => 'required',
-            'gender' => 'required|string',
-            'phone' => 'required|string',
-            'dob' => 'required|string',
-        ]);
+
+        // Retrieve the validated input data...
+        $validated = $request->validated();
+
         $user = User::where('unique_id', $unique_id)->first();
         //        $user->email = $request->email;
         $user->firstname = $request->firstname;
@@ -30,6 +36,8 @@ class PatientController extends Controller
         $user->gender = $request->gender;
         $user->dob = $request->dob;
         $user->phone = $request->phone;
+
+        //$user->update(['avatar' => $avatar]);
 
         if (!$user->save()) {
             return response([
@@ -74,7 +82,7 @@ class PatientController extends Controller
 
     public function getHospitals()
     {
-        $hospitals = Hospital::get()->toArray();
+        $hospitals = Hospital::get();
         if (!$hospitals || !count($hospitals)) {
             $status = false;
             $message = 'No hospital has added yet';
@@ -85,8 +93,9 @@ class PatientController extends Controller
         $status = true;
         $message = 'List of all the hospitals';
         $code = RES::HTTP_NO_CONTENT;
-        $data = $hospitals;
-        return helpController::getResponse($status, $message, $code, $data);
+        $data = $hospitals->toArray();
+        return $data;
+        // return helpController::getResponse($status,  $code, $message, $data);
     }
     public function getHospital($id)
     {

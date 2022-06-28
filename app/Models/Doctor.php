@@ -1,20 +1,21 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class Doctor extends Authenticatable implements JWTSubject
 {
     use SoftDeletes, HasFactory;
 
     protected $appends = ['hospital', 'specialties'];
+
+
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -51,6 +52,16 @@ class Doctor extends Authenticatable implements JWTSubject
     public function schedule()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class);
     }
 
     public function getDoctorsAttribute()

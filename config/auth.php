@@ -40,13 +40,13 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
-        'hospital' => [
+        'hospital_api' => [
             'driver' => 'jwt',
-            'provider' => 'hospitals',
+            'provider' => 'hospital',
         ],
-        'doctor' => [
+        'doctor_api' => [
             'driver' => 'jwt',
-            'provider' => 'doctors',
+            'provider' => 'doctor',
         ],
         'admin' => [
             'driver' => 'session',
@@ -80,19 +80,19 @@ return [
 
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Models\User::class,
         ],
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Admin::class,
+            'model' => App\Models\Admin::class,
         ],
-        'hospitals' => [
+        'hospital' => [
             'driver' => 'eloquent',
-            'model' => App\Hospital::class,
+            'model' => App\Models\Hospital::class,
         ],
-        'doctors' => [
+        'doctor' => [
             'driver' => 'eloquent',
-            'model' => App\Doctor::class,
+            'model' => App\Models\Doctor::class,
         ],
 
         // 'users' => [

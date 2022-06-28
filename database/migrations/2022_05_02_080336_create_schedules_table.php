@@ -8,17 +8,14 @@ class CreateSchedulesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->integer('doctor_id');
+            $table->integer('doctor_unique_id');
             $table->integer('day_id');
-            $table->string('from');
-            $table->string('to');
+            $table->string('date');
             $table->timestamps();
         });
     }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\User;
-use App\Doctor;
-use App\Hospital;
+use App\Models\User;
+use App\Models\Doctor;
+use App\Models\Hospital;
 use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
 use App\Mail\newHospitalMail;

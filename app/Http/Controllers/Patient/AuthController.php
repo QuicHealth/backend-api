@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Database\Eloquent\Model;
+use App\Http\Resources\PatientResource;
 use App\Http\Controllers\helpController;
 use Illuminate\Support\Facades\Validator;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class AuthController extends Controller
@@ -34,7 +34,7 @@ class AuthController extends Controller
             $message = 'error';
             $data = $validator->errors()->toArray();
             $code = RES::HTTP_BAD_REQUEST;
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         }
 
         $user = new User();
@@ -69,20 +69,16 @@ class AuthController extends Controller
             $message = 'Registration Successful';
             $code = RES::HTTP_OK;
             $data = [
-                'unique_id' => $user->unique_id,
-                'name' => $user->firstname,
-                'name' => $user->lastname,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
+                'user' => new PatientResource($user),
                 'token' => $this->createNewToken($token),
             ];
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         } else {
 
             $status = false;
             $message = 'Registration Unsuccessful';
             $code = RES::HTTP_UNAUTHORIZED;
-            return helpController::getResponse($status, $message, $code);
+            return helpController::getResponse($status, $code, $message);
         }
     }
 
@@ -98,7 +94,7 @@ class AuthController extends Controller
             $message = 'error';
             $data = $validator->errors()->toArray();
             $code = RES::HTTP_BAD_REQUEST;
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         }
 
         $credentials = $request->only('email', 'password');
@@ -110,14 +106,10 @@ class AuthController extends Controller
             $message = 'Login Successful';
             $code = RES::HTTP_OK;
             $data = [
-                'id' => $user->id,
-                'name' => $user->firstname,
-                'name' => $user->lastname,
-                'email' => $user->email,
-                'phone_number' => $user->phone,
+                'user' => new PatientResource($user),
                 'token' => $this->createNewToken($token),
             ];
-            return helpController::getResponse($status, $message, $code, $data);
+            return helpController::getResponse($status, $code, $message,  $data);
         } else {
             return response([
                 'status' => false,

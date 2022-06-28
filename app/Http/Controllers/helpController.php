@@ -12,7 +12,7 @@ class helpController extends Controller
         session()->flash('msg', $msg);
     }
 
-    public static function getResponse(bool $status, string $message = "", $responseCode, array $data = [])
+    public static function getResponse(bool $status, $responseCode, string $message = "",  array $data = [])
     {
         return response()->json([
             'status' => $status,

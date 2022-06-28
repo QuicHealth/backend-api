@@ -2,18 +2,19 @@
 
 namespace App\Exceptions;
 
-use App\Events\NotifyTeamMembersOfServerErrorEvent;
-use App\Traits\HasResponse;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 use Throwable;
+use App\Traits\HasResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use App\Events\NotifyTeamMembersOfServerErrorEvent;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -65,6 +66,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+        if ($e instanceof ModelNotFoundException && $request->wantsJson()) {
+            return response()->json(
+                [
+                    'error' => 'Resource not found'
+                ],
+                404
+            );
+        }
         if ($e instanceof MethodNotAllowedHttpException) {
             return $this->notAllowedResponse(__('errors.method_not_allowed'));
         }

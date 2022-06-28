@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Doctor;
 
-use App\Doctor;
+use App\Models\Doctor;
+use App\Models\Schedule;
+use App\Models\Timeslot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Schedule;
+use App\Actions\SetAvailablityAction;
+use App\Http\Requests\ScheduleRequest;
 
 class DoctorController extends Controller
 {
@@ -19,47 +23,27 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function setSchedule(Request $request)
+    public function setSchedule(ScheduleRequest $request)
     {
-        $this->validate($request, [
-            'day_id' => 'required|integer', // monday
-            'from' => 'required|date_format:H:i|unique:schedules', // 8.00am
-            'to' => 'required|date_format:H:i|after:from|unique:schedules', // 4.00pm
-        ]);
+        $validated = $request->validated();
 
-        $hourdiff = (strtotime($request->to) - strtotime($request->from)) / 3600;
-
-        // return $hourdiff;
-
-        if ($hourdiff == 1) {
-            $schedule = new Schedule();
-            $schedule->doctor_id = $request->doctor_id;
-            $schedule->day_id = $request->day_id;
-            $schedule->from = $request->from;
-            $schedule->to = $request->to;
-
-            $schedule->save();
-
-            return response([
-                'status' => true,
-                'msg' => 'Schedule saved successfully'
-            ]);
-        }
-
-        return response([
-            'status' => false,
-            'message' => 'Time must be one hour',
-        ], 402);
+        return SetAvailablityAction::run($validated);
     }
 
     public function getSchedule()
     {
-        $schedule = Schedule::where('doctor_id', 1)->get();
+        $schedule = Schedule::where('doctor_unique_id', 1)->with('timeslot')->get();
         return response([
             'status' => true,
             'data' => $schedule
         ]);
     }
+
+    public function getavailble()
+    {
+        # code...
+    }
+
 
     public function getDoctorsDashboard(Request $request)
     {
@@ -74,6 +58,7 @@ class DoctorController extends Controller
             'phone' => 'required',
             'address' => 'required|string',
             'specialty' => 'required|integer',
+            'password' => 'required|min:6',
         ]);
 
         // $password = rand(111111, 999999);

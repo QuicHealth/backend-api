@@ -18,11 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::prefix('v1')->group(function () {
 
     Route::namespace('Patient')->group(function () {
-        //pascal api code goes here
 
         Route::post('register', 'AuthController@register');
         Route::post('login', 'AuthController@login');
@@ -46,18 +44,24 @@ Route::prefix('v1')->group(function () {
             Route::get('get-dashboard', 'PatientController@getDashboard');
             Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
 
-            // Payment APIs
-            Route::post('make-payment', 'PaymentController@makePayment');
-
             // appointment APIs
             Route::post('create-appointment', 'AppointmentController@createAppointment');
+            Route::post('appointment/details', 'AppointmentController@appointmentDetails');
             Route::get('appointments', 'AppointmentController@getAll');
             Route::get('appointment/{id}', 'AppointmentController@findAppointment');
             Route::put('reschedule-appointment/{id}', 'AppointmentController@rescheduleAppointment');
             Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
         });
+
+        // Payment APIs
+        Route::post('payment', 'PaymentController@makePayment');
+        Route::get('payment/status/{txnReference}', 'PaymentController@payment_status');
+        Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
     });
+
+    // Route::webhooks('webhook-receiving-url');
+
 
     Route::namespace('Doctor')->prefix('doctor')->group(function () {
 
@@ -65,7 +69,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('add-test-Doctor', 'DoctorController@testDoctor');
 
-        Route::middleware('auth:api')->group(function () {
+        Route::middleware('auth:doctor_api')->group(function () {
             Route::Post(
                 'doctor-forget-password',
                 'DoctorAuthController@doctorsForgetPassword'
@@ -80,11 +84,11 @@ Route::prefix('v1')->group(function () {
 
     Route::namespace('Hospital')->prefix('hospital')->group(function () {
         //abass api code goes here
-        Route::post('login', 'HospitalAuthController@hospitalLogin');
+        Route::post('hospital-login', 'HospitalAuthController@hospitalLogin');
 
         Route::post('add-test-Hospital', 'HospitalController@testHospital');
 
-        Route::middleware('auth:api')->group(function () {
+        Route::middleware('auth:hospital_api')->group(function () {
             Route::post('add-doctor', 'HospitalController@addDoctor');
             Route::get('dashboard', 'HospitalController@getDashboard');
             Route::put('update', 'HospitalController@update');
