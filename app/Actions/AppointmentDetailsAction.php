@@ -18,8 +18,16 @@ class AppointmentDetailsAction
         if ($appointment) {
 
             $details = Details::updateOrCreate(
-                ['appointment_id' => $data['appointment_id']],
-                [$data]
+                [
+                    'appointment_id' => $data['appointment_id']
+                ],
+
+                [
+                    'purpose' => $data['purpose'],
+                    'length' => $data['length'],
+                    'treatments' => $data['treatments'],
+                    'others' => $data['others']
+                ]
             );
 
             return $details;
