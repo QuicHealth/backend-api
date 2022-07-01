@@ -14,7 +14,7 @@ class SetAvailablityAction
     public function handle($validated)
     {
         $setSchedule = Schedule::updateOrCreate(
-            ['doctor_unique_id' => $validated['doctor_id'], 'day_id' => $validated['day_id']],
+            ['doctor_id' => $validated['doctor_id'], 'day_id' => $validated['day_id']],
             ['date' =>  Carbon::now()->toFormattedDateString()]
         );
 

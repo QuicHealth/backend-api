@@ -31,9 +31,9 @@ class DoctorAuthAction
 
         $credentials = $request->only('email', 'password');
 
-        if ($token = Auth('doctor_api')->attempt($credentials)) {
+        if ($token = auth('doctor_api')->attempt($credentials)) {
 
-            $user = Auth('doctor_api')->user();
+            $user = auth('doctor_api')->user();
 
             return response([
                 'status' => true,
