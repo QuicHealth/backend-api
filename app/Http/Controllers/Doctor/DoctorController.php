@@ -4,24 +4,23 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Models\Doctor;
 use App\Models\Schedule;
-use App\Models\Timeslot;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Actions\SetAvailablityAction;
 use App\Http\Requests\ScheduleRequest;
+use App\Http\Resources\DoctorResource;
 
 class DoctorController extends Controller
 {
-    public function getDays()
-    {
-        $days = DB::table('days')->get();
-        return response([
-            'status' => true,
-            'data' => $days
-        ]);
-    }
+    // public function getDays()
+    // {
+    //     $days = DB::table('days')->get();
+    //     return response([
+    //         'status' => true,
+    //         'data' => $days
+    //     ]);
+    // }
 
     public function setSchedule(ScheduleRequest $request)
     {
@@ -32,7 +31,7 @@ class DoctorController extends Controller
 
     public function getSchedule()
     {
-        $schedule = Schedule::where('doctor_unique_id', 1)->with('timeslot')->get();
+        $schedule = Schedule::where('doctor_id', auth('doctor_api')->user()->id)->with('timeslot')->get();
         return response([
             'status' => true,
             'data' => $schedule
@@ -47,7 +46,13 @@ class DoctorController extends Controller
 
     public function getDoctorsDashboard(Request $request)
     {
-        # code...
+        $doctor = Doctor::where("id", auth('doctor_api')->user()->id)
+            ->with(['hospital', 'schedule', 'appointments'])
+            ->first();
+
+        // dd($doctor);DoctorResource::collection
+
+        return response()->json(['success' => true, 'doctor' => new DoctorResource($doctor)]);
     }
 
     public function testDoctor(Request $request)

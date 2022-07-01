@@ -2,10 +2,18 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use App\Models\Timeslot;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class ScheduleCollection extends ResourceCollection
+
+class ScheduleResource extends JsonResource
 {
+
+    public function slot($schedule_id)
+    {
+        $timeslot = Timeslot::where('schedule_id', $schedule_id)->get();
+        return $timeslot;
+    }
     /**
      * Transform the resource collection into an array.
      *
@@ -20,7 +28,7 @@ class ScheduleCollection extends ResourceCollection
             'day_id' => $this->day_id,
             'date' => $this->date,
             'doctor' => $this->whenLoaded('doctor'),
-            'timeslot' => $this->whenLoaded('timeslot'),
+            'timeslot' => $this->slot($this->id),
         ];
     }
 }

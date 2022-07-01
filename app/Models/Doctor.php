@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Concerns\HasRelationships;
 
 class Doctor extends Authenticatable implements JWTSubject
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, HasRelationships;
 
     protected $appends = ['hospital', 'specialties'];
 
