@@ -63,7 +63,7 @@ class CreateAppointmentAction
 
     public function checkAppointmentBooking()
     {
-        $appointment = new Appointment();
+        // $appointment = new Appointment();
 
         $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
             ->where('day_id', $this->validated['day_id'])

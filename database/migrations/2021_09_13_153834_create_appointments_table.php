@@ -17,7 +17,7 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('doctor_id');
-            $table->integer('day_id');
+            $table->string('day_id');
             $table->string('start');
             $table->string('end');
             $table->string('date');
