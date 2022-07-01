@@ -63,4 +63,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Appointment::class);
     }
+
+    /**
+     * Get the Notifications associated with the user.
+    */
+    public function notification()
+    {
+        return $this->hasMany(Notification::class);
+    }
 }

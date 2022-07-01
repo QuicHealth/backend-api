@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\CreateAppointmentAction;
 use App\Actions\AppointmentDetailsAction;
+use App\Events\NotificationReceived;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\AppointmentDetailsRequest;
 
@@ -26,6 +27,12 @@ class AppointmentController extends Controller
         // Appointment::truncate();
 
         return CreateAppointmentAction::run($validated, $user_id, $date);
+        // $appoint = CreateAppointmentAction::run($validated, $user_id, $date);
+        // if($appoint)
+        // {
+        //     event(new NotificationReceived($user_id));
+        //     return $appoint;
+        // }
     }
 
     public function appointmentDetails(AppointmentDetailsRequest $request)

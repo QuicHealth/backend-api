@@ -32,7 +32,7 @@ class DoctorController extends Controller
 
     public function getSchedule()
     {
-        $schedule = Schedule::where('doctor_unique_id', 1)->with('timeslot')->get();
+        $schedule = Schedule::where('doctor_id', 1)->with('timeslot')->get();
         return response([
             'status' => true,
             'data' => $schedule
