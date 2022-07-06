@@ -12,16 +12,12 @@ class Schedule extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'time_slots' => 'array',
+    protected $fillable = [
+        'doctor_id',
+        'date'
     ];
+
+    protected $table = 'schedules';
 
 
     public function doctor()

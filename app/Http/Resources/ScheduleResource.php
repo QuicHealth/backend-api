@@ -25,7 +25,7 @@ class ScheduleResource extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'day_id' => $this->day_id,
+            // 'day_id' => $this->day_id,
             'date' => $this->date,
             'doctor' => $this->whenLoaded('doctor'),
             'timeslot' => $this->slot($this->id),

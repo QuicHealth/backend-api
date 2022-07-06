@@ -42,7 +42,7 @@ class CreateAppointmentAction
 
         if ($appointment) {
 
-            UpdateTimeslotStatus::run($this->validated['doctor_id'], $this->validated['day_id'], $this->validated['time_slots']);
+            UpdateTimeslotStatus::run($appointment->doctor_id, $appointment->day_id, $this->validated['time_slots']);
 
             return response([
                 'status' => true,

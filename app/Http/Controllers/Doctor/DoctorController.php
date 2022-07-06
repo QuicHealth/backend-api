@@ -38,9 +38,16 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function getavailble()
+    public function searchSchedule($date)
     {
-        # code...
+        $schedule = Schedule::where('doctor_id', auth('doctor_api')->user()->id)
+            ->where('date', $date)->with('timeslot')
+            ->get();
+
+        return response([
+            'status' => true,
+            'data' => $schedule
+        ]);
     }
 
 
