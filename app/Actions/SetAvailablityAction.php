@@ -14,7 +14,7 @@ class SetAvailablityAction
     public function handle($validated)
     {
         $setSchedule = Schedule::updateOrCreate(
-            ['doctor_id' => $validated['doctor_id']],
+            ['doctor_id' => $validated['doctor_id'], 'date' =>  $validated['date']],
             ['date' =>  $validated['date']]
         );
 

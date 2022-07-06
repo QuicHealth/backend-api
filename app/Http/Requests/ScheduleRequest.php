@@ -25,7 +25,7 @@ class ScheduleRequest extends FormRequest
     {
         return [
             'doctor_id' => ['required'],
-            'date' => ['required', 'string'],
+            'date' => ['required'],
             'time_slots' => ['required'],
             "time_slots.*.start"  => "date_format:H:i|distinct",
             "time_slots.*.end"  => "date_format:H:i|distinct",

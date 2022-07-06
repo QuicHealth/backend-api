@@ -18,7 +18,7 @@ class CreateAppointmentAction
     public AppointmentDetailsRequest $request;
 
 
-    public function handle($validated, $user_id, $date)
+    public function handle($validated, $user_id)
     {
         $this->validated = $validated;
 
@@ -36,13 +36,13 @@ class CreateAppointmentAction
             return $data;
         }
 
-        $appointment =  $this->createAppointment($user_id, $date);
+        $appointment =  $this->createAppointment($user_id);
 
         // AppointmentDetailsAction::run($this->request, $appointment->id);
 
         if ($appointment) {
 
-            UpdateTimeslotStatus::run($appointment->doctor_id, $appointment->day_id, $this->validated['time_slots']);
+            UpdateTimeslotStatus::run($this->validated['doctor_id'], $this->validated['date'], $this->validated['time_slots']);
 
             return response([
                 'status' => true,
@@ -63,28 +63,24 @@ class CreateAppointmentAction
 
     public function checkAppointmentBooking()
     {
-        // $appointment = new Appointment();
 
         $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
-            ->where('day_id', $this->validated['day_id'])
+            ->where('date', $this->validated['date'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
             ->first();
 
-        // dd($this->validated['time_slots']['start']);
-
         return $checkAppointmentBooking;
     }
 
-    public function createAppointment($user_id, $date)
+    public function createAppointment($user_id)
     {
         $appointment = Appointment::create([
             "user_id" => $user_id,
             "doctor_id" => $this->validated['doctor_id'],
-            "day_id" => $this->validated['day_id'],
+            "date" => $this->validated['date'],
             "start" => $this->validated['time_slots']['start'],
             "end" => $this->validated['time_slots']['end'],
-            "date" => $date,
             "status" => 'pending',
             "payment_status" => 'pending',
             "payment_reference" => '',

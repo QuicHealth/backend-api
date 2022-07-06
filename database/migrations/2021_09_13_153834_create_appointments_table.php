@@ -15,16 +15,23 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
-            $table->integer('doctor_id');
-            $table->string('day_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('doctor_id');
+            $table->string('date');
             $table->string('start');
             $table->string('end');
-            $table->string('date');
             $table->string('status');
             $table->string('payment_status');
             $table->string('payment_reference');
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')->on('users')
+                ->onDelete('cascade');
+
+            $table->foreign('doctor_id')
+                ->references('id')->on('doctors')
+                ->onDelete('cascade');
         });
     }
 
