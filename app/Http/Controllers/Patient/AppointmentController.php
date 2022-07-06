@@ -22,17 +22,11 @@ class AppointmentController extends Controller
         $validated = $request->validated();
 
         $user_id = Auth::user($request->token)->id;
-        $date = Carbon::now()->toFormattedDateString();
+        // $date = Carbon::now()->toFormattedDateString();
 
         // Appointment::truncate();
 
-        return CreateAppointmentAction::run($validated, $user_id, $date);
-        // $appoint = CreateAppointmentAction::run($validated, $user_id, $date);
-        // if($appoint)
-        // {
-        //     event(new NotificationReceived($user_id));
-        //     return $appoint;
-        // }
+        return CreateAppointmentAction::run($validated, $user_id);
     }
 
     public function appointmentDetails(AppointmentDetailsRequest $request)

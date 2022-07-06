@@ -34,7 +34,8 @@ class SendNotification
         $saveNotification = Notification::create(
             [
                 'user_id' => '1',
-                'user_type' => 'Appointment',
+                'user_type' => 'doctor',
+                'title' => 'Fever',
                 'message' => 'Message',
                 'data' => '1'
             ]

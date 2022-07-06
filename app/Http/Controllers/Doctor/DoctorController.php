@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Actions\SetAvailablityAction;
 use App\Http\Requests\ScheduleRequest;
 use App\Http\Resources\DoctorResource;
+use App\Http\Resources\ScheduleResource;
 
 class DoctorController extends Controller
 {
@@ -38,9 +39,17 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function getavailble()
+    public function searchSchedule($date)
     {
-        # code...
+        $schedule = Schedule::where('doctor_id', auth('doctor_api')->user()->id)
+            ->where('date', $date)
+            ->with('timeslot')
+            ->get();
+
+        return response([
+            'status' => true,
+            'scheduling' =>  ScheduleResource::collection($schedule)
+        ]);
     }
 
 
