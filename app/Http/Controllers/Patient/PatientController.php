@@ -8,7 +8,9 @@ use App\Models\Hospital;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\DoctorResource;
 use App\Http\Controllers\helpController;
+use App\Http\Resources\HospitalResource;
 use App\Http\Requests\UpdatePatientRequest;
 use Symfony\Component\HttpFoundation\Response as RES;
 
@@ -82,24 +84,22 @@ class PatientController extends Controller
 
     public function getHospitals()
     {
-        $hospitals = Hospital::get();
+        $hospitals = Hospital::with('doctors')->get();
         if (!$hospitals || !count($hospitals)) {
             $status = false;
             $message = 'No hospital has added yet';
-            $code = RES::HTTP_OK;
+            $code = RES::HTTP_NO_CONTENT;
             return helpController::getResponse($status, $message, $code);
         }
 
-        $status = true;
-        $message = 'List of all the hospitals';
-        $code = RES::HTTP_NO_CONTENT;
-        $data = $hospitals->toArray();
-        return $data;
-        // return helpController::getResponse($status,  $code, $message, $data);
+        return response([
+            'status' => true,
+            'hospital' =>  HospitalResource::collection($hospitals),
+        ], RES::HTTP_OK);
     }
     public function getHospital($id)
     {
-        $hospital = Hospital::where('unique_id', $id)->first()->toArray();
+        $hospital = Hospital::where('unique_id', $id)->with('doctors')->first();
         if (!$hospital) {
             return response([
                 'status' => false,
@@ -107,43 +107,54 @@ class PatientController extends Controller
             ], 404);
         }
 
-        $status = true;
-        $message = 'Hospital found';
-        $code = RES::HTTP_OK;
-        $data = $hospital;
+        // $status = true;
+        // $message = 'Hospital found';
+        // $code = RES::HTTP_OK;
+        // $data = new HospitalResource($hospital)->toArray();
 
-        return helpController::getResponse($status, $message, $code, $data);
+        // return helpController::getResponse($status, $message, $code, $data);
+        return response([
+            'status' => true,
+            'hospital' => new HospitalResource($hospital),
+        ], RES::HTTP_OK);
     }
     public function getRandomHospitals()
     {
-        $hospitals = Hospital::inRandomOrder()->limit(4)->get();
+        $hospitals = Hospital::inRandomOrder()->limit(4)->with('doctors')->get();
+
         return response([
             'status' => true,
-            'hospitals' => $hospitals,
+            'hospitals' => HospitalResource::collection($hospitals),
         ]);
     }
 
     public function getRandomDoctors()
     {
-        $doctors = Doctor::inRandomOrder()->limit(4)->get();
+        $doctors = Doctor::inRandomOrder()->limit(4)->with(['schedule', 'hospital'])->get();
+
         return response([
             'status' => true,
-            'doctors' => $doctors,
-        ]);
+            'doctors' => DoctorResource::collection($doctors),
+        ], RES::HTTP_OK);
     }
 
     public function getDoctors()
     {
-        $doctors = Doctor::where('status', 1)->paginate(12);
+        $doctors = Doctor::where('status', 1)
+            ->with(['schedule', 'hospital'])
+            ->paginate(12);
+
         return response([
             'status' => true,
-            'doctors' => $doctors,
+            'doctors' =>  DoctorResource::collection($doctors),
         ]);
     }
 
     public function getDoctor($id)
     {
-        $doctor = Doctor::where('unique_id', $id)->first();
+        $doctor = Doctor::where('unique_id', $id)
+            ->with(['schedule', 'hospital'])
+            ->first();
         if (!$doctor) {
             return response([
                 'status' => false,
@@ -152,7 +163,7 @@ class PatientController extends Controller
         }
         return response([
             'status' => true,
-            'doctor' => $doctor,
+            'doctor' => new DoctorResource($doctor),
         ]);
     }
 

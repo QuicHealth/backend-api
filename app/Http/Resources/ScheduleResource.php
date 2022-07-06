@@ -29,7 +29,8 @@ class ScheduleResource extends JsonResource
             'date' => $this->date,
             'doctor_id' => $this->doctor_id,
             'doctor' => new DoctorResource($this->whenLoaded('doctor')),
-            'timeslot' =>  TimeslotResource::collection($this->whenLoaded('timeslot')),
+            'timeslot' =>  TimeslotResource::collection($this->timeslot),
+            // 'timeslot' =>  TimeslotResource::collection($this->whenLoaded('timeslot')),
         ];
     }
 }
