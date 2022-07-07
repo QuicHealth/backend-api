@@ -26,7 +26,6 @@ class UpdateTimeslotStatus
             ->where('date', $date)
             ->first();
 
-
         if ($getSchedule) {
 
             return $getSchedule;
