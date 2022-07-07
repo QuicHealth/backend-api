@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
-    Route::namespace('Patient')->group(function () {
+    Route::namespace('Patient')->prefix('patient')->group(function () {
 
         Route::post('register', 'AuthController@register');
         Route::post('login', 'AuthController@login');
