@@ -12,6 +12,7 @@ class Settings extends Model
     protected $table = "settings";
 
     protected $fillable = [
+        'hospital_id',
         'bank',
         'acc_no',
         'acc_name',

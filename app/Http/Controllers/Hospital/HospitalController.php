@@ -101,10 +101,6 @@ class HospitalController extends Controller
             'state' => 'required|string',
             'country' => 'required|string',
             'password' => 'required|min:6',
-            'settings.bank' => 'required|string',
-            'settings.acc_name' => 'required|string',
-            'settings.acc_no' => 'required',
-            'settings.price' => 'required',
         ]);
 
         $hos = new Hospital();
@@ -125,24 +121,12 @@ class HospitalController extends Controller
             $hos->latitude = $request['latitude'];
         }
 
-        // $hos->settings()->attach([$hos->id, $request->bank, $request->acc_name, $request->acc_no, $request->price]);
-
         if (!$hos->save()) {
             return response([
                 'status' => false,
                 'msg' => 'Error saving Hospital'
             ]);
         }
-        Settings::updateOrCreate(
-            [
-                'hospital_id' => $hos->id,
-                'bank' => $request['settings']['bank'],
-                'acc_name' => $request['settings']['acc_name'],
-                'acc_no' =>  $request['settings']['acc_no'],
-                'price' =>  $request['settings']['price']
-            ]
-        );
-
 
         return response([
             'status' => true,
