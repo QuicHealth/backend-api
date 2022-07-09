@@ -17,8 +17,9 @@ class CreateNotificationsTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('user_type');
+            $table->string('title');
             $table->text('message');
-            $table->json('data')->nullable();
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
     }

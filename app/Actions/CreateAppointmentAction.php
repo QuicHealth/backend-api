@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Events\NotificationReceived;
 use App\Models\Appointment;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Http\Requests\AppointmentDetailsRequest;
@@ -87,6 +88,12 @@ class CreateAppointmentAction
             "unique_id" => uniqid(),
         ]);
 
-        return $appointment;
+        // return $appointment;
+
+        if($appointment)
+        {
+            event(new NotificationReceived($user_id));
+            return $appointment;
+        }
     }
 }

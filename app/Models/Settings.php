@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Settings extends Model
 {
     use HasFactory;
+
+    protected $table = "settings";
+
+    protected $fillable = [
+        'hospital_id',
+        'bank',
+        'acc_no',
+        'acc_name',
+        'price',
+    ];
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class);
+    }
 }

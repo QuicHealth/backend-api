@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Event;
 use App\Events\NewWebHookCallReceived;
+use App\Events\NotificationReceived;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\MonnifyNotificationListener;
+use App\Listeners\SendNotification;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -34,6 +36,10 @@ class EventServiceProvider extends ServiceProvider
 
         NewWebHookCallReceived::class => [
             MonnifyNotificationListener::class,
+        ],
+
+        NotificationReceived::class => [
+            SendNotification::class,
         ],
 
     ];
