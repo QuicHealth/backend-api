@@ -35,9 +35,13 @@ class Hospital extends Authenticatable implements JWTSubject
         return $this->doctors()->get();
     }
 
+    /**
+     * Get all the settings associated with the hospital.
+     */
+
     public function settings()
     {
-        return $this->hasMany(Settings::class);
+        return $this->hasOne(Settings::class);
     }
 
     /**

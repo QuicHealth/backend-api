@@ -6,61 +6,41 @@ use App\Models\Payment;
 use App\Facades\Monnify;
 use Illuminate\Http\Request;
 use App\Classes\StringGenerator;
-use Illuminate\Support\Facades\Log;
+use App\Actions\MakePaymentAction;
+use App\Actions\UpdatePaymentAction;
 use App\Http\Controllers\Controller;
 use App\Events\NewWebHookCallReceived;
 use App\Models\Payment as WebHookCall;
-use App\Classes\Funtions\MonnifyPaymentMethod;
-use App\Classes\Funtions\MonnifyPaymentMethods;
 
 
 class PaymentController extends Controller
 {
 
+    protected $payload = [];
+
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
+
     public function makePayment(Request $request)
     {
-        // dd($this->generateRandomString());
         $validatedPayload = $request->validate([
+            'appointment_id' => 'required|integer',
             'amount' => 'required',
             'customerName' => 'required',
             'customerEmail' => 'required',
             'paymentDescription' => 'required',
-            // 'redirectUrl' => 'required',
         ]);
+
+        $this->payload = $validatedPayload;
         $paymentReference = $this->generateRandomString();
 
-        $response = Monnify::Transactions()->initializeTransaction(
-            $validatedPayload['amount'],
-            $validatedPayload['customerName'],
-            $validatedPayload['customerEmail'],
-            $paymentReference,
-            $validatedPayload['paymentDescription'],
-            $validatedPayload['redirectUrl'] = 'http:127.0.0.1:8000/api/v1/webhook/transaction-completion',
-            new MonnifyPaymentMethods(MonnifyPaymentMethod::CARD(), MonnifyPaymentMethod::ACCOUNT_TRANSFER()),
-        );
+        $this->payload['paymentReference'] = $paymentReference;
 
-        $payment = Payment::create([
-            'transactionReference' => "",
-            'paymentReference' => $paymentReference,
-            'amountPaid' => $validatedPayload['amount'],
-            'totalPayable' => "",
-            'paymentStatus' => "Not Paid",
-            'paymentDescription' => $validatedPayload['paymentDescription'],
-            'transactionHash' => "",
-            'currency' => "",
-            'paymentMethod' => "",
-            'paidOn' => "",
-        ]);
+        $response = MakePaymentAction::run($this->payload);
 
-        if ($payment) {
-            return response([
-                'status' => $response,
-            ], 200);
-        } else {
-            return response([
-                'status' => "error",
-            ], 500);
-        }
+        return $response;
     }
 
     public function txnCompletion(Request $request)
@@ -82,11 +62,31 @@ class PaymentController extends Controller
         event(new NewWebHookCallReceived($webHookCall, $isValidHash, NewWebHookCallReceived::WEB_HOOK_EVENT_TXN_COMPLETION_CALL));
     }
 
-    public function payment_status(Request $request, $txnReference)
+    public function payment_status(Request $request)
+    {
+        // dd($request->query('paymentReference'));
+
+        $transaction = Payment::where('paymentReference', $request->query('paymentReference'))->first();
+
+        if ($transaction) {
+
+            return UpdatePaymentAction::run($transaction);
+        } else {
+            return response([
+                'status' => "error",
+            ], 500);
+        }
+    }
+
+
+    public function payment_confirmation($txnReference)
     {
         $response = Monnify::Transactions()->getTransactionStatus($txnReference);
+
         return $response;
     }
+
+
 
     private function initRequest($request, &$isValidHash)
     {

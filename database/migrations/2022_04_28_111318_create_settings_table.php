@@ -19,7 +19,7 @@ class CreateSettingsTable extends Migration
             $table->string('bank');
             $table->string('acc_no');
             $table->string('acc_name');
-            $table->string('price');
+            $table->string('amount');
             $table->timestamps();
         });
     }

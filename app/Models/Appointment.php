@@ -11,7 +11,19 @@ class Appointment extends Model
     // 0 - pending
     // 1 - Successful
     // 2 - Cancelled
-    protected $guarded = [];
+    // protected $guarded = [];
+
+    protected $fillable =
+    [
+        'user_id',
+        'doctor_id',
+        'date',
+        'start',
+        'end',
+        'status',
+        'payment_status',
+        'unique_id'
+    ];
 
     // protected $appends = ['day'];
 

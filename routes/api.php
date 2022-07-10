@@ -56,7 +56,8 @@ Route::prefix('v1')->group(function () {
 
         // Payment APIs
         Route::post('payment', 'PaymentController@makePayment');
-        Route::get('payment/status/{txnReference}', 'PaymentController@payment_status');
+        Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
+        Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
         Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
     });
 
