@@ -90,7 +90,7 @@ class PatientController extends Controller
      */
     public function getHospitals()
     {
-        $hospitals = Hospital::with('doctors')->letest()->get();
+        $hospitals = Hospital::with(['doctors', 'settings'])->letest()->get();
 
         if ($hospitals) {
             return response([
@@ -107,7 +107,7 @@ class PatientController extends Controller
 
     public function getHospital($id)
     {
-        $hospital = Hospital::where('unique_id', $id)->with('doctors')->first();
+        $hospital = Hospital::where('unique_id', $id)->with(['doctors', 'settings'])->first();
         if (!$hospital) {
             return response([
                 'status' => false,

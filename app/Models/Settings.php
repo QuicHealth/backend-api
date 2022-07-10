@@ -16,7 +16,7 @@ class Settings extends Model
         'bank',
         'acc_no',
         'acc_name',
-        'price',
+        'amount',
     ];
 
     public function hospital()
