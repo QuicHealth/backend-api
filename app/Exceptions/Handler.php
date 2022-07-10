@@ -94,6 +94,10 @@ class Handler extends ExceptionHandler
             return $this->notAllowedResponse($e->getMessage());
         }
 
+        if ($e instanceof AuthorizationException) {
+            return $this->serverErrorResponse($e->getMessage());
+        }
+
         return $this->serverErrorResponse(__('errors.server_error'), new Exception($e->getMessage()));
     }
 }

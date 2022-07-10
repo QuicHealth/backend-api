@@ -36,6 +36,15 @@ class Hospital extends Authenticatable implements JWTSubject
     }
 
     /**
+     * Get all the settings associated with the hospital.
+     */
+
+    public function settings()
+    {
+        return $this->hasOne(Settings::class);
+    }
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed

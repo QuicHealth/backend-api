@@ -84,19 +84,21 @@ class PatientController extends Controller
 
     public function getHospitals()
     {
-        $hospitals = Hospital::with('doctors')->get();
-        if (!$hospitals || !count($hospitals)) {
-            $status = false;
-            $message = 'No hospital has added yet';
-            $code = RES::HTTP_NO_CONTENT;
-            return helpController::getResponse($status, $message, $code);
+        $hospitals = Hospital::with('doctors')->letest()->get();
+
+        if ($hospitals) {
+            return response([
+                'status' => true,
+                'hospital' =>  HospitalResource::collection($hospitals),
+            ], RES::HTTP_OK);
         }
 
-        return response([
-            'status' => true,
-            'hospital' =>  HospitalResource::collection($hospitals),
-        ], RES::HTTP_OK);
+        $status = false;
+        $message = 'No hospital has added yet';
+        $code = RES::HTTP_NO_CONTENT;
+        return helpController::getResponse($status, $message, $code);
     }
+
     public function getHospital($id)
     {
         $hospital = Hospital::where('unique_id', $id)->with('doctors')->first();

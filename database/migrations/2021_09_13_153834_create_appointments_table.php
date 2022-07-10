@@ -22,7 +22,6 @@ class CreateAppointmentsTable extends Migration
             $table->string('end');
             $table->string('status');
             $table->string('payment_status');
-            $table->string('payment_reference');
             $table->timestamps();
 
             $table->foreign('user_id')
