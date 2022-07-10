@@ -15,12 +15,10 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('appointments_id');
             $table->string('transactionReference');
             $table->string('paymentReference');
             $table->string('amountPaid');
             $table->string('totalPayable');
-            $table->string('settlementAmount');
             $table->string('paidOn');
             $table->string('paymentStatus');
             $table->string('paymentDescription');
@@ -28,10 +26,6 @@ class CreatePaymentsTable extends Migration
             $table->string('currency');
             $table->string('paymentMethod');
             $table->timestamps();
-
-            $table->foreign('appointments_id')
-                ->references('id')->on('appointments')
-                ->onDelete('cascade');
         });
     }
 

@@ -15,11 +15,6 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('hospital_id')->unsigned();
-            $table->string('bank');
-            $table->string('acc_no');
-            $table->string('acc_name');
-            $table->string('amount');
             $table->timestamps();
         });
     }

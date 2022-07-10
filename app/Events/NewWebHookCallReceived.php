@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Payment as WebHookCall;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Created By: Henry Ejemuta
+ * Email: henry.ejemuta@gmail.com
+ * GitHub: https://github.com/henryejemuta
+ * Project: laravel-monnify
+ * Class Name: monnify.php
+ * Date Created: 7/13/20
+ * Time Created: 3:43 PM
+ */
 
 return [
     /*

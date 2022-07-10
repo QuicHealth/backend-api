@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\CreateAppointmentAction;
 use App\Actions\AppointmentDetailsAction;
-use App\Events\NotificationReceived;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\AppointmentDetailsRequest;
 

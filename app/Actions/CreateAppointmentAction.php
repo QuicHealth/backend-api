@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use App\Events\NotificationReceived;
 use App\Models\Appointment;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Http\Requests\AppointmentDetailsRequest;
@@ -43,7 +42,7 @@ class CreateAppointmentAction
 
         if ($appointment) {
 
-            // UpdateTimeslotStatus::run($this->validated['doctor_id'], $this->validated['date'], $this->validated['time_slots']);
+            UpdateTimeslotStatus::run($this->validated['doctor_id'], $this->validated['date'], $this->validated['time_slots']);
 
             return response([
                 'status' => true,
@@ -69,7 +68,6 @@ class CreateAppointmentAction
             ->where('date', $this->validated['date'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
-            ->where('payment_status', 'PAID')
             ->first();
 
         return $checkAppointmentBooking;
@@ -85,14 +83,10 @@ class CreateAppointmentAction
             "end" => $this->validated['time_slots']['end'],
             "status" => 'pending',
             "payment_status" => 'pending',
+            "payment_reference" => '',
             "unique_id" => uniqid(),
         ]);
 
         return $appointment;
-
-        // if ($appointment) {
-        //     event(new NotificationReceived($user_id));
-        //     return $appointment;
-        // }
     }
 }

@@ -105,7 +105,6 @@ abstract class Transactions
         if (!$response->successful())
             throw new MonnifyFailedRequestException($responseObject->responseMessage ?? "Path '{$responseObject->path}' {$responseObject->error}", $responseObject->responseCode ?? $responseObject->status);
 
-
         return $responseObject->responseBody;
     }
 
