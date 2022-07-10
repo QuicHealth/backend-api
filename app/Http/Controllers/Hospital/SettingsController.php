@@ -23,7 +23,7 @@ class SettingsController extends Controller
                 'bank' => $request['bank'],
                 'acc_name' => $request['acc_name'],
                 'acc_no' =>  $request['acc_no'],
-                'price' =>  $request['price']
+                'amount' =>  $request['amount']
             ]
         );
 
@@ -31,6 +31,17 @@ class SettingsController extends Controller
         return response([
             'status' => true,
             'msg' => 'Settings saved successfully',
+            'data' => $Settings
+        ]);
+    }
+
+    public function settings()
+    {
+        $Settings = Settings::where('hospital_id', auth('hospital_api')->user()->id)->first();
+
+        return response([
+            'status' => true,
+            'msg' => 'Settings retrieved successfully',
             'data' => $Settings
         ]);
     }
