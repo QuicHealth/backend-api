@@ -81,7 +81,13 @@ class PatientController extends Controller
             'data' => array_merge(collect($user)->toArray()),
         ], 200);
     }
-
+    /**
+     * Get the hospital's information.
+     *
+     * @param  \App\Models\Hospital
+     *
+     * @return Illuminate\Http\Response
+     */
     public function getHospitals()
     {
         $hospitals = Hospital::with('doctors')->letest()->get();
@@ -109,12 +115,6 @@ class PatientController extends Controller
             ], 404);
         }
 
-        // $status = true;
-        // $message = 'Hospital found';
-        // $code = RES::HTTP_OK;
-        // $data = new HospitalResource($hospital)->toArray();
-
-        // return helpController::getResponse($status, $message, $code, $data);
         return response([
             'status' => true,
             'hospital' => new HospitalResource($hospital),

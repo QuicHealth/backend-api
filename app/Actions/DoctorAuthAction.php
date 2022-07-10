@@ -19,8 +19,6 @@ class DoctorAuthAction
             'password' => 'required',
         ]);
 
-        // dd($validated->fails());
-
         if ($validated->fails()) {
             $status = false;
             $message = 'error';
@@ -40,8 +38,6 @@ class DoctorAuthAction
                 'message' => 'Login Successful',
                 'token' => $token,
                 'user' => new DoctorResource($user),
-                // 'data' => $user
-
             ], 200);
         } else {
             return response([

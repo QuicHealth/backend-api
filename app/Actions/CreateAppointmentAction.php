@@ -5,9 +5,6 @@ namespace App\Actions;
 use App\Events\NotificationReceived;
 use App\Models\Appointment;
 use Lorisleiva\Actions\Concerns\AsAction;
-use App\Http\Requests\AppointmentDetailsRequest;
-use Illuminate\Http\Request;
-
 
 
 class CreateAppointmentAction
@@ -15,8 +12,6 @@ class CreateAppointmentAction
     use AsAction;
 
     public $validated;
-
-    public AppointmentDetailsRequest $request;
 
 
     public function handle($validated, $user_id)
@@ -39,11 +34,7 @@ class CreateAppointmentAction
 
         $appointment =  $this->createAppointment($user_id);
 
-        // AppointmentDetailsAction::run($this->request, $appointment->id);
-
         if ($appointment) {
-
-            // UpdateTimeslotStatus::run($this->validated['doctor_id'], $this->validated['date'], $this->validated['time_slots']);
 
             return response([
                 'status' => true,
