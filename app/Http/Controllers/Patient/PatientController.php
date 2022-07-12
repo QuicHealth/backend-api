@@ -90,12 +90,13 @@ class PatientController extends Controller
      */
     public function getHospitals()
     {
-        $hospitals = Hospital::with(['doctors', 'settings'])->letest()->get();
+        $hospitals = Hospital::with(['doctors', 'settings'])->latest()->get();
 
         if ($hospitals) {
             return response([
                 'status' => true,
-                'hospital' =>  HospitalResource::collection($hospitals),
+                // 'hospital' =>  HospitalResource::collection($hospitals),
+                'hospital' => $hospitals,
             ], RES::HTTP_OK);
         }
 
