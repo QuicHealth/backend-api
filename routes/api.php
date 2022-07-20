@@ -59,6 +59,10 @@ Route::prefix('v1')->group(function () {
         Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
         Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
         Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
+
+        //Zoom
+        Route::get('meetings', 'ZoomMeetingController@index');
+        Route::post('create-meeting', 'ZoomMeetingController@store');
     });
 
     // Route::webhooks('webhook-receiving-url');
