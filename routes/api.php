@@ -102,8 +102,8 @@ Route::prefix('v1')->group(function () {
             Route::post('reset-password', 'HospitalAuthController@hospitalResetPassword');
             Route::get('verify-reset-token', 'HospitalAuthController@hospitalVerifyPassword');
 
-            Route::post('setting', 'SettingsController@index');
-            Route::get('setting', 'SettingsController@settings');
+            Route::get('setting', 'SettingsController@index');
+            Route::post('setting', 'SettingsController@settings');
         });
     });
 });

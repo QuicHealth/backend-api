@@ -24,6 +24,10 @@ return new class extends Migration
             $table->text('start_url');
             $table->text('join_url');
             $table->timestamps();
+            
+            $table->foreign('appointments_id')
+                ->references('id')->on('appointments')
+                ->onDelete('cascade');
         });
     }
 
