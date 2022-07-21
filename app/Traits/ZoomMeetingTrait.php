@@ -31,7 +31,7 @@ trait ZoomMeetingTrait
             'waiting_room' => true,
             'approval_type' => config('zoom.approval_type'),
             'audio' => config('zoom.audio'),
-            'auto_recording' => config('zoom.auto_recording')
+            'auto_recording' => true
         ]);
 
         return  $user->meetings()->save($meeting);
