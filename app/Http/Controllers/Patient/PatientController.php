@@ -118,7 +118,7 @@ class PatientController extends Controller
 
         return response([
             'status' => true,
-            'hospital' => new HospitalResource($hospital),
+            'hospital' => $hospital,
         ], RES::HTTP_OK);
     }
     public function getRandomHospitals()

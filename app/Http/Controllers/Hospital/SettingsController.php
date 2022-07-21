@@ -8,7 +8,18 @@ use App\Models\Settings;
 
 class SettingsController extends Controller
 {
-    public function index(Request $request)
+    public function index()
+    {
+        $settings = Settings::where('hospital_id', auth('hospital_api')->user()->id)->first();
+
+        return response([
+            'status' => true,
+            'msg' => 'Settings retrieved successfully',
+            'data' => $settings
+        ]);
+    }
+
+    public function settings(Request $request)
     {
         $this->validate($request, [
             'bank' => 'required|string',
@@ -17,9 +28,9 @@ class SettingsController extends Controller
             'amount' => 'required|numeric',
         ]);
 
-        $Settings = Settings::updateOrCreate(
+        $settings = Settings::updateOrCreate(
+            ['hospital_id' => auth('hospital_api')->user()->id],
             [
-                'hospital_id' => auth('hospital_api')->user()->id,
                 'bank' => $request['bank'],
                 'acc_name' => $request['acc_name'],
                 'acc_no' =>  $request['acc_no'],
@@ -31,18 +42,8 @@ class SettingsController extends Controller
         return response([
             'status' => true,
             'msg' => 'Settings saved successfully',
-            'data' => $Settings
+            'data' => $settings
         ]);
-    }
 
-    public function settings()
-    {
-        $Settings = Settings::where('hospital_id', auth('hospital_api')->user()->id)->first();
-
-        return response([
-            'status' => true,
-            'msg' => 'Settings retrieved successfully',
-            'data' => $Settings
-        ]);
     }
 }
