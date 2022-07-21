@@ -15,12 +15,16 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('hospital_id')->unsigned();
+            $table->bigInteger('hospital_id')->unsigned()->unique();
             $table->string('bank');
             $table->string('acc_no');
             $table->string('acc_name');
             $table->string('amount');
             $table->timestamps();
+
+            $table->foreign('hospital_id')
+                ->references('id')->on('hospitals')
+                ->onDelete('cascade');
         });
     }
 
