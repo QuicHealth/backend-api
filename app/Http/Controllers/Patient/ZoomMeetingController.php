@@ -16,8 +16,7 @@ class ZoomMeetingController extends Controller
     public function index()
     {
         $meeting = zoom::all();
-        if($meeting)
-        {
+        if ($meeting) {
             return response()->json([
                 'status' => true,
                 'message' => 'success',
@@ -31,18 +30,18 @@ class ZoomMeetingController extends Controller
         $meeting = $this->createMeeting($request);
 
         ///Main Code///
-        // $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->firstorfail();
+        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->firstorfail();
 
-        // $create = zoom::create([
-        //     'appointment_id' => $getappint->id,
-        //     'meeting_id' => $meeting->id,
-        //     'topic' => $request->topic,
-        //     'start_at' => $getappint->start,
-        //     'duration' => $meeting->duration,
-        //     'password' => $meeting->password,
-        //     'start_url' => $meeting->start_url,
-        //     'join_url' => $meeting->join_url,
-        // ]);
+        $create = zoom::create([
+            'appointment_id' => $getappint->id,
+            'meeting_id' => $meeting->id,
+            'topic' => $request->topic,
+            'start_at' => $getappint->start,
+            'duration' => $meeting->duration,
+            'password' => $meeting->password,
+            'start_url' => $meeting->start_url,
+            'join_url' => $meeting->join_url,
+        ]);
         ///Main Code///
 
 
@@ -58,8 +57,7 @@ class ZoomMeetingController extends Controller
             'join_url' => $meeting->join_url,
         ]);
 
-        if($create)
-        {
+        if ($create) {
             return response()->json([
                 'status' => true,
                 'message' => 'success',
