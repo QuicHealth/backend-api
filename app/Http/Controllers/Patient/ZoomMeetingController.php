@@ -28,35 +28,40 @@ class ZoomMeetingController extends Controller
 
     public function store(Request $request)
     {
+        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
+
+        if(!$getappint)
+        {
+            return response()->json([
+                'status' => false,
+                'message' => 'error',
+                'data' => []
+            ], 422);
+        }
         $meeting = $this->createMeeting($request);
 
-        ///Main Code///
-        // $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->firstorfail();
-
-        // $create = zoom::create([
-        //     'appointment_id' => $getappint->id,
-        //     'meeting_id' => $meeting->id,
-        //     'topic' => $request->topic,
-        //     'start_at' => $getappint->start,
-        //     'duration' => $meeting->duration,
-        //     'password' => $meeting->password,
-        //     'start_url' => $meeting->start_url,
-        //     'join_url' => $meeting->join_url,
-        // ]);
-        ///Main Code///
-
-
-        //Test code//
         $create = zoom::create([
-            'appointment_id' => $request->appointment_id,
+            'appointment_id' => $getappint->id,
             'meeting_id' => $meeting->id,
             'topic' => $request->topic,
-            'start_at' => new Carbon($request->start),
+            'start_at' => new Carbon($getappint->start),
             'duration' => $meeting->duration,
             'password' => $meeting->password,
             'start_url' => $meeting->start_url,
             'join_url' => $meeting->join_url,
         ]);
+
+        // Test code//
+        // $create = zoom::create([
+        //     'appointment_id' => $request->appointment_id,
+        //     'meeting_id' => $meeting->id,
+        //     'topic' => $request->topic,
+        //     'start_at' => new Carbon($request->start),
+        //     'duration' => $meeting->duration,
+        //     'password' => $meeting->password,
+        //     'start_url' => $meeting->start_url,
+        //     'join_url' => $meeting->join_url,
+        // ]);
 
         if($create)
         {
