@@ -27,30 +27,23 @@ class ZoomMeetingController extends Controller
 
     public function store(Request $request)
     {
-        $meeting = $this->createMeeting($request);
+        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
 
-        ///Main Code///
-        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->firstorfail();
+        if(!$getappint)
+        {
+            return response()->json([
+                'status' => false,
+                'message' => 'error',
+                'data' => []
+            ], 422);
+        }
+        $meeting = $this->createMeeting($request);
 
         $create = zoom::create([
             'appointment_id' => $getappint->id,
             'meeting_id' => $meeting->id,
-            'topic' => $request->topic,
-            'start_at' => $getappint->start,
-            'duration' => $meeting->duration,
-            'password' => $meeting->password,
-            'start_url' => $meeting->start_url,
-            'join_url' => $meeting->join_url,
-        ]);
-        ///Main Code///
-
-
-        //Test code//
-        $create = zoom::create([
-            'appointment_id' => $request->appointment_id,
-            'meeting_id' => $meeting->id,
-            'topic' => $request->topic,
-            'start_at' => new Carbon($request->start),
+            'topic' => 'Meeting with QuicHealth Doctor',
+            'start_at' => new Carbon($getappint->start),
             'duration' => $meeting->duration,
             'password' => $meeting->password,
             'start_url' => $meeting->start_url,
