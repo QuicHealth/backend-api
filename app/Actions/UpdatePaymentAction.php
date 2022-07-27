@@ -34,10 +34,10 @@ class UpdatePaymentAction
 
     public function runUpdates($confirmation, $transaction)
     {
-        $pay = $this->updatePayment($confirmation);
+        // $this->updatePayment($confirmation);
 
-        dd($pay);
 
+        dd($this->updatePayment($confirmation));
         $appointment =  $this->updateAppointment($transaction->appointments_id);
 
         $this->timeslots['start'] = $appointment->start;
@@ -56,7 +56,7 @@ class UpdatePaymentAction
 
     public function updatePayment($response)
     {
-        $pay = Payment::updateOrCreate(
+        Payment::updateOrCreate(
             [
                 'paymentReference' => $response->paymentReference,
                 'transactionReference' => $response->transactionReference
@@ -73,8 +73,6 @@ class UpdatePaymentAction
 
             ]
         );
-
-        return $pay;
     }
 
     public function updateAppointment($appointment_id)
