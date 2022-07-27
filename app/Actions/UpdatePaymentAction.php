@@ -34,11 +34,11 @@ class UpdatePaymentAction
 
     public function runUpdates($confirmation, $transaction)
     {
-        $this->updatePayment($confirmation);
+        // $this->updatePayment($confirmation);
+
+        dd($this->updatePayment($confirmation));
 
         $appointment =  $this->updateAppointment($transaction->appointments_id);
-        // die and dump appointments
-        dd($appointment);
 
         $this->timeslots['start'] = $appointment->start;
         $this->timeslots['end'] = $appointment->end;
