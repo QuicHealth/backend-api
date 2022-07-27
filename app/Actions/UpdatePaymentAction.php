@@ -34,12 +34,14 @@ class UpdatePaymentAction
 
     public function runUpdates($confirmation, $transaction)
     {
-        $this->updatePayment($confirmation);
+        // $this->updatePayment($confirmation);
 
         $appointment =  $this->updateAppointment($transaction->appointments_id);
 
-        $this->timeslots['start'] = $appointment->start;
-        $this->timeslots['end'] = $appointment->end;
+        // $this->timeslots['start'] = $appointment->start;
+        // $this->timeslots['end'] = $appointment->end;
+
+        // just testing
 
         $time =  UpdateTimeslotStatus::run($appointment->doctor_id, $appointment->date, $this->timeslots);
         dd($time);
