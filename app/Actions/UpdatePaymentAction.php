@@ -37,7 +37,9 @@ class UpdatePaymentAction
         $this->updatePayment($confirmation);
 
         $appointment =  $this->updateAppointment($transaction->appointments_id);
+        // die and dump appointments
         dd($appointment);
+
         $this->timeslots['start'] = $appointment->start;
         $this->timeslots['end'] = $appointment->end;
 
