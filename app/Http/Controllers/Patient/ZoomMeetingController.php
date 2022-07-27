@@ -46,16 +46,16 @@ class ZoomMeetingController extends Controller
 
 
         //Test code//
-        $create = zoom::create([
-            'appointment_id' => $request->appointment_id,
-            'meeting_id' => $meeting->id,
-            'topic' => $request->topic,
-            'start_at' => new Carbon($request->start),
-            'duration' => $meeting->duration,
-            'password' => $meeting->password,
-            'start_url' => $meeting->start_url,
-            'join_url' => $meeting->join_url,
-        ]);
+        // $create = zoom::create([
+        //     'appointment_id' => $request->appointment_id,
+        //     'meeting_id' => $meeting->id,
+        //     'topic' => $request->topic,
+        //     'start_at' => new Carbon($request->start),
+        //     'duration' => $meeting->duration,
+        //     'password' => $meeting->password,
+        //     'start_url' => $meeting->start_url,
+        //     'join_url' => $meeting->join_url,
+        // ]);
 
         if ($create) {
             return response()->json([
