@@ -12,7 +12,7 @@ class UpdateTimeslotStatus
 
     public function handle($doctor_id, $day_id, $time_slots)
     {
-        dd($doctor_id, $day_id, $time_slots);
+        dd("coming from UpdateTimeslotStatus " . $doctor_id, $day_id, $time_slots);
 
         $schedule = $this->getScheduleID($doctor_id, $day_id);
 
