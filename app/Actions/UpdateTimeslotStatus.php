@@ -12,10 +12,9 @@ class UpdateTimeslotStatus
 
     public function handle($doctor_id, $day_id, $time_slots)
     {
-        dd("coming from UpdateTimeslotStatus " . $doctor_id, $day_id, $time_slots);
 
         $schedule = $this->getScheduleID($doctor_id, $day_id);
-
+        dd($schedule);
         Timeslot::where('schedule_id', $schedule->id)
             ->where('start', $time_slots['start'])
             ->where('end', $time_slots['end'])
