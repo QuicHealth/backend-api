@@ -18,8 +18,6 @@ class UpdatePaymentAction
 
         $confirmation = $this->paymentConfirmation($transaction->transactionReference);
 
-        dd($confirmation);
-
         if ($confirmation->paymentStatus === 'PAID') {
 
             $this->runUpdates($confirmation, $transaction);
@@ -39,7 +37,7 @@ class UpdatePaymentAction
         $this->updatePayment($confirmation);
 
         $appointment =  $this->updateAppointment($transaction->appointments_id);
-
+        dd($appointment);
         $this->timeslots['start'] = $appointment->start;
         $this->timeslots['end'] = $appointment->end;
 
