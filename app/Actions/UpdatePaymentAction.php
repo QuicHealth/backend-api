@@ -41,8 +41,6 @@ class UpdatePaymentAction
         $this->timeslots['start'] = $appointment->start;
         $this->timeslots['end'] = $appointment->end;
 
-        dd($appointment->doctor_id, $appointment->date, $this->timeslots);
-
         UpdateTimeslotStatus::run($appointment->doctor_id, $appointment->date, $this->timeslots);
     }
 
