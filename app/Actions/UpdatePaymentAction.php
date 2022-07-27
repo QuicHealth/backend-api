@@ -34,9 +34,9 @@ class UpdatePaymentAction
 
     public function runUpdates($confirmation, $transaction)
     {
-        // $this->updatePayment($confirmation);
+        $pay = $this->updatePayment($confirmation);
 
-        dd($this->updatePayment($confirmation));
+        dd($pay);
 
         $appointment =  $this->updateAppointment($transaction->appointments_id);
 
@@ -56,7 +56,7 @@ class UpdatePaymentAction
 
     public function updatePayment($response)
     {
-        Payment::updateOrCreate(
+        $pay = Payment::updateOrCreate(
             [
                 'paymentReference' => $response->paymentReference,
                 'transactionReference' => $response->transactionReference
@@ -73,6 +73,8 @@ class UpdatePaymentAction
 
             ]
         );
+
+        return $pay;
     }
 
     public function updateAppointment($appointment_id)
