@@ -25,11 +25,11 @@ class UpdateTimeslotStatus
 
     public function getScheduleID($doctor_id, $date)
     {
-        dd($doctor_id, $date);
+
         $getSchedule = Schedule::where('doctor_id', $doctor_id)
             ->where('date', $date)
             ->first();
-
+        dd($getSchedule);
         if ($getSchedule) {
 
             return $getSchedule;
