@@ -67,14 +67,13 @@ class PaymentController extends Controller
 
         $transaction = Payment::where('paymentReference', $request->query('paymentReference'))->first();
 
-        dd($transaction);
-        // if ($transaction) {
-        //     return UpdatePaymentAction::run($transaction);
-        // } else {
-        //     return response([
-        //         'status' => "error",
-        //     ], 500);
-        // }
+        if ($transaction) {
+            return UpdatePaymentAction::run($transaction);
+        } else {
+            return response([
+                'status' => "error",
+            ], 500);
+        }
     }
 
 
