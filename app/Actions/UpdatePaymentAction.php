@@ -41,9 +41,7 @@ class UpdatePaymentAction
         $this->timeslots['start'] = $appointment->start;
         $this->timeslots['end'] = $appointment->end;
 
-
-
-        $time =  UpdateTimeslotStatus::run($appointment->doctor_id, $appointment->date, $this->timeslots);
+        UpdateTimeslotStatus::run($appointment->doctor_id, $appointment->date, $this->timeslots);
     }
 
     public function paymentConfirmation($txnReference)
