@@ -18,7 +18,6 @@ class UpdatePaymentAction
 
         $confirmation = $this->paymentConfirmation($transaction->transactionReference);
 
-
         if ($confirmation->paymentStatus === 'PAID') {
 
             $this->runUpdates($confirmation, $transaction);
