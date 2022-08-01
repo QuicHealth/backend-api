@@ -53,7 +53,6 @@ Route::prefix('v1')->group(function () {
             Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
-
             // Payment APIs
             Route::post('payment', 'WaveController@add');
             Route::get('payment/status', 'WaveController@status')->name('payment.status');
