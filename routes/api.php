@@ -53,26 +53,19 @@ Route::prefix('v1')->group(function () {
             Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
+            // Payment APIs
+            Route::post('payment', 'WaveController@add');
+            Route::get('payment/status', 'WaveController@status')->name('payment.status');
 
-            // Zoom APIs
-            Route::post('zoomAuthenication', 'ZoomController@zoomAuthenication');
-            Route::get('auth', 'ZoomController@zoomAuthenication');
-            Route::post('create-zoom-meeting', 'ZoomController@createMeeting');
-            Route::get('get-zoom-meetings', 'ZoomController@getMeetings');
-            Route::get('get-zoom-meeting/{id}', 'ZoomController@getMeeting');
-            Route::post('update-zoom-meeting/{id}', 'ZoomController@updateMeeting');
-            Route::post('delete-zoom-meeting/{id}', 'ZoomController@deleteMeeting');
+            // Route::post('payment', 'PaymentController@makePayment');
+            // Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
+            // Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
+            // Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
+
+            //Zoom
+            Route::get('meetings', 'ZoomMeetingController@index');
+            Route::post('create-meeting', 'ZoomMeetingController@store');
         });
-
-        // Payment APIs
-        Route::post('payment', 'PaymentController@makePayment');
-        Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
-        Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
-        Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
-
-        //Zoom
-        Route::get('meetings', 'ZoomMeetingController@index');
-        Route::post('create-meeting', 'ZoomMeetingController@store');
     });
 
     // Route::webhooks('webhook-receiving-url');
