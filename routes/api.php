@@ -55,10 +55,13 @@ Route::prefix('v1')->group(function () {
 
 
             // Payment APIs
-            Route::post('payment', 'PaymentController@makePayment');
-            Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
-            Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
-            Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
+            Route::post('payment', 'WaveController@add');
+            Route::get('payment/status', 'WaveController@status')->name('payment.status');
+
+            // Route::post('payment', 'PaymentController@makePayment');
+            // Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
+            // Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
+            // Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
 
             //Zoom
             Route::get('meetings', 'ZoomMeetingController@index');
