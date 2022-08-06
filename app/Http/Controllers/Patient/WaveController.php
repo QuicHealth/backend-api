@@ -34,7 +34,7 @@ class WaveController extends Controller
             "customizations" => [
                 'title' => "QuicHealth",
                 'description' => "QuicHealth Doctors Appointment",
-                // 'logo' => "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+                'logo' => "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
             ],
         ];
 
@@ -78,8 +78,9 @@ class WaveController extends Controller
 
         if($status == 'cancelled')
         {
+            return redirect('http://localhost:3000/select-appointment');
             return response([
-                'status' => "error",
+                'status' => $status,
                 'data' => $status
             ], 500);
         }else
@@ -128,6 +129,7 @@ class WaveController extends Controller
 
             if ($response) {
                 return $res;
+                return redirect('http://localhost:3000/payment-confirm');
             } else {
                 return response([
                     'status' => "error",
