@@ -62,9 +62,9 @@ Route::prefix('v1')->group(function () {
             Route::get('meetings', 'ZoomMeetingController@index');
             Route::post('create-meeting', 'ZoomMeetingController@store');
 
-            // Payment APIs
-            Route::post('payment', 'WaveController@add');
         });
+        // Payment APIs
+        Route::post('payment', 'WaveController@add');
         Route::get('payment/status', 'WaveController@status')->name('payment.status');
     });
 
