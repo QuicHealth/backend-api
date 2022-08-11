@@ -15,31 +15,58 @@ class ZoomMeetingController extends Controller
 
     public function index()
     {
-        $meeting = zoom::all();
-        if ($meeting) {
+        $meetings = zoom::where('user_id', auth()->user()->id)->get();
+
+        if ($meetings) {
             return response()->json([
                 'status' => true,
                 'message' => 'success',
-                'data' => $meeting
+                'data' => $meetings
             ], 200);
         }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'error',
+            'data' => []
+        ], 422);
+    }
+
+    public function getMeetingsByDoctor()
+    {
+        $meetings = zoom::where('doctor_id', auth()->user()->id)->get();
+
+        if ($meetings) {
+            return response()->json([
+                'status' => true,
+                'message' => 'success',
+                'data' => $meetings
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'error',
+            'data' => []
+        ], 422);
     }
 
     public function store(Request $request)
     {
         $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
-
-        if(!$getappint)
-        {
+        // dd($getappint);
+        if (!$getappint) {
             return response()->json([
                 'status' => false,
-                'message' => 'error',
+                'message' => 'Sorry, you have not Paid this appointment',
                 'data' => []
             ], 422);
         }
         $meeting = $this->createMeeting($request);
 
         $create = zoom::create([
+            'user_id' => $getappint->user_id,
+            'doctor_id' => $getappint->doctor_id,
             'appointment_id' => $getappint->id,
             'meeting_id' => $meeting->id,
             'topic' => 'Meeting with QuicHealth Doctor',
@@ -59,8 +86,7 @@ class ZoomMeetingController extends Controller
         }
         return response()->json([
             'status' => false,
-            'message' => 'error',
-            'data' => []
+            'message' => 'can not create',
         ], 422);
     }
 }
