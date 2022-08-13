@@ -105,24 +105,6 @@ class ZoomMeetingController extends Controller
         ], 422);
     }
 
-    public function getMeetingsByDoctor()
-    {
-        $meetings = zoom::where('doctor_id', auth()->user()->id)->get();
-
-        if ($meetings) {
-            return response()->json([
-                'status' => true,
-                'message' => 'success',
-                'data' => $meetings
-            ], 200);
-        }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'error',
-            'data' => []
-        ], 422);
-    }
 
     public function getMeetingsByPatient()
     {

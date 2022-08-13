@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Models\Zoom;
 use App\Models\Doctor;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
@@ -100,5 +101,24 @@ class DoctorController extends Controller
             'msg' => 'Doctor saved successfully',
             'data' => $hos
         ]);
+    }
+
+    public function getMeetingsByDoctor()
+    {
+        $meetings = Zoom::where('doctor_id', auth()->user()->id)->get();
+
+        if ($meetings) {
+            return response()->json([
+                'status' => true,
+                'message' => 'success',
+                'data' => $meetings
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => false,
+            'message' => 'error',
+            'data' => []
+        ], 422);
     }
 }
