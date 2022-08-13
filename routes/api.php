@@ -62,6 +62,8 @@ Route::prefix('v1')->group(function () {
             Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
             Route::get('redirect', 'ZoomMeetingController@redirect');
             Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
+
+            Route::post('get-zoom-meetings', 'ZoomMeetingController@getMeetingsByPatient');
         });
         // Payment APIs
         Route::post('payment', 'WaveController@add');
@@ -89,7 +91,7 @@ Route::prefix('v1')->group(function () {
             Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
             Route::post('save-schedule', 'DoctorController@setSchedule');
             // Route::get('get-days', 'DoctorController@getDays');
-            Route::get('get-meeting', 'ZoomMeetingController@getMeetingsByDoctor');
+            Route::get('get-zoom-meetings', 'ZoomMeetingController@getMeetingsByDoctor');
             Route::get('get-schedule', 'DoctorController@getSchedule');
             Route::get('search-by-date/{date}', 'DoctorController@searchSchedule');
             Route::get('get-dashboard', 'DoctorController@getDoctorsDashboard');
