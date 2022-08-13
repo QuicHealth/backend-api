@@ -33,7 +33,9 @@ class Zoom
 
         $this->CLIENT = $this->newGuzzleHttp($api_url);
         $this->ZOOM_ACCESS = $this->newGuzzleHttp($auth_url);
-        $this->CREDENTIAL_PATH = storage_path(config('zoom.credential_path'));
+        $this->CREDENTIAL_PATH = public_path(config('zoom.credential_path'));
+
+        // dd($this->CREDENTIAL_PATH);
 
         $this->CREDENTIAL_DATA = json_decode(file_get_contents($this->CREDENTIAL_PATH), true);
     }
