@@ -59,7 +59,6 @@ Route::prefix('v1')->group(function () {
             // Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
 
             //Zoom APIs
-
             Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
             Route::get('redirect', 'ZoomMeetingController@redirect');
             Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
