@@ -23,9 +23,10 @@ return new class extends Migration
             $table->dateTime('start_at');
             $table->integer('duration')->comment('minutes');
             $table->string('password')->comment('meeting password');
-            $table->string('start_url');
-            $table->string('join_url');
+            $table->text('start_url');
+            $table->text('join_url');
             $table->timestamps();
+
 
             $table->foreign('user_id')
                 ->references('id')->on('users')

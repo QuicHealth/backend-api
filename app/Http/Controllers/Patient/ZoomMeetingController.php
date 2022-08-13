@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\Http\Controllers\Controller;
-use App\Models\Appointment;
-use App\Models\Zoom;
-use App\Traits\ZoomMeetingTrait;
 use Carbon\Carbon;
+use App\Models\Zoom;
+use App\Classes\myzoom2;
+use App\Traits\ZoomTrait;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class ZoomMeetingController extends Controller
 {
-    use ZoomMeetingTrait;
+    use  ZoomTrait;
 
     public function index()
     {
@@ -29,6 +32,79 @@ class ZoomMeetingController extends Controller
             'status' => false,
             'message' => 'error',
             'data' => []
+        ], 422);
+    }
+
+    public function getZoomUrl()
+    {
+        // dd($this->getAuthUrl());
+        return redirect()->to($this->getAuthUrl());
+    }
+
+    public function redirect(Request $request)
+    {
+        $code = $request->code;
+        return $this->getToken($code);
+    }
+
+    public function createZoomMeeting(Request $request)
+    {
+
+        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
+
+        if (!$getappint) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Sorry, you have not Paid this appointment',
+                'data' => []
+            ], 422);
+        }
+
+        $data = [
+            'topic' => $request->topic,
+            'agenda' => $request->agenda,
+            'duration' => $request->duration,
+            'password' => Str::random(6),
+            'start_time' => $request->start_time,
+            'timezone' => 'West Central Africa',
+            'pre_schedule' => true,
+            'meeting_invitees' => [
+                'email' => auth()->user()->email,
+            ]
+        ];
+
+        $meeting = $this->createMeeting($data);
+
+        if ($meeting) {
+            $start_at = new Carbon($meeting['data']['start_time']);
+
+            $create = Zoom::create([
+                'user_id' => $getappint->user_id,
+                'doctor_id' => $getappint->doctor_id,
+                'appointment_id' => $getappint->id,
+                'meeting_id' => $meeting['data']['id'],
+                'topic' => $meeting['data']['topic'],
+                'start_at' => $start_at->format('Y-m-d H:i:s'),
+                'duration' => $meeting['data']['duration'],
+                'password' => $meeting['data']['password'],
+                'start_url' => $meeting['data']['start_url'],
+                'join_url' => $meeting['data']['join_url'],
+            ]);
+
+            if ($create) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'success',
+                    'data' => $create
+                ], 200);
+            }
+        }
+
+
+
+        return response()->json([
+            'status' => false,
+            'message' => 'can not create',
         ], 422);
     }
 
@@ -51,42 +127,61 @@ class ZoomMeetingController extends Controller
         ], 422);
     }
 
-    public function store(Request $request)
+    public function getMeetingsByPatient()
     {
-        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
-        // dd($getappint);
-        if (!$getappint) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Sorry, you have not Paid this appointment',
-                'data' => []
-            ], 422);
-        }
-        $meeting = $this->createMeeting($request);
+        $meetings = zoom::where('user_id', auth()->user()->id)->get();
 
-        $create = zoom::create([
-            'user_id' => $getappint->user_id,
-            'doctor_id' => $getappint->doctor_id,
-            'appointment_id' => $getappint->id,
-            'meeting_id' => $meeting->id,
-            'topic' => 'Meeting with QuicHealth Doctor',
-            'start_at' => new Carbon($getappint->start),
-            'duration' => $meeting->duration,
-            'password' => $meeting->password,
-            'start_url' => $meeting->start_url,
-            'join_url' => $meeting->join_url,
-        ]);
-
-        if ($create) {
+        if ($meetings) {
             return response()->json([
                 'status' => true,
                 'message' => 'success',
-                'data' => $create
+                'data' => $meetings
             ], 200);
         }
+
         return response()->json([
             'status' => false,
-            'message' => 'can not create',
+            'message' => 'error',
+            'data' => []
         ], 422);
     }
+
+    // public function store(Request $request)
+    // {
+    //     $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
+    //     // dd($getappint);
+    //     if (!$getappint) {
+    //         return response()->json([
+    //             'status' => false,
+    //             'message' => 'Sorry, you have not Paid this appointment',
+    //             'data' => []
+    //         ], 422);
+    //     }
+    //     $meeting = $this->createMeeting($request);
+
+    //     $create = zoom::create([
+    //         'user_id' => $getappint->user_id,
+    //         'doctor_id' => $getappint->doctor_id,
+    //         'appointment_id' => $getappint->id,
+    //         'meeting_id' => $meeting->id,
+    //         'topic' => 'Meeting with QuicHealth Doctor',
+    //         'start_at' => new Carbon($getappint->start),
+    //         'duration' => $meeting->duration,
+    //         'password' => $meeting->password,
+    //         'start_url' => $meeting->start_url,
+    //         'join_url' => $meeting->join_url,
+    //     ]);
+
+    //     if ($create) {
+    //         return response()->json([
+    //             'status' => true,
+    //             'message' => 'success',
+    //             'data' => $create
+    //         ], 200);
+    //     }
+    //     return response()->json([
+    //         'status' => false,
+    //         'message' => 'can not create',
+    //     ], 422);
+    // }
 }

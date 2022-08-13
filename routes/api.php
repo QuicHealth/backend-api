@@ -58,13 +58,19 @@ Route::prefix('v1')->group(function () {
             // Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
             // Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
 
-            //Zoom
-            Route::get('meetings', 'ZoomMeetingController@index');
-            Route::post('create-meeting', 'ZoomMeetingController@store');
+            //Zoom APIs
+
+            Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
+            Route::get('redirect', 'ZoomMeetingController@redirect');
+            Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
         });
         // Payment APIs
         Route::post('payment', 'WaveController@add');
         Route::get('payment/status', 'WaveController@status')->name('payment.status');
+
+        // Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
+        // Route::get('redirect', 'ZoomMeetingController@redirect');
+        // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
 
     // Route::webhooks('webhook-receiving-url');
