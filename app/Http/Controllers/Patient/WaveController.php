@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 
 class WaveController extends Controller
@@ -28,13 +29,13 @@ class WaveController extends Controller
                 "appointment_id" => request()->appointment_id
             ],
             "customer" => [
-                "name" => auth()->user()->name,
+                "name" => auth()->user()->firstname.' '. auth()->user()->lastname,
                 "email" => auth()->user()->email
             ],
             "customizations" => [
                 'title' => "QuicHealth",
                 'description' => "QuicHealth Doctors Appointment",
-                'logo' => "https://www.logolynx.com/images/logolynx/22/2239ca38f5505fbfce7e55bbc0604386.jpeg",
+                'logo' => "https://quichealthapi.herokuapp.com/assets/images/logo.png",
             ],
         ];
 
@@ -56,6 +57,8 @@ class WaveController extends Controller
             ),
         ));
 
+        $response = $this->saveResponse($request);
+
         $response = curl_exec($curl);
 
         curl_close($curl);
@@ -67,21 +70,23 @@ class WaveController extends Controller
         } else {
             return response([
                 'status' => "error",
-            ], 500);
+            ], 404);
         }
 
     }
 
     public function status()
     {
-        $status = request()->status;
+        $data = request();
+        $status = $data->status;
 
         if($status == 'cancelled')
         {
+            $this->saveNotPaid($data);
             return redirect('http://localhost:3000/select-appointment');
             return response([
                 'status' => $status,
-                'data' => $status
+                'data' => $data
             ], 500);
         }else
         if($status == 'successful')
@@ -115,16 +120,17 @@ class WaveController extends Controller
             // dd($res);
 
             if ($res->status == 'success') {
-                $appointment = Appointment::find($res->data->meta->appointment_id);
+                $appointment_id = $res->data->meta->appointment_id;
+                $appointment = Appointment::find($appointment_id);
 
                 if ($appointment) {
                     $appointment->payment_status = 'PAID';
                     $appointment->save();
 
-                    // return $appointment;
                 } else {
                     return false;
                 }
+                $this->savePaid($res, $appointment_id);
             }
 
             if ($response) {
@@ -137,5 +143,49 @@ class WaveController extends Controller
                 ], 500);
             }
         }
+    }
+
+    public function saveResponse($request)
+    {
+        $payment = Payment::create([
+            'appointments_id' =>  $request->appointment_id,
+            'amount' => $request->amount,
+            'paymentStatus' => "PENDING",
+            'customer_name' => auth()->user()->firstname.' '. auth()->user()->lastname,
+            'customer_email' => auth()->user()->email,
+        ]);
+
+        return $payment;
+    }
+
+    public function savePaid($res, $appointment_id)
+    {
+        $payment = Payment::where('appointments_id', $appointment_id)->first();
+
+        if ($payment) {
+            $payment->status = $res->data->status;
+            $payment->paymentStatus = 'PAID';
+            $payment->tx_ref = $res->data->tx_ref;
+            $payment->transaction_id = $res->data->id;
+            $payment->charged_amount = $res->data->charged_amount;
+            $payment->processor_response = $res->data->processor_response;
+            $payment->save();
+        }
+    }
+
+    public function saveNotPaid($data)
+    {
+        $payment = Payment::where('customer_email', auth()->user()->email)
+                            ->where('paymentStatus', 'PENDING')
+                            ->first();
+
+        if ($payment) {
+            $payment->status = $data->status;
+            $payment->paymentStatus = 'cancelled';
+            $payment->tx_ref = $data->tx_ref;
+            $payment->save();
+        }
+
+        return $payment;
     }
 }
