@@ -11,18 +11,16 @@ class Payment extends Model
 
     protected $guarded = [];
 
-    // protected $fillable = [
-    //     'appointment_id',
-    //     'transactionReference',
-    //     'paymentReference',
-    //     'amountPaid',
-    //     'totalPayable',
-    //     'settlementAmount',
-    //     'paidOn',
-    //     'paymentStatus',
-    //     'paymentDescription',
-    //     'transactionHash',
-    //     'currency',
-    //     'paymentMethod',
-    // ];
+    protected $fillable = [
+        'appointments_id',
+        'customer_name',
+        'customer_email',
+        'amount',
+        'status',
+        'paymentStatus',
+        'tx_ref',
+        'transaction_id',
+        'charged_amount',
+        'processor_response',
+    ];
 }
