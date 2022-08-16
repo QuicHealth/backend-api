@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -175,6 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\MonnifyServiceProvider::class,
+        App\Providers\ZoomServiceProvider::class,
 
     ],
 
@@ -227,7 +229,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Monnify'   =>  App\Facades\Monnify::class
+        'Monnify'   =>  App\Facades\Monnify::class,
+        'Zoom'   =>  App\Facades\Zoom::class
 
     ],
 

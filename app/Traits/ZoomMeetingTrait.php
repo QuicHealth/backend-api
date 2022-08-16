@@ -9,7 +9,8 @@ use MacsiDigital\Zoom\Facades\Zoom;
  */
 trait ZoomMeetingTrait
 {
-    public function createMeeting($request){
+    public function createMeeting($request)
+    {
 
         $user = Zoom::user()->first();
 
@@ -22,6 +23,8 @@ trait ZoomMeetingTrait
         ];
 
         $meeting = Zoom::meeting()->make($meetingData);
+
+        // dd($meeting);
 
         $meeting->settings()->make([
             'join_before_host' => false,

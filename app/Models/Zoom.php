@@ -11,7 +11,9 @@ class Zoom extends Model
 
     protected $guarded = [];
 
-    public $fillable= [
+    public $fillable = [
+        'user_id',
+        'doctor_id',
         'appointment_id',
         'meeting_id',
         'topic',
@@ -26,5 +28,4 @@ class Zoom extends Model
     {
         return $this->belongsTo(Application::class);
     }
-
 }

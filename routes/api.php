@@ -58,14 +58,20 @@ Route::prefix('v1')->group(function () {
             // Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
             // Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
 
-            //Zoom
-            Route::get('meetings', 'ZoomMeetingController@index');
-            Route::post('create-meeting', 'ZoomMeetingController@store');
+            //Zoom APIs
+            Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
+            Route::get('redirect', 'ZoomMeetingController@redirect');
+            Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
 
+            Route::post('get-zoom-meetings', 'ZoomMeetingController@getMeetingsByPatient');
         });
         // Payment APIs
         Route::post('payment', 'WaveController@add');
         Route::get('payment/status', 'WaveController@status')->name('payment.status');
+
+        // Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
+        // Route::get('redirect', 'ZoomMeetingController@redirect');
+        // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
 
     // Route::webhooks('webhook-receiving-url');
@@ -85,6 +91,7 @@ Route::prefix('v1')->group(function () {
             Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
             Route::post('save-schedule', 'DoctorController@setSchedule');
             // Route::get('get-days', 'DoctorController@getDays');
+            Route::get('get-zoom-meetings', 'ZoomMeetingController@getMeetingsByDoctor');
             Route::get('get-schedule', 'DoctorController@getSchedule');
             Route::get('search-by-date/{date}', 'DoctorController@searchSchedule');
             Route::get('get-dashboard', 'DoctorController@getDoctorsDashboard');
