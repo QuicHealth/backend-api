@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Doctor;
 use App\Models\Zoom;
 use App\Models\Doctor;
 use App\Models\Schedule;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Actions\SetAvailablityAction;
 use App\Http\Requests\ScheduleRequest;
 use App\Http\Resources\DoctorResource;
@@ -120,5 +121,25 @@ class DoctorController extends Controller
             'message' => 'error',
             'data' => []
         ], 422);
+    }
+
+    public function appointmentByPaymentStatus(Request $request)
+    {
+        $appointments = Appointment::where('doctor_id', Auth::user($request->token)->id)
+            ->where('payment_status', 'PAID')
+            ->with('doctor')
+            ->get();
+
+        if ($appointments) {
+            return response([
+                'status' => true,
+                'Appointments' => $appointments,
+            ], http_response_code());
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'You dont have any appointments',
+            ], http_response_code());
+        }
     }
 }

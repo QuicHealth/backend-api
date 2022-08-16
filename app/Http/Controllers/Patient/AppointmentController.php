@@ -76,6 +76,26 @@ class AppointmentController extends Controller
         }
     }
 
+    public function appointmentByPaymentStatus(Request $request)
+    {
+        $appointments = Appointment::where('user_id', Auth::user($request->token)->id)
+            ->where('payment_status', 'PAID')
+            ->with('doctor')
+            ->get();
+
+        if ($appointments) {
+            return response([
+                'status' => true,
+                'Appointments' => $appointments,
+            ], http_response_code());
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'Can not find Appointments, pls try again',
+            ], http_response_code());
+        }
+    }
+
     public function findAppointment(Request $request, $id)
     {
 

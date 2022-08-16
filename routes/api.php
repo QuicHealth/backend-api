@@ -48,6 +48,7 @@ Route::prefix('v1')->group(function () {
             Route::post('create-appointment', 'AppointmentController@createAppointment');
             Route::post('appointment/details', 'AppointmentController@appointmentDetails');
             Route::get('appointments', 'AppointmentController@getAll');
+            Route::get('appointment-by-payment-status', 'AppointmentController@appointmentByPaymentStatus');
             Route::get('appointment/{id}', 'AppointmentController@findAppointment');
             Route::put('reschedule-appointment/{id}', 'AppointmentController@rescheduleAppointment');
             Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
@@ -92,6 +93,7 @@ Route::prefix('v1')->group(function () {
             );
             Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
             Route::post('save-schedule', 'DoctorController@setSchedule');
+            Route::get('appointment-by-payment-status', 'DoctorController@appointmentByPaymentStatus');
             // Route::get('get-days', 'DoctorController@getDays');
             Route::get('get-zoom-meetings', 'DoctorController@getMeetingsByDoctor');
             Route::get('get-schedule', 'DoctorController@getSchedule');
