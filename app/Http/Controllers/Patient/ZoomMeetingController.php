@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Patient;
 
 use Carbon\Carbon;
 use App\Models\Zoom;
-use App\Classes\myzoom2;
 use App\Traits\ZoomTrait;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ZoomMeetingController extends Controller
@@ -50,7 +48,10 @@ class ZoomMeetingController extends Controller
     public function createZoomMeeting(Request $request)
     {
 
-        $getappint = Appointment::where('user_id', auth()->user()->id)->where('payment_status', 'PAID')->first();
+        $getappint = Appointment::where('id', $request->appointment_id)
+            ->where('user_id', auth()->user()->id)
+            ->where('payment_status', 'PAID')
+            ->first();
 
         if (!$getappint) {
             return response()->json([

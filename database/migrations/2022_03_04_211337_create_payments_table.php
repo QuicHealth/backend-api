@@ -15,18 +15,16 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('appointments_id');
-            $table->string('transactionReference');
-            $table->string('paymentReference');
-            $table->string('amountPaid');
-            $table->string('totalPayable');
-            $table->string('settlementAmount');
-            $table->string('paidOn');
+            $table->unsignedBigInteger('appointments_id')->nullable();
+            $table->string('customer_name');
+            $table->string('customer_email');
+            $table->string('amount');
             $table->string('paymentStatus');
-            $table->string('paymentDescription');
-            $table->string('transactionHash');
-            $table->string('currency');
-            $table->string('paymentMethod');
+            $table->string('status');
+            $table->string('tx_ref')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->string('charged_amount')->nullable();
+            $table->string('processor_response')->nullable();
             $table->timestamps();
 
             $table->foreign('appointments_id')
