@@ -68,15 +68,20 @@
             "chmod -R 777 storage",
             "@php artisan clear-compiled",
             "@php artisan config:clear",
-            "@php artisan cache:clear",
-            "@php artisan migrate:fresh"
+            "@php artisan cache:clear"
         ],
 
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
+
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+
+        "post-update-cmd": [
+            "php artisan migrate:fresh"
         ]
+
     }
 }
