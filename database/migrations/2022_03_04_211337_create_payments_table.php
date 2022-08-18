@@ -20,7 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->string('customer_email');
             $table->string('amount');
             $table->string('paymentStatus');
-            $table->string('status');
+            // $table->string('status');
             $table->string('tx_ref')->nullable();
             $table->string('transaction_id')->nullable();
             $table->string('charged_amount')->nullable();

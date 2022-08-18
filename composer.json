@@ -68,7 +68,8 @@
             "chmod -R 777 storage",
             "@php artisan clear-compiled",
             "@php artisan config:clear",
-            "@php artisan cache:clear"
+            "@php artisan cache:clear",
+            "@php artisan migrate:fresh"
         ],
 
         "post-root-package-install": [

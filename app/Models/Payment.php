@@ -16,7 +16,6 @@ class Payment extends Model
         'customer_name',
         'customer_email',
         'amount',
-        'status',
         'paymentStatus',
         'tx_ref',
         'transaction_id',

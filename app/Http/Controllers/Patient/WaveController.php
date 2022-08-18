@@ -29,7 +29,7 @@ class WaveController extends Controller
                 "appointment_id" => request()->appointment_id
             ],
             "customer" => [
-                "name" => auth()->user()->firstname.' '. auth()->user()->lastname,
+                "name" => auth()->user()->firstname . ' ' . auth()->user()->lastname,
                 "email" => auth()->user()->email
             ],
             "customizations" => [
@@ -52,7 +52,7 @@ class WaveController extends Controller
             CURLOPT_CUSTOMREQUEST => 'POST',
             CURLOPT_POSTFIELDS => json_encode($payment),
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.env('FLW_SECRET_KEY'),
+                'Authorization: Bearer ' . env('FLW_SECRET_KEY'),
                 'Content-Type: application/json'
             ),
         ));
@@ -72,7 +72,6 @@ class WaveController extends Controller
                 'status' => "error",
             ], 404);
         }
-
     }
 
     public function status()
@@ -80,35 +79,33 @@ class WaveController extends Controller
         $data = request();
         $status = $data->status;
 
-        if($status == 'cancelled')
-        {
+        if ($status == 'cancelled') {
             $this->saveNotPaid($data);
             return redirect('http://localhost:3000/select-appointment');
             return response([
                 'status' => $status,
                 'data' => $data
             ], 500);
-        }else
-        if($status == 'successful')
-        {
+        } else
+        if ($status == 'successful') {
             $curl = curl_init();
 
             $txid = request()->transaction_id;
             // // dd($txid);
 
             curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.flutterwave.com/v3/transactions/'.$txid.'/verify',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.env('FLW_SECRET_KEY'),
-                'Content-Type: application/json'
-            ),
+                CURLOPT_URL => 'https://api.flutterwave.com/v3/transactions/' . $txid . '/verify',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: Bearer ' . env('FLW_SECRET_KEY'),
+                    'Content-Type: application/json'
+                ),
             ));
 
             $response = curl_exec($curl);
@@ -126,7 +123,6 @@ class WaveController extends Controller
                 if ($appointment) {
                     $appointment->payment_status = 'PAID';
                     $appointment->save();
-
                 } else {
                     return false;
                 }
@@ -151,7 +147,7 @@ class WaveController extends Controller
             'appointments_id' =>  $request->appointment_id,
             'amount' => $request->amount,
             'paymentStatus' => "PENDING",
-            'customer_name' => auth()->user()->firstname.' '. auth()->user()->lastname,
+            'customer_name' => auth()->user()->firstname . ' ' . auth()->user()->lastname,
             'customer_email' => auth()->user()->email,
         ]);
 
@@ -163,7 +159,7 @@ class WaveController extends Controller
         $payment = Payment::where('appointments_id', $appointment_id)->first();
 
         if ($payment) {
-            $payment->status = $res->data->status;
+            // $payment->status = $res->data->status;
             $payment->paymentStatus = 'PAID';
             $payment->tx_ref = $res->data->tx_ref;
             $payment->transaction_id = $res->data->id;
@@ -176,8 +172,8 @@ class WaveController extends Controller
     public function saveNotPaid($data)
     {
         $payment = Payment::where('customer_email', auth()->user()->email)
-                            ->where('paymentStatus', 'PENDING')
-                            ->first();
+            ->where('paymentStatus', 'PENDING')
+            ->first();
 
         if ($payment) {
             $payment->status = $data->status;
