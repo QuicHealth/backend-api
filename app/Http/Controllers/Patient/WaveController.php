@@ -130,7 +130,7 @@ class WaveController extends Controller
             }
 
             if ($response) {
-                return $res;
+                // return $res;
                 return redirect('http://localhost:3000/payment-confirm');
             } else {
                 return response([
