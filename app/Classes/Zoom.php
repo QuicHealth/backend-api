@@ -85,11 +85,6 @@ class Zoom
 
     public function refreshToken()
     {
-        $data = [
-            "client ID" =>   $this->CLIENT_ID,
-            "Client Secret" =>    $this->CLIENT_SECRET
-        ];
-        dd($data);
         try {
             $response = $this->CLIENT->request('POST', '/oauth/token', [
                 "headers" => [
@@ -102,7 +97,7 @@ class Zoom
                 ],
             ]);
 
-            // dd($response);
+            dd($response->getBody()->getContents());
             $response_token = json_decode($response->getBody()->getContents(), true);
 
             $token = json_encode($response_token);
