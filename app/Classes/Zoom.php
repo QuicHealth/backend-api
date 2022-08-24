@@ -38,8 +38,11 @@ class Zoom
 
         // dd($this->CREDENTIAL_PATH);
 
-        $this->CREDENTIAL_DATA = json_decode(file_get_contents($this->CREDENTIAL_PATH), true);
+        // $this->CREDENTIAL_DATA = json_decode(file_get_contents($this->CREDENTIAL_PATH), true);
+        $this->CREDENTIAL_DATA = json_decode(ZoomToken::find(1));
+        dd($this->CREDENTIAL_DATA);
     }
+
 
     private function newGuzzleHttp(array $url)
     {
@@ -78,22 +81,22 @@ class Zoom
         ]);
 
         if ($saveNewToken) {
-            return ['status' => true, 'message' => 'Token saved successfully'];
+            return ['status' => true, 'message' => 'Token saved successfully', 'data' => $response_token];
         }
 
-        $token = json_encode($response_token);
+        // $token = json_encode($response_token);
 
-        file_put_contents($this->CREDENTIAL_PATH, $token);
+        // file_put_contents($this->CREDENTIAL_PATH, $token);
 
-        if (!file_exists($this->CREDENTIAL_PATH)) {
-            return ['status' => false, 'message' => 'Error while saving file'];
-        }
-        $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+        // if (!file_exists($this->CREDENTIAL_PATH)) {
+        //     return ['status' => false, 'message' => 'Error while saving file'];
+        // }
+        // $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
 
-        if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
-            return ['status' => false, 'message' => 'Error in saved token'];
-        }
-        return ['status' => true, 'message' => 'Token saved successfully'];
+        // if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
+        //     return ['status' => false, 'message' => 'Error in saved token'];
+        // }
+        // return ['status' => true, 'message' => 'Token saved successfully'];
     }
 
     public function refreshToken()
@@ -108,6 +111,7 @@ class Zoom
                     "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET),
                     "Content-Type" => "application/x-www-form-urlencoded"
                 ],
+
                 'form_params' => [
                     "grant_type" => "refresh_token",
                     // "refresh_token" => $this->CREDENTIAL_DATA['refresh_token']
@@ -127,24 +131,24 @@ class Zoom
             $updateToken = $findToken->save();
 
             if ($updateToken) {
-                return ['status' => true, 'message' => 'Token Refreshed successfully'];
+                return ['status' => true, 'message' => 'Token Refreshed successfully', 'data' => $response_token];
             }
 
-            $token = json_encode($response_token);
+            // $token = json_encode($response_token);
 
-            file_put_contents($this->CREDENTIAL_PATH, $token);
+            // file_put_contents($this->CREDENTIAL_PATH, $token);
 
-            if (!file_exists($this->CREDENTIAL_PATH)) {
-                throw new ZoomException("Token file not exist");
-            }
+            // if (!file_exists($this->CREDENTIAL_PATH)) {
+            //     throw new ZoomException("Token file not exist");
+            // }
 
-            $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+            // $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
 
-            if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
-                throw new ZoomException("Token refreshed successfully But error in saved json token");
-            }
+            // if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
+            //     throw new ZoomException("Token refreshed successfully But error in saved json token");
+            // }
 
-            return ['status' => true, 'message' => 'Token Refreshed successfully'];
+            // return ['status' => true, 'message' => 'Token Refreshed successfully'];
         } catch (ZoomException $e) {
             // echo 'Failed during refresh token ' . $e->getMessage();
             return 'Failed during refresh token ' . $e->getMessage();
