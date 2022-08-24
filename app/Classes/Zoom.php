@@ -56,7 +56,8 @@ class Zoom
     {
         $response = $this->ZOOM_ACCESS->request('POST', '/oauth/token', [
             "headers" => [
-                "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET)
+                "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET),
+                "Content-Type" => "application/x-www-form-urlencoded"
             ],
             'form_params' => [
                 "grant_type" => "authorization_code",
@@ -64,6 +65,7 @@ class Zoom
                 "redirect_uri" => $this->REDIRECT_URI
             ],
         ]);
+        dd($response->getBody());
         $response_token = json_decode($response->getBody()->getContents(), true);
 
         $token = json_encode($response_token);

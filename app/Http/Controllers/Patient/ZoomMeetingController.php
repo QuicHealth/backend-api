@@ -35,7 +35,7 @@ class ZoomMeetingController extends Controller
 
     public function getZoomUrl()
     {
-        dd($this->getAuthUrl());
+        // dd($this->getAuthUrl());
         return redirect()->to($this->getAuthUrl());
     }
 
