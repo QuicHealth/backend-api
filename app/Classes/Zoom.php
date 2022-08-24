@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use GuzzleHttp\Client;
+use App\Models\ZoomToken;
 
 class Zoom
 {
@@ -68,6 +69,18 @@ class Zoom
 
         $response_token = json_decode($response->getBody()->getContents(), true);
 
+        $saveNewToken = ZoomToken::create([
+            'access_token' => $response_token['access_token'],
+            'refresh_token' => $response_token['refresh_token'],
+            'expires_in' => $response_token['expires_in'],
+            'token_type' => $response_token['token_type'],
+            'scope' => $response_token['scope'],
+        ]);
+
+        if ($saveNewToken) {
+            return ['status' => true, 'message' => 'Token saved successfully'];
+        }
+
         $token = json_encode($response_token);
 
         file_put_contents($this->CREDENTIAL_PATH, $token);
@@ -86,6 +99,10 @@ class Zoom
     public function refreshToken()
     {
         try {
+            $findToken = ZoomToken::find(1);
+            if (!$findToken) {
+                return ['status' => false, 'message' => 'Token not found, Generate a new Token'];
+            }
             $response = $this->ZOOM_ACCESS->request('POST', '/oauth/token', [
                 "headers" => [
                     "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET),
@@ -93,12 +110,25 @@ class Zoom
                 ],
                 'form_params' => [
                     "grant_type" => "refresh_token",
-                    "refresh_token" => $this->CREDENTIAL_DATA['refresh_token']
+                    // "refresh_token" => $this->CREDENTIAL_DATA['refresh_token']
+                    "refresh_token" => $findToken->refresh_token
                 ],
             ]);
 
 
             $response_token = json_decode($response->getBody()->getContents(), true);
+
+
+            $findToken->access_token = $response_token['access_token'];
+            $findToken->refresh_token = $response_token['refresh_token'];
+            $findToken->expires_in = $response_token['expires_in'];
+            $findToken->token_type = $response_token['token_type'];
+            $findToken->scope = $response_token['scope'];
+            $updateToken = $findToken->save();
+
+            if ($updateToken) {
+                return ['status' => true, 'message' => 'Token Refreshed successfully'];
+            }
 
             $token = json_encode($response_token);
 
@@ -120,8 +150,6 @@ class Zoom
             return 'Failed during refresh token ' . $e->getMessage();
         }
     }
-
-
 
     // https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetings
     public function listMeeting($query = [], $user_id = 'me')
