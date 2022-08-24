@@ -40,7 +40,6 @@ class Zoom
 
         // $this->CREDENTIAL_DATA = json_decode(file_get_contents($this->CREDENTIAL_PATH), true);
         $this->CREDENTIAL_DATA = json_decode(ZoomToken::find(1));
-        dd($this->CREDENTIAL_DATA);
     }
 
 
