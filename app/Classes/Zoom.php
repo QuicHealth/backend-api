@@ -110,7 +110,7 @@ class Zoom
             $updateToken = $findToken->save();
 
             if ($updateToken) {
-                return ['status' => true, 'message' => 'Token Refreshed successfully', 'data' =>  $this->CREDENTIAL_DATA['access_token']];
+                return ['status' => true, 'message' => 'Token Refreshed successfully'];
             } else {
                 return ['status' => false, 'message' => 'Token not refreshed'];
             }
