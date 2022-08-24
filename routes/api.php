@@ -64,7 +64,6 @@ Route::prefix('v1')->group(function () {
             //Zoom APIs
             // Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
             // Route::get('redirect', 'ZoomMeetingController@redirect');
-            Route::post('refresh-token', 'ZoomMeetingController@refreshToken');
             Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
 
             Route::get('get-zoom-meetings', 'ZoomMeetingController@getMeetingsByPatient');
@@ -75,6 +74,8 @@ Route::prefix('v1')->group(function () {
 
         Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
         Route::get('redirect', 'ZoomMeetingController@redirect');
+        Route::post('refresh-token', 'ZoomMeetingController@refreshToken');
+
         // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
 

@@ -97,16 +97,22 @@ class Zoom
                 ],
             ]);
             $response_token = json_decode($response->getBody()->getContents(), true);
+
             $token = json_encode($response_token);
+
             file_put_contents($this->CREDENTIAL_PATH, $token);
+
             if (!file_exists($this->CREDENTIAL_PATH)) {
                 throw new \Exception("Token file not exist");
             }
+
             $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+
             if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
                 throw new \Exception("Token refreshed successfully But error in saved json token");
             }
-            return true;
+
+            return ['status' => true, 'message' => 'Token Refreshed successfully'];
         } catch (\Exception $e) {
             echo 'Failed during refresh token ' . $e->getMessage();
             return false;
