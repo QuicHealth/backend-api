@@ -67,20 +67,20 @@ class Zoom
         ]);
 
         $response_token = json_decode($response->getBody()->getContents(), true);
-        return $response_token;
-        // $token = json_encode($response_token);
 
-        // file_put_contents($this->CREDENTIAL_PATH, $token);
+        $token = json_encode($response_token);
 
-        // if (!file_exists($this->CREDENTIAL_PATH)) {
-        //     return ['status' => false, 'message' => 'Error while saving file'];
-        // }
-        // $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+        file_put_contents($this->CREDENTIAL_PATH, $token);
 
-        // if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
-        //     return ['status' => false, 'message' => 'Error in saved token'];
-        // }
-        // return ['status' => true, 'message' => 'Token saved successfully'];
+        if (!file_exists($this->CREDENTIAL_PATH)) {
+            return ['status' => false, 'message' => 'Error while saving file'];
+        }
+        $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+
+        if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
+            return ['status' => false, 'message' => 'Error in saved token'];
+        }
+        return ['status' => true, 'message' => 'Token saved successfully'];
     }
 
     public function refreshToken()
@@ -88,7 +88,8 @@ class Zoom
         try {
             $response = $this->CLIENT->request('POST', '/oauth/token', [
                 "headers" => [
-                    "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET)
+                    "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET),
+                    "Content-Type" => "application/x-www-form-urlencoded"
                 ],
                 'form_params' => [
                     "grant_type" => "refresh_token",
