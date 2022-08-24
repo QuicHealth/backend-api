@@ -26,7 +26,7 @@ class Zoom
         $this->CLIENT = $this->newGuzzleHttp($api_url);
         $this->ZOOM_ACCESS = $this->newGuzzleHttp($auth_url);
 
-        $this->CREDENTIAL_DATA = json_encode(ZoomToken::find(1));
+        $this->CREDENTIAL_DATA = ZoomToken::find(1);
     }
 
 
