@@ -13,10 +13,19 @@ class Zoom
     protected $REDIRECT_URI;
     protected $CLIENT;
     protected $ZOOM_ACCESS;
+    protected $CREDENTIAL_PATH;
     protected $CREDENTIAL_DATA;
 
     public function __construct()
     {
+        // $this->CLIENT_ID = isset($config['client_id']) ? $config['client_id'] : NULL;
+        // $this->CLIENT_SECRET = isset($config['client_secret']) ? $config['client_secret'] : NULL;
+        // $this->REDIRECT_URI = isset($config['redirect_uri']) ? $config['redirect_uri'] : NULL;
+        // $this->CLIENT = new \GuzzleHttp\Client(['base_uri' => 'https://api.zoom.us']);
+        // $this->ZOOM_ACCESS = new \GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
+        // $this->CREDENTIAL_PATH = isset($config['credential_path']) ? $config['credential_path'] : NULL;
+        // $this->CREDENTIAL_DATA = json_decode(file_get_contents($this->CREDENTIAL_PATH), true);
+
         $this->CLIENT_ID = config('zoom.client_id');
         $this->CLIENT_SECRET = config('zoom.client_secret');
         $this->REDIRECT_URI = config('zoom.redirect_uri');
@@ -25,8 +34,11 @@ class Zoom
 
         $this->CLIENT = $this->newGuzzleHttp($api_url);
         $this->ZOOM_ACCESS = $this->newGuzzleHttp($auth_url);
+        $this->CREDENTIAL_PATH = public_path(config('zoom.credential_path'));
 
-        $this->CREDENTIAL_DATA = json_decode(ZoomToken::find(1));
+        // dd($this->CREDENTIAL_PATH);
+
+        $this->CREDENTIAL_DATA = json_decode(file_get_contents($this->CREDENTIAL_PATH), true);
     }
 
 
@@ -58,34 +70,25 @@ class Zoom
 
         $response_token = json_decode($response->getBody()->getContents(), true);
 
-        $saveNewToken = ZoomToken::updateOrCreate(
-            [
-                'id' => 1
-            ],
+        $token = json_encode($response_token);
 
-            [
-                'access_token' => $response_token['access_token'],
-                'refresh_token' => $response_token['refresh_token'],
-                'expires_in' => $response_token['expires_in'],
-                'token_type' => $response_token['token_type'],
-                'scope' => $response_token['scope'],
-            ]
-        );
+        file_put_contents($this->CREDENTIAL_PATH, $token);
 
-        if ($saveNewToken) {
-            return ['status' => true, 'message' => 'Token saved successfully'];
-        } else {
-            return ['status' => false, 'message' => 'Token not saved'];
+        if (!file_exists($this->CREDENTIAL_PATH)) {
+            return ['status' => false, 'message' => 'Error while saving file'];
         }
+        $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+
+        if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
+            return ['status' => false, 'message' => 'Error in saved token'];
+        }
+        return ['status' => true, 'message' => 'Token saved successfully'];
     }
 
     public function refreshToken()
     {
         try {
-            $findToken = ZoomToken::find(1);
-            if (!$findToken) {
-                return ['status' => false, 'message' => 'Token not found, Generate a new Token'];
-            }
+
             $response = $this->ZOOM_ACCESS->request('POST', '/oauth/token', [
                 "headers" => [
                     "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET),
@@ -94,7 +97,8 @@ class Zoom
 
                 'form_params' => [
                     "grant_type" => "refresh_token",
-                    "refresh_token" => $findToken->refresh_token
+                    "refresh_token" => $this->CREDENTIAL_DATA['refresh_token']
+
                 ],
             ]);
 
@@ -102,19 +106,23 @@ class Zoom
             $response_token = json_decode($response->getBody()->getContents(), true);
 
 
-            $findToken->access_token = $response_token['access_token'];
-            $findToken->refresh_token = $response_token['refresh_token'];
-            $findToken->expires_in = $response_token['expires_in'];
-            $findToken->token_type = $response_token['token_type'];
-            $findToken->scope = $response_token['scope'];
-            $updateToken = $findToken->save();
+            $token = json_encode($response_token);
 
-            if ($updateToken) {
-                return ['status' => true, 'message' => 'Token Refreshed successfully', 'data' =>  $this->CREDENTIAL_DATA['access_token']];
-            } else {
-                return ['status' => false, 'message' => 'Token not refreshed'];
+            file_put_contents($this->CREDENTIAL_PATH, $token);
+
+            if (!file_exists($this->CREDENTIAL_PATH)) {
+                throw new ZoomException("Token file not exist");
             }
+
+            $savedToken = json_decode(file_get_contents($this->CREDENTIAL_PATH), true); //getting json from saved json file
+
+            if (!empty(array_diff($savedToken, $response_token))) { // checking reponse token and saved tokends are same
+                throw new ZoomException("Token refreshed successfully But error in saved json token");
+            }
+
+            return ['status' => true, 'message' => 'Token Refreshed successfully'];
         } catch (ZoomException $e) {
+            // echo 'Failed during refresh token ' . $e->getMessage();
             return 'Failed during refresh token ' . $e->getMessage();
         }
     }
