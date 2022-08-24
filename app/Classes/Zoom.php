@@ -122,6 +122,7 @@ class Zoom
     }
 
 
+
     // https://marketplace.zoom.us/docs/api-reference/zoom-api/meetings/meetings
     public function listMeeting($query = [], $user_id = 'me')
     {
@@ -134,7 +135,7 @@ class Zoom
             ]);
 
             return array('status' => true, 'data' => json_decode($response->getBody(), true));
-        } catch (\Exception $e) {
+        } catch (ZoomException $e) {
             if ($e->getCode() == 401 && $this->refreshToken()) {
                 return $this->listMeeting($user_id, $query);
             } else {
@@ -158,8 +159,8 @@ class Zoom
                 return array('status' => true, 'data' => json_decode($response->getBody(), true));
             }
 
-            throw new \Exception("Not able to find error");
-        } catch (\Exception $e) {
+            throw new ZoomException("Not able to find error");
+        } catch (ZoomException $e) {
             if ($e->getCode() == 401 && $this->refreshToken()) {
                 return $this->createMeeting($user_id, $json);
             }
@@ -189,8 +190,8 @@ class Zoom
             if ($response->getStatusCode() == 204) {
                 return array('status' => true, 'message' => 'Meeting deleted.');
             }
-            throw new \Exception("Not able to find error");
-        } catch (\Exception $e) {
+            throw new ZoomException("Not able to find error");
+        } catch (ZoomException $e) {
             if ($e->getCode() == 401 && $this->refreshToken()) {
                 return $this->deleteMeeting($meeting_id, $query);
             }
@@ -222,8 +223,8 @@ class Zoom
                 return array('status' => true, 'message' => 'Registration successfull', 'data' => json_decode($response->getBody(), true));
             }
 
-            throw new \Exception("Not able to find error");
-        } catch (\Exception $e) {
+            throw new ZoomException("Not able to find error");
+        } catch (ZoomException $e) {
             if ($e->getCode() == 401 && $this->refreshToken()) {
                 return $this->addMeetingRegistrant($meeting_id, $json);
             }
