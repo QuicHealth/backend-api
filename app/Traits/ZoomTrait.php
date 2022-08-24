@@ -20,7 +20,7 @@ trait ZoomTrait
         return Zoom::token($code);
     }
 
-    public function refreshToken()
+    public function refresh_token()
     {
         return Zoom::refreshToken();
     }

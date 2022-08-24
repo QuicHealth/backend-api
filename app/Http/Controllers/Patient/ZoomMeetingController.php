@@ -48,7 +48,7 @@ class ZoomMeetingController extends Controller
     public function refreshToken()
     {
         // dd($this->refreshToken());
-        return $this->refreshToken();
+        return $this->refresh_token();
     }
 
     public function createZoomMeeting(Request $request)
