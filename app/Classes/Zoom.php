@@ -96,6 +96,8 @@ class Zoom
                     "refresh_token" => $this->CREDENTIAL_DATA['refresh_token']
                 ],
             ]);
+
+            dd($response);
             $response_token = json_decode($response->getBody()->getContents(), true);
 
             $token = json_encode($response_token);
