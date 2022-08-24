@@ -85,6 +85,7 @@ class Zoom
 
     public function refreshToken()
     {
+        dd($this->CREDENTIAL_DATA['refresh_token']);
         try {
             $response = $this->CLIENT->request('POST', '/oauth/token', [
                 "headers" => [
@@ -97,7 +98,7 @@ class Zoom
                 ],
             ]);
 
-            dd($response);
+            // dd($response);
             $response_token = json_decode($response->getBody()->getContents(), true);
 
             $token = json_encode($response_token);
@@ -116,8 +117,8 @@ class Zoom
 
             return ['status' => true, 'message' => 'Token Refreshed successfully'];
         } catch (ZoomException $e) {
-            echo 'Failed during refresh token ' . $e->getMessage();
-            return $e;
+            // echo 'Failed during refresh token ' . $e->getMessage();
+            return 'Failed during refresh token ' . $e->getMessage();
         }
     }
 
