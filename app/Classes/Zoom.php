@@ -85,7 +85,11 @@ class Zoom
 
     public function refreshToken()
     {
-        dd($this->CREDENTIAL_DATA['refresh_token']);
+        $data = [
+            "client ID" =>   $this->CLIENT_ID,
+            "Client Secret" =>    $this->CLIENT_SECRET
+        ];
+        dd($data);
         try {
             $response = $this->CLIENT->request('POST', '/oauth/token', [
                 "headers" => [
