@@ -65,9 +65,9 @@ class Zoom
                 "redirect_uri" => $this->REDIRECT_URI
             ],
         ]);
-        return $response->getBody()->getContents();
-        // $response_token = json_decode($response->getBody()->getContents(), true);
 
+        $response_token = json_decode($response->getBody()->getContents(), true);
+        return $response_token;
         // $token = json_encode($response_token);
 
         // file_put_contents($this->CREDENTIAL_PATH, $token);
