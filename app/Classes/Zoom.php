@@ -97,7 +97,7 @@ class Zoom
                 ],
             ]);
 
-            dd($response->getBody()->getContents());
+
             $response_token = json_decode($response->getBody()->getContents(), true);
 
             $token = json_encode($response_token);
