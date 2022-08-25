@@ -52,6 +52,8 @@ class ZoomMeetingController extends Controller
 
     public function createZoomMeeting(Request $request)
     {
+        //Carbon::createFromFormat('Y-m-d H:i:s', $some_date, 'UTC')->setTimezone('America/Los_Angeles')
+        // $query->whereTime('open_at', '>=', Carbon::parse($request->open_at)->utc());
 
         $getappint = Appointment::where('id', $request->appointment_id)
             ->where('user_id', auth()->user()->id)
@@ -65,6 +67,10 @@ class ZoomMeetingController extends Controller
                 'data' => []
             ], 422);
         }
+
+        $appointmentTime = $getappint->date . '' . $getappint->start;
+        $formatedAppointmentTime = Carbon::parse($appointmentTime)->utc();
+        dd("formatedAppointmentTime " . $formatedAppointmentTime . "appointmentTime " . $appointmentTime);
 
         $data = [
             'topic' => $request->topic,
@@ -82,8 +88,6 @@ class ZoomMeetingController extends Controller
         $meeting = $this->createMeeting($data);
 
         if ($meeting) {
-
-            dd($meeting);
 
             try {
                 $start_at = new Carbon($meeting['data']['start_time']);
