@@ -69,8 +69,8 @@ class ZoomMeetingController extends Controller
         }
 
         $appointmentTime = $getappint->date . 'T' . $getappint->start . "Z";
-        // $formatedAppointmentTime = Carbon::parse($appointmentTime)->utc();
-        $formatedAppointmentTime = Carbon::createFromFormat('Y-m-d H:i:s', $appointmentTime, 'UTC')->setTimezone('West Central Africa');
+        $formatedAppointmentTime = Carbon::parse($appointmentTime)->setTimezone('UTC');
+
         dd("formatedAppointmentTime " . $formatedAppointmentTime . " appointmentTime " . $appointmentTime);
 
         $data = [
