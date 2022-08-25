@@ -81,11 +81,11 @@ class ZoomMeetingController extends Controller
             ]
         ];
 
-        // dd(json_encode($data));
         try {
 
             $meeting = $this->createMeeting($data);
-            dd(json_encode($meeting->data->id));
+            $zoomM = json_decode($meeting);
+            dd($zoomM->data->id);
             if ($meeting) {
 
                 $start_at = new Carbon($meeting['data']['start_time']);
