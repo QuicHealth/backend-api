@@ -68,9 +68,9 @@ class ZoomMeetingController extends Controller
             ], 422);
         }
 
-        $appointmentTime = $getappint->date . '' . $getappint->start;
+        $appointmentTime = $getappint->date . 'T' . $getappint->start . "Z";
         $formatedAppointmentTime = Carbon::parse($appointmentTime)->utc();
-        dd("formatedAppointmentTime " . $formatedAppointmentTime . "appointmentTime " . $appointmentTime);
+        dd("formatedAppointmentTime " . $formatedAppointmentTime . " appointmentTime " . $appointmentTime);
 
         $data = [
             'topic' => $request->topic,
