@@ -121,7 +121,7 @@ class ZoomMeetingController extends Controller
                 ], 422);
             }
         } catch (\Throwable $th) {
-            throw $th->getMessage();
+            throw $th;
         }
     }
 
