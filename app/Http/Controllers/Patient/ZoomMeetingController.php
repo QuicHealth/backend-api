@@ -82,27 +82,34 @@ class ZoomMeetingController extends Controller
         $meeting = $this->createMeeting($data);
 
         if ($meeting) {
-            $start_at = new Carbon($meeting['data']['start_time']);
 
-            $create = Zoom::create([
-                'user_id' => $getappint->user_id,
-                'doctor_id' => $getappint->doctor_id,
-                'appointment_id' => $getappint->id,
-                'meeting_id' => $meeting['data']['id'],
-                'topic' => $meeting['data']['topic'],
-                'start_at' => $start_at->format('Y-m-d H:i:s'),
-                'duration' => $meeting['data']['duration'],
-                'password' => $meeting['data']['password'],
-                'start_url' => $meeting['data']['start_url'],
-                'join_url' => $meeting['data']['join_url'],
-            ]);
+            dd($meeting);
 
-            if ($create) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'success',
-                    'data' => $create
-                ], 200);
+            try {
+                $start_at = new Carbon($meeting['data']['start_time']);
+
+                $create = Zoom::create([
+                    'user_id' => $getappint->user_id,
+                    'doctor_id' => $getappint->doctor_id,
+                    'appointment_id' => $getappint->id,
+                    'meeting_id' => $meeting['data']['id'],
+                    'topic' => $meeting['data']['topic'],
+                    'start_at' => $start_at->format('Y-m-d H:i:s'),
+                    'duration' => $meeting['data']['duration'],
+                    'password' => $meeting['data']['password'],
+                    'start_url' => $meeting['data']['start_url'],
+                    'join_url' => $meeting['data']['join_url'],
+                ]);
+
+                if ($create) {
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'success',
+                        'data' => $create
+                    ], 200);
+                }
+            } catch (\Throwable $th) {
+                throw $th->getMessage();
             }
         }
         return response()->json([
