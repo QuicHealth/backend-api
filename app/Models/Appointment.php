@@ -51,4 +51,9 @@ class Appointment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function zoomMeeting()
+    {
+        return $this->hasOne(Zoom::class);
+    }
 }

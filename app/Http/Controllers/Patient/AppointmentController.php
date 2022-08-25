@@ -80,7 +80,7 @@ class AppointmentController extends Controller
     {
         $appointments = Appointment::where('user_id', Auth::user($request->token)->id)
             ->where('payment_status', 'PAID')
-            ->with('doctor')
+            ->with(['doctor', 'zoomMeeting'])
             ->get();
 
         if ($appointments) {

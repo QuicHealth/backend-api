@@ -127,7 +127,7 @@ class DoctorController extends Controller
     {
         $appointments = Appointment::where('doctor_id', Auth::user($request->token)->id)
             ->where('payment_status', 'PAID')
-            ->with('doctor')
+            ->with(['user', 'zoomMeeting'])
             ->get();
 
         if ($appointments) {

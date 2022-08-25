@@ -52,9 +52,6 @@ class ZoomMeetingController extends Controller
 
     public function createZoomMeeting(Request $request)
     {
-        //Carbon::createFromFormat('Y-m-d H:i:s', $some_date, 'UTC')->setTimezone('America/Los_Angeles')
-        // $query->whereTime('open_at', '>=', Carbon::parse($request->open_at)->utc());
-
         $getappint = Appointment::where('id', $request->appointment_id)
             ->where('user_id', auth()->user()->id)
             ->where('payment_status', 'PAID')
@@ -68,17 +65,15 @@ class ZoomMeetingController extends Controller
             ], 422);
         }
 
-        $appointmentTime = $getappint->date . 'T' . $getappint->start . "Z";
+        $appointmentTime = $getappint->date . '' . $getappint->start;
         $formatedAppointmentTime = Carbon::parse($appointmentTime)->setTimezone('UTC');
-
-        dd("formatedAppointmentTime " . $formatedAppointmentTime . " appointmentTime " . $appointmentTime);
 
         $data = [
             'topic' => $request->topic,
             'agenda' => $request->agenda,
             'duration' => $request->duration,
             'password' => Str::random(6),
-            'start_time' => $request->start_time,
+            'start_time' => $formatedAppointmentTime,
             'timezone' => 'West Central Africa',
             'pre_schedule' => true,
             'meeting_invitees' => [
@@ -86,11 +81,12 @@ class ZoomMeetingController extends Controller
             ]
         ];
 
-        $meeting = $this->createMeeting($data);
+        try {
 
-        if ($meeting) {
+            $meeting = $this->createMeeting($data);
 
-            try {
+            if ($meeting) {
+
                 $start_at = new Carbon($meeting['data']['start_time']);
 
                 $create = Zoom::create([
@@ -113,14 +109,20 @@ class ZoomMeetingController extends Controller
                         'data' => $create
                     ], 200);
                 }
-            } catch (\Throwable $th) {
-                throw $th->getMessage();
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'error, can not save meeting',
+                ], 422);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'can not create',
+                ], 422);
             }
+        } catch (\Throwable $th) {
+            throw $th->getMessage();
         }
-        return response()->json([
-            'status' => false,
-            'message' => 'can not create',
-        ], 422);
     }
 
 
