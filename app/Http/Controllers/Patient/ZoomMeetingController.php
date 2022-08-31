@@ -73,14 +73,14 @@ class ZoomMeetingController extends Controller
             'agenda' => $request->agenda,
             'duration' => $request->duration,
             'password' => Str::random(6),
-            'start_time' => $formatedAppointmentTime,
+            // 'start_time' => $formatedAppointmentTime,
+            'start_time' => '2022-09-01T12:40:26Z',
             'timezone' => 'West Central Africa',
             'pre_schedule' => false,
             'meeting_invitees' => [
                 'email' => auth()->user()->email,
             ],
             "settings" => [
-                "alternative_hosts" => "dikep15@gmail.com",
                 "encryption_type" => "enhanced_encryption",
                 "focus_mode" => true,
                 "host_video" => true,
