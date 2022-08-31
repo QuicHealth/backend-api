@@ -70,7 +70,7 @@ class ZoomMeetingController extends Controller
         $formatedAppointmentTime = Carbon::parse($appointmentTime)->toIso8601ZuluString();
         $tempDate = new DateTime($appointmentTime);
         $d = $tempDate->format('Y-m-d\TH:i:s');
-        dd("main time " . $getappint->start . " formated time " . $d);
+        dd("Carbon parse " . $formatedAppointmentTime . " DateTime " . $d);
         $data = [
             'topic' => $request->topic,
             'agenda' => $request->agenda,
