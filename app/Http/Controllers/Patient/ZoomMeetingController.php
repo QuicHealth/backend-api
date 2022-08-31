@@ -80,16 +80,16 @@ class ZoomMeetingController extends Controller
             // 'start_time' => '2022-09-01T12:40:26Z',
             'timezone' => 'West Central Africa',
             'pre_schedule' => false,
-            'meeting_invitees' => [
-                'email' => auth()->user()->email,
-            ],
+
             "settings" => [
                 "encryption_type" => "enhanced_encryption",
                 "focus_mode" => true,
                 "host_video" => true,
                 "jbh_time" => 0,
                 "join_before_host" => true,
-                "private_meeting" => true,
+                'meeting_invitees' => [
+                    'email' => auth()->user()->email,
+                ],
             ],
         ];
 
