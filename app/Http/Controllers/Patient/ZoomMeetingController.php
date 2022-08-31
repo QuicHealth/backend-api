@@ -96,7 +96,7 @@ class ZoomMeetingController extends Controller
         try {
 
             $meeting = $this->createMeeting($data);
-            return response()->json([$meeting], 200);
+            return response()->json($meeting, 200);
             // if ($meeting) {
 
             //     $start_at = new Carbon($meeting['data']['start_time']);
