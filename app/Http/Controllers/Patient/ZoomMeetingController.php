@@ -93,42 +93,42 @@ class ZoomMeetingController extends Controller
         try {
 
             $meeting = $this->createMeeting($data);
+            return response()->json([$meeting], 200);
+            // if ($meeting) {
 
-            if ($meeting) {
+            //     $start_at = new Carbon($meeting['data']['start_time']);
 
-                $start_at = new Carbon($meeting['data']['start_time']);
+            //     $create = Zoom::create([
+            //         'user_id' => $getappint->user_id,
+            //         'doctor_id' => $getappint->doctor_id,
+            //         'appointment_id' => $getappint->id,
+            //         'meeting_id' => $meeting['data']['id'],
+            //         'topic' => $meeting['data']['topic'],
+            //         'start_at' => $start_at->format('Y-m-d H:i:s'),
+            //         'duration' => $meeting['data']['duration'],
+            //         'password' => $meeting['data']['password'],
+            //         'start_url' => $meeting['data']['start_url'],
+            //         'join_url' => $meeting['data']['join_url'],
+            //     ]);
 
-                $create = Zoom::create([
-                    'user_id' => $getappint->user_id,
-                    'doctor_id' => $getappint->doctor_id,
-                    'appointment_id' => $getappint->id,
-                    'meeting_id' => $meeting['data']['id'],
-                    'topic' => $meeting['data']['topic'],
-                    'start_at' => $start_at->format('Y-m-d H:i:s'),
-                    'duration' => $meeting['data']['duration'],
-                    'password' => $meeting['data']['password'],
-                    'start_url' => $meeting['data']['start_url'],
-                    'join_url' => $meeting['data']['join_url'],
-                ]);
+            //     if ($create) {
+            //         return response()->json([
+            //             'status' => true,
+            //             'message' => 'success',
+            //             'data' => $create
+            //         ], 200);
+            //     }
 
-                if ($create) {
-                    return response()->json([
-                        'status' => true,
-                        'message' => 'success',
-                        'data' => $create
-                    ], 200);
-                }
-
-                return response()->json([
-                    'status' => false,
-                    'message' => 'error, can not save meeting',
-                ], 422);
-            } else {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'can not create',
-                ], 422);
-            }
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'error, can not save meeting',
+            //     ], 422);
+            // } else {
+            //     return response()->json([
+            //         'status' => false,
+            //         'message' => 'can not create',
+            //     ], 422);
+            // }
         } catch (\Throwable $th) {
             throw $th;
         }
