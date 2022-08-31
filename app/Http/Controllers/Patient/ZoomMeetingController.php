@@ -75,10 +75,19 @@ class ZoomMeetingController extends Controller
             'password' => Str::random(6),
             'start_time' => $formatedAppointmentTime,
             'timezone' => 'West Central Africa',
-            'pre_schedule' => true,
+            'pre_schedule' => false,
             'meeting_invitees' => [
                 'email' => auth()->user()->email,
-            ]
+            ],
+            "settings" => [
+                "alternative_hosts" => "jchill@example.com;thill@example.com",
+                "encryption_type" => "enhanced_encryption",
+                "focus_mode" => true,
+                "host_video" => true,
+                "jbh_time" => 0,
+                "join_before_host" => true,
+                "private_meeting" => true,
+            ],
         ];
 
         try {
