@@ -80,6 +80,7 @@ class ZoomMeetingController extends Controller
                 'email' => auth()->user()->email,
             ],
             "settings" => [
+                "alternative_hosts" => "dikep15@gmail.com",
                 "encryption_type" => "enhanced_encryption",
                 "focus_mode" => true,
                 "host_video" => true,
