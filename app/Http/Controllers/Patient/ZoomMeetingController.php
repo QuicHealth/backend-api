@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Patient;
 
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Zoom;
 use App\Traits\ZoomTrait;
 use App\Models\Appointment;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 
 class ZoomMeetingController extends Controller
 {
@@ -67,7 +68,9 @@ class ZoomMeetingController extends Controller
 
         $appointmentTime = $getappint->date . '' . $getappint->start;
         $formatedAppointmentTime = Carbon::parse($appointmentTime)->toIso8601ZuluString();
-        // dd($formatedAppointmentTime);
+        $tempDate = new DateTime($getappint->start);
+        $d = $tempDate->format('Y-m-d\TH:i:s');
+        dd("normal time" . $getappint->start . "formated" . $d);
         $data = [
             'topic' => $request->topic,
             'agenda' => $request->agenda,
