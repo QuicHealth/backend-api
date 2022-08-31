@@ -69,15 +69,15 @@ class ZoomMeetingController extends Controller
         $appointmentTime = $getappint->date . '' . $getappint->start;
         $formatedAppointmentTime = Carbon::parse($appointmentTime)->toIso8601ZuluString();
         $tempDate = new DateTime($appointmentTime);
-        $d = $tempDate->format('Y-m-d\TH:i:sZ');
-        dd("Carbon parse " . $formatedAppointmentTime . " DateTime " . $d);
+        $startTime = $tempDate->format('Y-m-d\TH:i:s');
+        // dd("Carbon parse " . $formatedAppointmentTime . " DateTime " . $d);
         $data = [
             'topic' => $request->topic,
             'agenda' => $request->agenda,
             'duration' => $request->duration,
             'password' => Str::random(6),
-            // 'start_time' => $formatedAppointmentTime,
-            'start_time' => '2022-09-01T12:40:26Z',
+            'start_time' => $startTime,
+            // 'start_time' => '2022-09-01T12:40:26Z',
             'timezone' => 'West Central Africa',
             'pre_schedule' => false,
             'meeting_invitees' => [
