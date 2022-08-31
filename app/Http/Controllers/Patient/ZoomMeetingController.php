@@ -80,23 +80,22 @@ class ZoomMeetingController extends Controller
             // 'start_time' => '2022-09-01T12:40:26Z',
             'timezone' => 'West Central Africa',
             'pre_schedule' => false,
-
+            'meeting_invitees' => [
+                'email' => auth()->user()->email,
+            ],
             "settings" => [
                 "encryption_type" => "enhanced_encryption",
                 "focus_mode" => true,
                 "host_video" => true,
                 "jbh_time" => 0,
                 "join_before_host" => true,
-                'meeting_invitees' => [
-                    'email' => auth()->user()->email,
-                ],
             ],
         ];
 
         try {
 
             $meeting = $this->createMeeting($data);
-            // return response()->json($meeting, 200);
+
             if ($meeting) {
 
                 $start_at = new Carbon($meeting['data']['start_time']);
