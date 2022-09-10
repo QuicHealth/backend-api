@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\PatientResource;
 use App\Http\Controllers\helpController;
+use App\Notifications\UserRegisterNotification;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response as RES;
@@ -47,18 +48,19 @@ class AuthController extends Controller
         $user->phone = $request->phone;
         $user->password = bcrypt($request->password);
 
-        $data = [
-            'email' => $request->email,
-            'subject' => 'Welcome Mail',
-            'name' => 'Welcome Mail',
-            'view' => 'mail.mail',
-            'content' =>
-            'Welcome to Quichealth, we are happy to have you here.',
-        ];
+        // $data = [
+        //     'email' => $request->email,
+        //     'subject' => 'Welcome Mail',
+        //     'name' => 'Welcome Mail',
+        //     'view' => 'mail.mail',
+        //     'content' =>
+        //     'Welcome to Quichealth, we are happy to have you here.',
+        // ];
 
         // MailSendingJob::dispatch($data);
 
         $user->save();
+        $user->notify(new UserRegisterNotification($user));
 
         $credentials = $request->only('email', 'password');
 
