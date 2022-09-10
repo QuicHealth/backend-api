@@ -4,6 +4,8 @@ namespace App\Actions;
 
 use App\Events\NotificationReceived;
 use App\Models\Appointment;
+use App\Models\User;
+use App\Notifications\CreateAppointmentNotification;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 
@@ -79,6 +81,12 @@ class CreateAppointmentAction
             "unique_id" => uniqid(),
         ]);
 
+        $user = User::find($user_id);
+        $appointment->user()->associate($user);
+        // $appointment->user()->associate($user);
+
+
+        $appointment->notify(new CreateAppointmentNotification($appointment));
         return $appointment;
 
         // if ($appointment) {
