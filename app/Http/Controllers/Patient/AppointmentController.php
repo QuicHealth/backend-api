@@ -13,7 +13,8 @@ use App\Actions\AppointmentDetailsAction;
 use App\Events\NotificationReceived;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\AppointmentDetailsRequest;
-
+use App\Models\User;
+use App\Notifications\CancelAppointmentNotification;
 
 class AppointmentController extends Controller
 {
@@ -180,6 +181,12 @@ class AppointmentController extends Controller
         $appointment->status = "cancelled";
 
         if ($appointment->save()) {
+
+        $user_id = $appointment->user_id;;
+        $user = User::find($user_id);
+        $appointment->user()->associate($user);
+
+        $appointment->notify(new CancelAppointmentNotification($appointment));
             return response([
                 'status' => true,
                 'Appointments' => $appointment,
