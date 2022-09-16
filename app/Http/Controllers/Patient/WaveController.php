@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Patient;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Payment;
+use App\Models\User;
+use App\Notifications\PaymentSuccessfulNotification;
 use Illuminate\Http\Request;
 
 class WaveController extends Controller
@@ -146,6 +148,7 @@ class WaveController extends Controller
         $payment = Payment::create([
             'appointments_id' =>  $request->appointment_id,
             'amount' => $request->amount,
+            'user_id' => auth()->user()->id,
             'paymentStatus' => "PENDING",
             'customer_name' => auth()->user()->firstname . ' ' . auth()->user()->lastname,
             'customer_email' => auth()->user()->email,
@@ -166,6 +169,13 @@ class WaveController extends Controller
             $payment->charged_amount = $res->data->charged_amount;
             $payment->processor_response = $res->data->processor_response;
             $payment->save();
+
+            $user_id = $payment->user_id;
+            $user = User::find($user_id);
+            $payment->user()->associate($user);
+
+            $payment->notify(new PaymentSuccessfulNotification($payment));
+            // dd($payment);
         }
     }
 
