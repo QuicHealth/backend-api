@@ -24,7 +24,7 @@ class CreateDoctorsTable extends Migration
             $table->integer('featured')->default(0);
             $table->integer('status')->default(1);
             $table->string('specialty');
-            $table->string('address');
+            $table->text('address');
             $table->softDeletes();
             $table->timestamps();
         });

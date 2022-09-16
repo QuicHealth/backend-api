@@ -7,23 +7,23 @@ use App\Models\Doctor;
 use App\Models\Schedule;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Services\SettingService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\SetAvailablityAction;
 use App\Http\Requests\ScheduleRequest;
+use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
 
 class DoctorController extends Controller
 {
-    // public function getDays()
-    // {
-    //     $days = DB::table('days')->get();
-    //     return response([
-    //         'status' => true,
-    //         'data' => $days
-    //     ]);
-    // }
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new SettingService(new Doctor, auth('doctor_api')->user()->id);
+    }
 
     public function setSchedule(ScheduleRequest $request)
     {
@@ -57,13 +57,23 @@ class DoctorController extends Controller
 
     public function getDoctorsDashboard(Request $request)
     {
-        $doctor = Doctor::where("id", auth('doctor_api')->user()->id)
-            ->with(['hospital', 'schedule', 'appointments'])
-            ->first();
+        // $doctor = Doctor::where("id", auth('doctor_api')->user()->id)
+        //     ->with(['hospital', 'schedule', 'appointments'])
+        //     ->first();
+        $totalPendingAppointments  = Appointment::where('user_id', auth('doctor_api')->user()->id)->where('status', 'pending')->count();
+        $totalSuccussfulAppointments  = Appointment::where('user_id', auth('doctor_api')->user()->id)->where('status', 'successful')->count();
+        $allPendingAppointments = Appointment::where('user_id', auth('doctor_api')->user()->id)->get();
 
         // dd($doctor);DoctorResource::collection
+        return response([
+            'status' => true,
+            // 'doctor' => new DoctorResource($doctor),
+            'totalPendingAppointments' => $totalPendingAppointments,
+            'totalSuccussfulAppointments' => $totalSuccussfulAppointments,
+            'allPendingAppointments' => $allPendingAppointments
+        ]);
 
-        return response()->json(['success' => true, 'doctor' => new DoctorResource($doctor)]);
+        // return response()->json(['success' => true, 'doctor' => new DoctorResource($doctor)]);
     }
 
     public function testDoctor(Request $request)
@@ -141,5 +151,31 @@ class DoctorController extends Controller
                 'message' => 'You dont have any appointments',
             ], http_response_code());
         }
+    }
+
+    public function getsetting(): array
+    {
+        return  $this->service->settings()->get();
+    }
+
+    public function updateSetting(SettingsRequest $request)
+    {
+        $validated = $request->validated();
+
+        if ($request->hasfile('image')) {
+            $validated['image']  = $request->file('image')->getRealPath();
+        }
+
+        return $this->service->settings()->saveUpdate($validated, "doctor");
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $this->validate($request, [
+            'old_password' => 'required',
+            'password' => 'required|confirmed|min:6',
+        ]);
+
+        return $this->service->settings()->saveUpdatePassword($request->all());
     }
 }

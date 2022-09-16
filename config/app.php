@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider::class,
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -230,7 +231,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Monnify'   =>  App\Facades\Monnify::class,
-        'Zoom'   =>  App\Facades\Zoom::class
+        'Zoom'   =>  App\Facades\Zoom::class,
+        'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
 
     ],
 

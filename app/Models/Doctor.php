@@ -16,7 +16,7 @@ class Doctor extends Authenticatable implements JWTSubject
 
     protected $appends = ['hospital', 'specialties'];
 
-
+    protected $guarded = [];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
