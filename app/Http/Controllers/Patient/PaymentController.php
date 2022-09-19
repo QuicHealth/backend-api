@@ -10,7 +10,6 @@ use App\Actions\MakePaymentAction;
 use App\Actions\UpdatePaymentAction;
 use App\Http\Controllers\Controller;
 use App\Events\NewWebHookCallReceived;
-use App\Models\Notification;
 use App\Models\Payment as WebHookCall;
 
 
@@ -120,17 +119,5 @@ class PaymentController extends Controller
         $token = $generator->generate($tokenLength);
 
         return $token;
-    }
-
-    public function notification()
-    {
-        $notification = Notification::where('user_id', auth()->user()->id)->get();
-    }
-
-    public function notificationById($id)
-    {
-        $notification = Notification::where('user_id', auth()->user()->id)->where('id',$id)->firstOrFail();
-        $notification->read = true;
-        $notification->save();
     }
 }
