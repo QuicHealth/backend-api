@@ -11,35 +11,35 @@ class NotificationsController extends Controller
     public function index()
     {
         $notification = Notification::where('user_id', auth()->user()->id)->get();
-        return $notification;
+
         if ($notification) {
             return response()->json([
                 'status' => true,
                 'message' => $notification
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'Error'
-            ],401);
+            ], 401);
         }
     }
 
     public function update($id)
     {
-        $notification = Notification::where('user_id', auth()->user()->id)->where('id',$id)->firstOrFail();
+        $notification = Notification::where('user_id', auth()->user()->id)->where('id', $id)->firstOrFail();
         $notification->read = true;
 
         if ($notification->save()) {
             return response()->json([
                 'status' => true,
                 'message' => $notification
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'Error'
-            ],401);
+            ], 401);
         }
     }
 }

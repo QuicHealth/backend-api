@@ -22,7 +22,9 @@ class DoctorController extends Controller
 
     public function __construct()
     {
-        $this->service = new SettingService(new Doctor, auth('doctor_api')->user()->id);
+        if (auth('doctor_api')->check()) {
+            $this->service = new SettingService(new Doctor, auth('doctor_api')->user()->id);
+        }
     }
 
     public function setSchedule(ScheduleRequest $request)
@@ -162,11 +164,15 @@ class DoctorController extends Controller
     {
         $validated = $request->validated();
 
+        $cloundinaryFolder = "";
+
         if ($request->hasfile('image')) {
+
             $validated['image']  = $request->file('image')->getRealPath();
+            $cloundinaryFolder = "doctor";
         }
 
-        return $this->service->settings()->saveUpdate($validated, "doctor");
+        return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
     }
 
     public function updatePassword(Request $request)
