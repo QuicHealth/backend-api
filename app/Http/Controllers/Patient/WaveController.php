@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\User;
 use App\Notifications\PaymentSuccessfulNotification;
@@ -176,6 +177,14 @@ class WaveController extends Controller
 
             $payment->notify(new PaymentSuccessfulNotification($payment));
             // dd($payment);
+
+            //save notification
+            $notification = new Notification();
+            $notification->user_id = auth()->user()->id;
+            $notification->user_type = 'Patient';
+            $notification->title = 'Payment was Successful';
+            $notification->message = 'Payment was Successful';
+            $notification->save();
         }
     }
 

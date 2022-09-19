@@ -82,6 +82,8 @@ Route::prefix('v1')->group(function () {
         Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
         Route::get('redirect', 'ZoomMeetingController@redirect');
 
+        Route::get('notification', 'PaymentController@notification');
+
 
         // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
