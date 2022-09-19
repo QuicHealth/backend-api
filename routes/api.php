@@ -60,10 +60,10 @@ Route::prefix('v1')->group(function () {
             Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
-            // Route::post('payment', 'PaymentController@makePayment');
-            // Route::get('payment/confirm/{txnReference}', 'PaymentController@payment_status');
-            // Route::get('payment/status', 'PaymentController@payment_status')->name('payment.status');
-            // Route::post('webhook-receiving-url', 'PaymentController@txnCompletion');
+            // Notifications
+            Route::get('notification', 'NotificationsController@index');
+            Route::get('notification/{id}', 'NotificationsController@update');
+
 
             Route::post('payment', 'WaveController@add');
 
@@ -81,10 +81,6 @@ Route::prefix('v1')->group(function () {
 
         Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
         Route::get('redirect', 'ZoomMeetingController@redirect');
-
-        Route::get('notification', 'NotificationsController@index');
-        Route::get('notification/{id}', 'NotificationsController@update');
-
 
         // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
