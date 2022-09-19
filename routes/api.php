@@ -26,6 +26,7 @@ Route::prefix('v1')->group(function () {
         Route::post('login', 'AuthController@login');
 
         Route::middleware('auth:api')->group(function () {
+
             Route::post('forget-password', 'AuthController@forget_password');
             Route::post('reset-password', 'AuthController@reset_password');
             Route::get('verify-reset-token', 'AuthController@verify_password');
@@ -43,6 +44,11 @@ Route::prefix('v1')->group(function () {
 
             Route::get('get-dashboard', 'PatientController@getDashboard');
             Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
+
+            Route::get('settings', 'PatientController@getsetting');
+            Route::post('settings', 'PatientController@updateSetting');
+
+            Route::post('password/update', 'PatientController@updatePassword');
 
             // appointment APIs
             Route::post('create-appointment', 'AppointmentController@createAppointment');
@@ -76,6 +82,9 @@ Route::prefix('v1')->group(function () {
         Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
         Route::get('redirect', 'ZoomMeetingController@redirect');
 
+        Route::get('notification', 'NotificationsController@index');
+        Route::get('notification/{id}', 'NotificationsController@update');
+
 
         // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
@@ -90,6 +99,7 @@ Route::prefix('v1')->group(function () {
         Route::post('add-test-Doctor', 'DoctorController@testDoctor');
 
         Route::middleware('auth:doctor_api')->group(function () {
+
             Route::Post(
                 'doctor-forget-password',
                 'DoctorAuthController@doctorsForgetPassword'
@@ -102,6 +112,11 @@ Route::prefix('v1')->group(function () {
             Route::get('get-schedule', 'DoctorController@getSchedule');
             Route::get('search-by-date/{date}', 'DoctorController@searchSchedule');
             Route::get('get-dashboard', 'DoctorController@getDoctorsDashboard');
+
+            Route::get('settings', 'DoctorController@getsetting');
+            Route::post('settings', 'DoctorController@updateSetting');
+
+            Route::post('password/update', 'DoctorController@updatePassword');
         });
     });
 

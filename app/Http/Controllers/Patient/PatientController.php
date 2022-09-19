@@ -6,38 +6,45 @@ use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Hospital;
 use Illuminate\Http\Request;
+use App\Services\SettingService;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Controllers\helpController;
 use App\Http\Resources\HospitalResource;
 use App\Http\Requests\UpdatePatientRequest;
+use App\Models\Appointment;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class PatientController extends Controller
 {
-    /**
-     * Update a user's record in the database.
-     *
-     * @param  \App\Http\Requests\UpdatePatientRequest  $request
-     * @param  \App\Models\User unique_id
-     *
-     * @return Illuminate\Http\Response
-     */
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new SettingService(new User, auth()->user()->id);
+    }
 
     public function updateProfile(UpdatePatientRequest $request, $unique_id)
     {
 
         // Retrieve the validated input data...
-        $validated = $request->validated();
+        // $validated = $request->validated();
+        $this->validate($request, [
+            'firstname'     => 'sometimes',
+            'lastname'      => 'sometimes',
+            'gender'        => 'sometimes',
+            'dob'           => 'sometimes',
+            'phone'         => 'sometimes'
+        ]);
 
         $user = User::where('unique_id', $unique_id)->first();
-        //        $user->email = $request->email;
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->gender = $request->gender;
-        $user->dob = $request->dob;
-        $user->phone = $request->phone;
+        // $request->has('email') ? $user->email = $request->email : false;
+        $request->has('firstname') ? $user->firstname = $request->firstname : false;
+        $request->has('lastname') ? $user->lastname = $request->lastname : false;
+        $request->has('gender') ? $user->gender = $request->gender : false;
+        $request->has('dob') ? $user->dob = $request->dob : false;
+        $request->has('phone') ? $user->phone = $request->phone : false;
 
         //$user->update(['avatar' => $avatar]);
 
@@ -67,9 +74,13 @@ class PatientController extends Controller
         return helpController::getResponse($status, $message, $code, $data);
     }
 
-    public function getDashboard(Request $request)
+    public function getDashboard()
     {
-        $user = Auth::user();
+
+        $user = auth()->user();
+
+        $totalPendingAppointments  = Appointment::where('user_id', auth()->user()->id)->where('status', 'pending')->count();
+        $totalBookedAppointments = Appointment::where('user_id', auth()->user()->id)->count();
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -78,16 +89,14 @@ class PatientController extends Controller
         }
         return response([
             'status' => true,
-            'data' => array_merge(collect($user)->toArray()),
+            'data' => [
+                'user' => $user,
+                'totalBookedAppointments' => $totalBookedAppointments,
+                'totalPendingAppointments' => $totalPendingAppointments,
+            ],
         ], 200);
     }
-    /**
-     * Get the hospital's information.
-     *
-     * @param  \App\Models\Hospital
-     *
-     * @return Illuminate\Http\Response
-     */
+
     public function getHospitals()
     {
         $hospitals = Hospital::with(['doctors', 'settings'])->latest()->get();
@@ -170,6 +179,32 @@ class PatientController extends Controller
         ]);
     }
 
+    public function getsetting(): array
+    {
+        return  $this->service->settings()->get();
+    }
+
+    public function updateSetting(SettingsRequest $request)
+    {
+
+        $validated = $request->validated();
+
+        if ($request->hasfile('image')) {
+            $validated['image']  = $request->file('image')->getRealPath();
+        }
+
+        return $this->service->settings()->saveUpdate($validated, "doctor");
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|confirmed',
+        ]);
+
+        return $this->service->settings()->saveUpdatePassword($request->all());
+    }
 
 
     //5MC4j689zQriZVsyar8otChFyoQ74smLnIcjwPJJq9qyGR9syv7MFwy3OuBN

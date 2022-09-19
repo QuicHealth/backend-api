@@ -16,6 +16,7 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('appointments_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('customer_name');
             $table->string('customer_email');
             $table->string('amount');
@@ -29,6 +30,9 @@ class CreatePaymentsTable extends Migration
 
             $table->foreign('appointments_id')
                 ->references('id')->on('appointments')
+                ->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')->on('users')
                 ->onDelete('cascade');
         });
     }
