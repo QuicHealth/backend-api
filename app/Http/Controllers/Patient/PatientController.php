@@ -29,15 +29,22 @@ class PatientController extends Controller
     {
 
         // Retrieve the validated input data...
-        $validated = $request->validated();
+        // $validated = $request->validated();
+        $this->validate($request, [
+            'firstname'     => 'sometimes',
+            'lastname'      => 'sometimes',
+            'gender'        => 'sometimes',
+            'dob'           => 'sometimes',
+            'phone'         => 'sometimes'
+        ]);
 
         $user = User::where('unique_id', $unique_id)->first();
-        //        $user->email = $request->email;
-        $user->firstname = $request->firstname;
-        $user->lastname = $request->lastname;
-        $user->gender = $request->gender;
-        $user->dob = $request->dob;
-        $user->phone = $request->phone;
+        // $request->has('email') ? $user->email = $request->email : false;
+        $request->has('firstname') ? $user->firstname = $request->firstname : false;
+        $request->has('lastname') ? $user->lastname = $request->lastname : false;
+        $request->has('gender') ? $user->gender = $request->gender : false;
+        $request->has('dob') ? $user->dob = $request->dob : false;
+        $request->has('phone') ? $user->phone = $request->phone : false;
 
         //$user->update(['avatar' => $avatar]);
 

@@ -13,7 +13,9 @@ use App\Actions\AppointmentDetailsAction;
 use App\Events\NotificationReceived;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\AppointmentDetailsRequest;
-
+use App\Models\Notification;
+use App\Models\User;
+use App\Notifications\CancelAppointmentNotification;
 
 class AppointmentController extends Controller
 {
@@ -137,6 +139,14 @@ class AppointmentController extends Controller
 
         if ($checkAppointmentBooking) {
 
+            //save notification
+            $notification = new Notification();
+            $notification->user_id = auth()->user()->id;
+            $notification->user_type = 'Patient';
+            $notification->title = 'Appointment Reschedule';
+            $notification->message = 'Appointment was Reschedule Successful';
+            $notification->save();
+
             return response([
                 'status' => false,
                 'message' => 'Time slot have already been booked',
@@ -180,6 +190,21 @@ class AppointmentController extends Controller
         $appointment->status = "cancelled";
 
         if ($appointment->save()) {
+
+        $user_id = $appointment->user_id;;
+        $user = User::find($user_id);
+        $appointment->user()->associate($user);
+
+        $appointment->notify(new CancelAppointmentNotification($appointment));
+
+        //save notification
+        $notification = new Notification();
+        $notification->user_id = auth()->user()->id;
+        $notification->user_type = 'Patient';
+        $notification->title = 'Appointment Cancelled';
+        $notification->message = 'Appointment was cancelled';
+        $notification->save();
+
             return response([
                 'status' => true,
                 'Appointments' => $appointment,
