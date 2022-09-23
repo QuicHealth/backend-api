@@ -61,8 +61,8 @@ Route::prefix('v1')->group(function () {
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
             // Notifications
-            Route::get('notification', 'NotificationsController@index');
-            Route::get('notification/{id}', 'NotificationsController@update');
+            Route::get('notification', 'NotificationsController@allNotification');
+            Route::get('notification/{id}', 'NotificationsController@updateNotification');
 
 
             Route::post('payment', 'WaveController@add');
@@ -113,6 +113,10 @@ Route::prefix('v1')->group(function () {
             Route::post('settings', 'DoctorController@updateSetting');
 
             Route::post('password/update', 'DoctorController@updatePassword');
+
+            // Notifications
+            Route::get('notification', 'DoctorController@allNotification');
+            Route::get('notification/{id}', 'DoctorController@updateNotification');
         });
     });
 
