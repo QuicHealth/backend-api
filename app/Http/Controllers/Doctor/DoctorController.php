@@ -15,6 +15,7 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
+use App\Models\Notification;
 
 class DoctorController extends Controller
 {
@@ -22,7 +23,9 @@ class DoctorController extends Controller
 
     public function __construct()
     {
-        $this->service = new SettingService(new Doctor, auth('doctor_api')->user()->id);
+        if (auth('doctor_api')->check()) {
+            $this->service = new SettingService(new Doctor, auth('doctor_api')->user()->id);
+        }
     }
 
     public function setSchedule(ScheduleRequest $request)
@@ -116,7 +119,7 @@ class DoctorController extends Controller
 
     public function getMeetingsByDoctor()
     {
-        $meetings = Zoom::where('doctor_id', auth()->user()->id)->get();
+        $meetings = Zoom::where('doctor_id', auth('doctor_api')->user()->id)->get();
 
         if ($meetings) {
             return response()->json([
@@ -162,11 +165,15 @@ class DoctorController extends Controller
     {
         $validated = $request->validated();
 
+        $cloundinaryFolder = "";
+
         if ($request->hasfile('image')) {
+
             $validated['image']  = $request->file('image')->getRealPath();
+            $cloundinaryFolder = "doctor";
         }
 
-        return $this->service->settings()->saveUpdate($validated, "doctor");
+        return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
     }
 
     public function updatePassword(Request $request)
@@ -177,5 +184,44 @@ class DoctorController extends Controller
         ]);
 
         return $this->service->settings()->saveUpdatePassword($request->all());
+    }
+
+    public function allNotification()
+    {
+        $notification = Notification::where('user_type', 'Doctor')
+                                        ->where('userId', auth('doctor_api')->user()->id)
+                                        ->get();
+        if ($notification) {
+            return response()->json([
+                'status' => true,
+                'message' => $notification
+            ],200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error'
+            ],401);
+        }
+    }
+
+    public function updateNotification($id)
+    {
+        $notification = Notification::where('user_type', 'Doctor')
+                                    ->where('userId', auth('doctor_api')->user()->id)
+                                    ->where('id',$id)
+                                    ->firstOrFail();
+        $notification->doctorRead = true;
+
+        if ($notification->save()) {
+            return response()->json([
+                'status' => true,
+                'message' => $notification
+            ],200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error'
+            ],401);
+        }
     }
 }

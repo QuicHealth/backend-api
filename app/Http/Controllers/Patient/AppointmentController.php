@@ -13,6 +13,7 @@ use App\Actions\AppointmentDetailsAction;
 use App\Events\NotificationReceived;
 use App\Http\Requests\CreateAppointmentRequest;
 use App\Http\Requests\AppointmentDetailsRequest;
+use App\Models\Doctor;
 use App\Models\Notification;
 use App\Models\User;
 use App\Notifications\CancelAppointmentNotification;
@@ -139,14 +140,6 @@ class AppointmentController extends Controller
 
         if ($checkAppointmentBooking) {
 
-            //save notification
-            $notification = new Notification();
-            $notification->user_id = auth()->user()->id;
-            $notification->user_type = 'Patient';
-            $notification->title = 'Appointment Reschedule';
-            $notification->message = 'Appointment was Reschedule Successful';
-            $notification->save();
-
             return response([
                 'status' => false,
                 'message' => 'Time slot have already been booked',
@@ -169,6 +162,15 @@ class AppointmentController extends Controller
         // $appointment->unique_id = Str::random(16);
 
         if ($appointment) {
+
+            //save db notification
+            $user_id = auth()->user()->id;
+            $doc_id = $appointment->doctor_id;
+            $title = 'Appointment Reschedule';
+            $message = 'Appointment was Reschedule Successful';
+            $usertype = 'Patient';
+            $this->sendNotification($user_id, $doc_id, $usertype,$title,$message);
+
             return response([
                 'status' => true,
                 'Appointments' => $appointment,
@@ -191,30 +193,35 @@ class AppointmentController extends Controller
 
         if ($appointment->save()) {
 
-        $user_id = $appointment->user_id;;
-        $user = User::find($user_id);
-        $appointment->user()->associate($user);
+            $user_id = $appointment->user_id;
+            $user = User::find($user_id);
+            $appointment->user()->associate($user);
 
-        $appointment->notify(new CancelAppointmentNotification($appointment));
+            $appointment->notify(new CancelAppointmentNotification($appointment));
 
-        //save notification
-        $notification = new Notification();
-        $notification->user_id = auth()->user()->id;
-        $notification->user_type = 'Patient';
-        $notification->title = 'Appointment Cancelled';
-        $notification->message = 'Appointment was cancelled';
-        $notification->save();
-
-            return response([
-                'status' => true,
-                'Appointments' => $appointment,
-            ], http_response_code());
-        } else {
-            return response([
-                'status' => false,
-                'message' => 'Error Cancelling Appointment, pls try again',
-            ], http_response_code());
+            //save db notification
+            $doc_id = $appointment->doctor_id;
+            $title = 'Appointment Cancelled';
+            $message = 'Appointment was cancelled';
+            $usertype = 'Patient';
+            $this->sendNotification($user_id, $doc_id, $usertype,$title,$message);
         }
+    }
+
+    public function sendNotification($authUserId, $receiverId, $usertype, $title, $message)
+    {
+        //save user notification
+        $notification = new Notification();
+        $notification->user_id = $authUserId;
+        $notification->receiverId = $receiverId;
+        $notification->user_type = $usertype;
+        $notification->title = $title;
+        $notification->message = $message;
+        if($notification->save()){
+            return true;
+        }
+        return false;
+
     }
 
     public function completedAppointment(Request $request, $id)
