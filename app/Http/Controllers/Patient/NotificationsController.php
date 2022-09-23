@@ -10,8 +10,8 @@ class NotificationsController extends Controller
 {
     public function index()
     {
-        $notification = Notification::where('user_id', auth()->user()->id)->get();
-
+        $notification = Notification::where('user_type', 'Patient')
+                                        ->where('userId', auth()->user()->id)->get();
         if ($notification) {
             return response()->json([
                 'status' => true,
@@ -27,8 +27,9 @@ class NotificationsController extends Controller
 
     public function update($id)
     {
-        $notification = Notification::where('user_id', auth()->user()->id)->where('id', $id)->firstOrFail();
-        $notification->read = true;
+        $notification = Notification::where('user_type', 'Patient')
+                                    ->where('userId', auth()->user()->id)->where('id',$id)->firstOrFail();
+        $notification->userRead = true;
 
         if ($notification->save()) {
             return response()->json([

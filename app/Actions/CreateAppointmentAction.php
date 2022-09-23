@@ -84,24 +84,19 @@ class CreateAppointmentAction
 
         $user = User::find($user_id);
         $appointment->user()->associate($user);
-        // $appointment->user()->associate($user);
-
 
         $appointment->notify(new CreateAppointmentNotification($appointment));
 
-        //save notification
+        //save db notification
         $notification = new Notification();
         $notification->user_id = auth()->user()->id;
+        $notification->receiverId = $appointment->doctor_id;
         $notification->user_type = 'Patient';
         $notification->title = 'Appointment Created';
         $notification->message = 'Appointment was Created Successful';
         $notification->save();
-        
+
         return $appointment;
 
-        // if ($appointment) {
-        //     event(new NotificationReceived($user_id));
-        //     return $appointment;
-        // }
     }
 }

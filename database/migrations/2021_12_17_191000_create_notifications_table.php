@@ -16,11 +16,13 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
+            $table->string('userId')->nullable();
+            $table->string('receiverId')->nullable();
             $table->string('user_type');
             $table->string('title');
             $table->text('message');
-            $table->boolean('read')->default(false);
+            $table->boolean('userRead')->default(false);
+            $table->boolean('DoctorRead')->default(false);
             $table->timestamps();
         });
     }
