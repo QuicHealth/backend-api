@@ -61,8 +61,8 @@ Route::prefix('v1')->group(function () {
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
             // Notifications
-            Route::get('notification', 'NotificationsController@allNotification');
-            Route::get('notification/{id}', 'NotificationsController@updateNotification');
+            Route::get('notification', 'NotificationsController@index');
+            Route::get('notification/{id}', 'NotificationsController@update');
 
 
             Route::post('payment', 'WaveController@add');
