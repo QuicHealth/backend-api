@@ -117,6 +117,9 @@ Route::prefix('v1')->group(function () {
             // Notifications
             Route::get('notification', 'DoctorController@allNotification');
             Route::get('notification/{id}', 'DoctorController@updateNotification');
+
+            Route::get('report', 'ReportController@index');
+            Route::post('write-report', 'ReportController@store');
         });
     });
 
