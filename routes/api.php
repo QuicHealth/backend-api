@@ -64,6 +64,8 @@ Route::prefix('v1')->group(function () {
             Route::get('notification', 'NotificationsController@index');
             Route::get('notification/{id}', 'NotificationsController@update');
 
+            // Health record
+            Route::get('report', 'ReportController@healthRecord');
 
             Route::post('payment', 'WaveController@add');
 
@@ -118,8 +120,7 @@ Route::prefix('v1')->group(function () {
             Route::get('notification', 'DoctorController@allNotification');
             Route::get('notification/{id}', 'DoctorController@updateNotification');
 
-            Route::get('report', 'ReportController@index');
-            Route::post('write-report', 'ReportController@store');
+            Route::post('write-report/{appointment_id}', 'ReportController@store');
         });
     });
 
