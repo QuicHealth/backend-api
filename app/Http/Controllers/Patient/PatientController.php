@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Patient;
 
 use App\Models\User;
 use App\Models\Doctor;
+use App\Models\Report;
 use App\Models\Hospital;
+use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
@@ -13,7 +15,6 @@ use App\Http\Resources\DoctorResource;
 use App\Http\Controllers\helpController;
 use App\Http\Resources\HospitalResource;
 use App\Http\Requests\UpdatePatientRequest;
-use App\Models\Appointment;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class PatientController extends Controller
@@ -177,6 +178,23 @@ class PatientController extends Controller
             'status' => true,
             'doctor' => new DoctorResource($doctor),
         ]);
+    }
+
+    public function history()
+    {
+        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
+
+        if ($healthRecord) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $healthRecord
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No health record found'
+            ]);
+        }
     }
 
     public function getsetting(): array

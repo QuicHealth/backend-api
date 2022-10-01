@@ -65,7 +65,7 @@ Route::prefix('v1')->group(function () {
             Route::get('notification/{id}', 'NotificationsController@update');
 
             // Health record
-            Route::get('history', 'ReportController@history');
+            Route::get('history', 'PatientController@history');
 
             Route::post('payment', 'WaveController@add');
 
