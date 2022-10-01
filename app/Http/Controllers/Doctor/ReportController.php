@@ -10,28 +10,29 @@ use App\Http\Controllers\Controller;
 class ReportController extends Controller
 {
 
-    public function history()
-    {
-        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
+    // public function history()
+    // {
+    //     $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
 
-        if ($healthRecord) {
-            return response()->json([
-                'status' => 'success',
-                'data' => $healthRecord
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'No health record found'
-            ]);
-        }
-    }
+    //     if ($healthRecord) {
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'data' => $healthRecord
+    //         ]);
+    //     } else {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'No health record found'
+    //         ]);
+    //     }
+    // }
 
     public function store(Request $request, $appointment_id)
     {
 
         $this->validate($request, [
             'description' => 'required',
+            'appointment_id' => 'required',
         ]);
 
         // get appointment
