@@ -26,6 +26,7 @@ class CreateDoctorsTable extends Migration
             $table->string('specialty');
             $table->text('address');
             $table->softDeletes();
+            $table->rememberToken();
             $table->timestamps();
         });
     }
