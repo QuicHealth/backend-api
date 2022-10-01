@@ -40,7 +40,7 @@ class ReportController extends Controller
 
         if ($appointment) {
             $report = Report::create([
-                'doctore_id' => auth('doctor')->user()->id,
+                'doctore_id' => auth('doctor_api')->user()->id,
                 'user_id' => $appointment->user_id,
                 'appointments_id' => $appointment->id,
                 'description' => $request->description,
