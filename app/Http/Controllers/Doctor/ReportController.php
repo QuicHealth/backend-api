@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 class ReportController extends Controller
 {
 
-    public function healthRecord()
+    public function history()
     {
         $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
 
