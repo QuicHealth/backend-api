@@ -60,6 +60,11 @@ class Appointment extends Model
         return $this->hasOne(Zoom::class);
     }
 
+    public function report()
+    {
+        return $this->hasOne(Report::class);
+    }
+
     public function routeNotificationForMail($notification)
     {
         // Return email address only...

@@ -18,4 +18,9 @@ class Report extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function appointments()
+    {
+        return $this->belongsTo(Appointment::class);
+    }
 }

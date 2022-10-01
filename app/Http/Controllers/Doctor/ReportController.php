@@ -12,7 +12,7 @@ class ReportController extends Controller
 
     public function healthRecord()
     {
-        $healthRecord = Report::where('user_id', auth()->user()->id);
+        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
 
         if ($healthRecord) {
             return response()->json([
