@@ -23,7 +23,9 @@ class PatientController extends Controller
 
     public function __construct()
     {
-        $this->service = new SettingService(new User, auth()->user()->id);
+        if (auth()->check()) {
+            $this->service = new SettingService(new User, auth()->user()->id);
+        }
     }
 
     public function updateProfile(UpdatePatientRequest $request, $unique_id)
