@@ -8,6 +8,7 @@ use App\Models\Notification;
 use App\Models\Payment;
 use App\Models\User;
 use App\Notifications\PaymentSuccessfulNotification;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
 
 class WaveController extends Controller
@@ -89,12 +90,11 @@ class WaveController extends Controller
                 'status' => $status,
                 'data' => $data
             ], 500);
-        } else
-        if ($status == 'successful') {
+        } else if ($status == 'successful') {
             $curl = curl_init();
 
             $txid = request()->transaction_id;
-            // // dd($txid);
+            // dd($txid);
 
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.flutterwave.com/v3/transactions/' . $txid . '/verify',
@@ -161,7 +161,7 @@ class WaveController extends Controller
     public function savePaid($res, $appointment_id)
     {
         $payment = Payment::where('appointments_id', $appointment_id)->first();
-
+        // dd($payment);
         if ($payment) {
             // $payment->status = $res->data->status;
             $payment->paymentStatus = 'PAID';
@@ -175,12 +175,14 @@ class WaveController extends Controller
             $user = User::find($user_id);
             $payment->user()->associate($user);
 
-            $payment->notify(new PaymentSuccessfulNotification($payment));
+            // dd($payment->user()->associate($user));
+
+            // $payment->notify(new PaymentSuccessfulNotification($payment));
             // dd($payment);
 
             //save notification
             $notification = new Notification();
-            $notification->user_id = auth()->user()->id;
+            $notification->user_id = auth()->user()->id ?? $user_id;
             $notification->user_type = 'Patient';
             $notification->title = 'Payment was Successful';
             $notification->message = 'Payment was Successful';
