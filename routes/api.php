@@ -116,6 +116,8 @@ Route::prefix('v1')->group(function () {
 
             Route::post('password/update', 'DoctorController@updatePassword');
 
+            Route::get('get/appointment/details/{appointment_id}', 'DoctorController@getAppointmentDetail');
+
             // Notifications
             Route::get('notification', 'DoctorController@allNotification');
             Route::get('notification/{id}', 'DoctorController@updateNotification');
