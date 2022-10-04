@@ -25,14 +25,12 @@ class CreateAppointmentAction
 
         if ($checkBooking) {
 
-            $data = [
-                response([
-                    'status' => false,
-                    'message' => 'Time slot have already been booked',
-                ], 403)
-            ];
+            return  response([
+                'status' => false,
+                'message' => 'Time slot have already been booked',
+            ], 403);
 
-            return $data;
+            // return $data;
         }
 
         $appointment =  $this->createAppointment($user_id);
@@ -53,7 +51,7 @@ class CreateAppointmentAction
         }
 
 
-        return $appointment;
+        // return $appointment;
     }
 
     public function checkAppointmentBooking()
@@ -63,7 +61,8 @@ class CreateAppointmentAction
             ->where('date', $this->validated['date'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
-            ->where('payment_status', 'PAID')
+            ->orWhere('payment_status', 'PAID')
+            ->orWhere('payment_status', 'pending')
             ->first();
 
         return $checkAppointmentBooking;
@@ -85,7 +84,7 @@ class CreateAppointmentAction
         $user = User::find($user_id);
         $appointment->user()->associate($user);
 
-        $appointment->notify(new CreateAppointmentNotification($appointment));
+        // $appointment->notify(new CreateAppointmentNotification($appointment));
 
         //save db notification
         $notification = new Notification();
@@ -97,6 +96,5 @@ class CreateAppointmentAction
         $notification->save();
 
         return $appointment;
-
     }
 }

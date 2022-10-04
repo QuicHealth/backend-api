@@ -60,7 +60,7 @@ class AuthController extends Controller
         // MailSendingJob::dispatch($data);
 
         $user->save();
-        $user->notify(new UserRegisterNotification($user));
+        // $user->notify(new UserRegisterNotification($user));
 
         $credentials = $request->only('email', 'password');
 
