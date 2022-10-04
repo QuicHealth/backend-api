@@ -169,7 +169,7 @@ class AppointmentController extends Controller
             $title = 'Appointment Reschedule';
             $message = 'Appointment was Reschedule Successful';
             $usertype = 'Patient';
-            $this->sendNotification($user_id, $doc_id, $usertype,$title,$message);
+            $this->sendNotification($user_id, $doc_id, $usertype, $title, $message);
 
             return response([
                 'status' => true,
@@ -197,14 +197,14 @@ class AppointmentController extends Controller
             $user = User::find($user_id);
             $appointment->user()->associate($user);
 
-            $appointment->notify(new CancelAppointmentNotification($appointment));
+            // $appointment->notify(new CancelAppointmentNotification($appointment));
 
             //save db notification
             $doc_id = $appointment->doctor_id;
             $title = 'Appointment Cancelled';
             $message = 'Appointment was cancelled';
             $usertype = 'Patient';
-            $this->sendNotification($user_id, $doc_id, $usertype,$title,$message);
+            $this->sendNotification($user_id, $doc_id, $usertype, $title, $message);
         }
     }
 
@@ -217,11 +217,10 @@ class AppointmentController extends Controller
         $notification->user_type = $usertype;
         $notification->title = $title;
         $notification->message = $message;
-        if($notification->save()){
+        if ($notification->save()) {
             return true;
         }
         return false;
-
     }
 
     public function completedAppointment(Request $request, $id)
