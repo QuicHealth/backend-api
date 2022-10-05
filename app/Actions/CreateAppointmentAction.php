@@ -27,7 +27,7 @@ class CreateAppointmentAction
 
             return  response([
                 'status' => false,
-                'message' => 'Time slot have already been booked',
+                'message' => 'Time slot have already been booked or pending',
             ], 403);
 
             // return $data;
