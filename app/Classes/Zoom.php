@@ -58,7 +58,7 @@ class Zoom
             ],
         ]);
 
-        dd($response);
+        // dd($response);
         $response_token = json_decode($response->getBody()->getContents(), true);
 
         $saveNewToken = ZoomToken::updateOrCreate(
