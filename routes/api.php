@@ -84,7 +84,7 @@ Route::prefix('v1')->group(function () {
         Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
         Route::get('redirect', 'ZoomMeetingController@redirect');
 
-        // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
+        Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
     });
 
     // Route::webhooks('webhook-receiving-url');
