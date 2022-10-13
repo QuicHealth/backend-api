@@ -45,7 +45,7 @@ class Zoom
 
     public function token($code)
     {
-        dd($code);
+        // dd($code);
         $response = $this->ZOOM_ACCESS->request('POST', '/oauth/token', [
             "headers" => [
                 "Authorization" => "Basic " . base64_encode($this->CLIENT_ID . ':' . $this->CLIENT_SECRET),
@@ -58,6 +58,7 @@ class Zoom
             ],
         ]);
 
+        dd($response);
         $response_token = json_decode($response->getBody()->getContents(), true);
 
         $saveNewToken = ZoomToken::updateOrCreate(
