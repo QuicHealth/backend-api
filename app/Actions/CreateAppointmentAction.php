@@ -16,7 +16,6 @@ class CreateAppointmentAction
 
     public $validated;
 
-
     public function handle($validated, $user_id)
     {
         $this->validated = $validated;
@@ -24,11 +23,10 @@ class CreateAppointmentAction
         $checkBooking = $this->checkAppointmentBooking();
 
         if ($checkBooking) {
-
             return  response([
                 'status' => false,
                 'message' => 'Time slot have already been booked or selected',
-            ], 403);
+            ], 405);
 
             // return $data;
         }
@@ -56,16 +54,19 @@ class CreateAppointmentAction
 
     public function checkAppointmentBooking()
     {
-
         $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
             ->where('date', $this->validated['date'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
-            ->orWhere('payment_status', 'PAID')
-            ->orWhere('payment_status', 'pending')
             ->first();
 
-        return $checkAppointmentBooking;
+            if($checkAppointmentBooking != null){
+                if(in_array($checkAppointmentBooking->payment_status, array('pending','PAID')))
+                {
+                    return $checkAppointmentBooking;
+                }
+            }
+            return $checkAppointmentBooking;
     }
 
     public function createAppointment($user_id)
@@ -88,7 +89,7 @@ class CreateAppointmentAction
 
         //save db notification
         $notification = new Notification();
-        $notification->user_id = auth()->user()->id;
+        $notification->userId = auth()->user()->id;
         $notification->receiverId = $appointment->doctor_id;
         $notification->user_type = 'Patient';
         $notification->title = 'Appointment Created';
