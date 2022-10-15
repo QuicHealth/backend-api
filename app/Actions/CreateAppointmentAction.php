@@ -5,8 +5,10 @@ namespace App\Actions;
 use App\Events\NotificationReceived;
 use App\Models\Appointment;
 use App\Models\Notification;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Notifications\CreateAppointmentNotification;
+use Illuminate\Http\Response;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 
@@ -16,36 +18,48 @@ class CreateAppointmentAction
 
     public $validated;
 
+    public $schedule;
+
+    public function __construct(Schedule $schedule)
+    {
+        $this->schedule = $schedule;
+    }
+
     public function handle($validated, $user_id)
     {
         $this->validated = $validated;
 
-        $checkBooking = $this->checkAppointmentBooking();
+        $checkSchedules = $this->checkSchedules();
 
-        if ($checkBooking) {
-            return  response([
-                'status' => false,
-                'message' => 'Time slot have already been booked or selected',
-            ], 405);
+        if($checkSchedules) {
 
-            // return $data;
-        }
+            $checkBooking = $this->checkAppointmentBooking();
 
-        $appointment =  $this->createAppointment($user_id);
+            if ($checkBooking) {
+                return  response([
+                    'status' => false,
+                    'message' => 'Time slot have already been booked or selected',
+                ], 405);
 
-        if ($appointment) {
+                // return $data;
+            }
 
-            return response([
-                'status' => true,
-                'message' => 'Success! Appointment created',
-                'Appointments' => $appointment,
-            ], http_response_code());
-        } else {
+            $appointment =  $this->createAppointment($user_id);
 
-            return response([
-                'status' => false,
-                'message' => 'Error rescheduling, pls try again',
-            ], http_response_code());
+            if ($appointment) {
+
+                return response([
+                    'status' => true,
+                    'message' => 'Success! Appointment created',
+                    'Appointments' => $appointment,
+                ], http_response_code());
+            } else {
+
+                return response([
+                    'status' => false,
+                    'message' => 'Error rescheduling, pls try again',
+                ], http_response_code());
+            }
         }
 
 
@@ -97,5 +111,23 @@ class CreateAppointmentAction
         $notification->save();
 
         return $appointment;
+    }
+
+    // check if Schedules exists
+    public function checkSchedules()
+    {
+        $checkschedules = $this->schedule->where('doctor_id', $this->validated['doctor_id'])
+                        ->where('date', $this->validated['date'])
+                        ->whereHas('timeslot', function ($query) {
+                            $query->where('start', $this->validated['time_slots']['start']);
+                            $query->where('end', $this->validated['time_slots']['end']);
+                        })
+                        ->first();
+
+        if ($checkschedules){
+            return $checkschedules;
+        }else{
+            abort(Response::HTTP_BAD_REQUEST, "Schedules not available!");
+        }
     }
 }
