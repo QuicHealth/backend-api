@@ -43,6 +43,7 @@ class ZoomMeetingController extends Controller
     public function redirect(Request $request)
     {
         $code = $request->code;
+
         return $this->getToken($code);
     }
 
