@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Patient;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Payment;
+use App\Models\Timeslot;
 use App\Models\Appointment;
 use App\Models\Notification;
-use App\Models\Payment;
-use App\Models\User;
-use App\Notifications\PaymentSuccessfulNotification;
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Actions\UpdateTimeslotStatus;
+use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Notifications\PaymentSuccessfulNotification;
 
 class WaveController extends Controller
 {
@@ -130,6 +132,8 @@ class WaveController extends Controller
                     return false;
                 }
                 $this->savePaid($res, $appointment_id);
+
+                $this->updateTimeslot($appointment);
             }
 
             if ($response) {
@@ -188,6 +192,17 @@ class WaveController extends Controller
             $notification->message = 'Payment was Successful';
             $notification->save();
         }
+    }
+
+    public function updateTimeslot($appointment)
+    {
+        $doctor_id = $appointment->doctor_id;
+        $date = $appointment->date;
+        $time_slots = [
+            "start" =>  $appointment->start_time,
+            "end" =>  $appointment->end_time,
+        ];
+        return UpdateTimeslotStatus::run($doctor_id, $date, $time_slots);
     }
 
     public function saveNotPaid($data)

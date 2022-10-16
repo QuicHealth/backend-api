@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Models\Zoom;
 use App\Models\Doctor;
+use App\Models\Details;
 use App\Models\Schedule;
 use App\Models\Appointment;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
@@ -15,7 +17,6 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
-use App\Models\Notification;
 
 class DoctorController extends Controller
 {
@@ -156,6 +157,23 @@ class DoctorController extends Controller
         }
     }
 
+    public function getAppointmentDetail($appointment_id)
+    {
+        $details = Details::where('appointment_id', $appointment_id)->first();
+
+        if ($details) {
+            return response([
+                'status' => true,
+                'details' => $details,
+            ], http_response_code());
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'No details found',
+            ], http_response_code());
+        }
+    }
+
     public function getsetting(): array
     {
         return  $this->service->settings()->get();
@@ -189,39 +207,39 @@ class DoctorController extends Controller
     public function allNotification()
     {
         $notification = Notification::where('user_type', 'Doctor')
-                                        ->where('userId', auth('doctor_api')->user()->id)
-                                        ->get();
+            ->where('user_id', auth('doctor_api')->user()->id)
+            ->get();
         if ($notification) {
             return response()->json([
                 'status' => true,
                 'message' => $notification
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'Error'
-            ],401);
+            ], 401);
         }
     }
 
     public function updateNotification($id)
     {
         $notification = Notification::where('user_type', 'Doctor')
-                                    ->where('userId', auth('doctor_api')->user()->id)
-                                    ->where('id',$id)
-                                    ->firstOrFail();
+            ->where('userId', auth('doctor_api')->user()->id)
+            ->where('id', $id)
+            ->firstOrFail();
         $notification->doctorRead = true;
 
         if ($notification->save()) {
             return response()->json([
                 'status' => true,
                 'message' => $notification
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'status' => false,
                 'message' => 'Error'
-            ],401);
+            ], 401);
         }
     }
 }
