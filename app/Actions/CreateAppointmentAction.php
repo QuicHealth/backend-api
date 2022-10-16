@@ -5,8 +5,10 @@ namespace App\Actions;
 use App\Events\NotificationReceived;
 use App\Models\Appointment;
 use App\Models\Notification;
+use App\Models\Schedule;
 use App\Models\User;
 use App\Notifications\CreateAppointmentNotification;
+use Illuminate\Http\Response;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 
@@ -16,38 +18,48 @@ class CreateAppointmentAction
 
     public $validated;
 
+    public $schedule;
+
+    public function __construct(Schedule $schedule)
+    {
+        $this->schedule = $schedule;
+    }
 
     public function handle($validated, $user_id)
     {
         $this->validated = $validated;
 
-        $checkBooking = $this->checkAppointmentBooking();
+        $checkSchedules = $this->checkSchedules();
 
-        if ($checkBooking) {
+        if($checkSchedules) {
 
-            return  response([
-                'status' => false,
-                'message' => 'Time slot have already been booked or selected',
-            ], 403);
+            $checkBooking = $this->checkAppointmentBooking();
 
-            // return $data;
-        }
+            if ($checkBooking) {
+                return  response([
+                    'status' => false,
+                    'message' => 'Time slot have already been booked or selected',
+                ], 405);
 
-        $appointment =  $this->createAppointment($user_id);
+                // return $data;
+            }
 
-        if ($appointment) {
+            $appointment =  $this->createAppointment($user_id);
 
-            return response([
-                'status' => true,
-                'message' => 'Success! Appointment created',
-                'Appointments' => $appointment,
-            ], http_response_code());
-        } else {
+            if ($appointment) {
 
-            return response([
-                'status' => false,
-                'message' => 'Error rescheduling, pls try again',
-            ], http_response_code());
+                return response([
+                    'status' => true,
+                    'message' => 'Success! Appointment created',
+                    'Appointments' => $appointment,
+                ], http_response_code());
+            } else {
+
+                return response([
+                    'status' => false,
+                    'message' => 'Error rescheduling, pls try again',
+                ], http_response_code());
+            }
         }
 
 
@@ -56,16 +68,19 @@ class CreateAppointmentAction
 
     public function checkAppointmentBooking()
     {
-
         $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
             ->where('date', $this->validated['date'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
-            ->orWhere('payment_status', 'PAID')
-            ->orWhere('payment_status', 'pending')
             ->first();
 
-        return $checkAppointmentBooking;
+            if($checkAppointmentBooking != null){
+                if(in_array($checkAppointmentBooking->payment_status, array('pending','PAID')))
+                {
+                    return $checkAppointmentBooking;
+                }
+            }
+            return $checkAppointmentBooking;
     }
 
     public function createAppointment($user_id)
@@ -88,7 +103,7 @@ class CreateAppointmentAction
 
         //save db notification
         $notification = new Notification();
-        $notification->user_id = auth()->user()->id;
+        $notification->userId = auth()->user()->id;
         $notification->receiverId = $appointment->doctor_id;
         $notification->user_type = 'Patient';
         $notification->title = 'Appointment Created';
@@ -96,5 +111,23 @@ class CreateAppointmentAction
         $notification->save();
 
         return $appointment;
+    }
+
+    // check if Schedules exists
+    public function checkSchedules()
+    {
+        $checkschedules = $this->schedule->where('doctor_id', $this->validated['doctor_id'])
+                        ->where('date', $this->validated['date'])
+                        ->whereHas('timeslot', function ($query) {
+                            $query->where('start', $this->validated['time_slots']['start']);
+                            $query->where('end', $this->validated['time_slots']['end']);
+                        })
+                        ->first();
+
+        if ($checkschedules){
+            return $checkschedules;
+        }else{
+            abort(Response::HTTP_BAD_REQUEST, "Schedules not available!");
+        }
     }
 }
