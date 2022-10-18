@@ -31,7 +31,7 @@ class CreateAppointmentAction
 
         $checkSchedules = $this->checkSchedules();
 
-        if($checkSchedules) {
+        if ($checkSchedules) {
 
             $checkBooking = $this->checkAppointmentBooking();
 
@@ -74,13 +74,12 @@ class CreateAppointmentAction
             ->where('end', $this->validated['time_slots']['end'])
             ->first();
 
-            if($checkAppointmentBooking != null){
-                if(in_array($checkAppointmentBooking->payment_status, array('pending','PAID')))
-                {
-                    return $checkAppointmentBooking;
-                }
+        if ($checkAppointmentBooking != null) {
+            if (in_array($checkAppointmentBooking->payment_status, array('pending', 'PAID'))) {
+                return $checkAppointmentBooking;
             }
-            return $checkAppointmentBooking;
+        }
+        return $checkAppointmentBooking;
     }
 
     public function createAppointment($user_id)
@@ -117,17 +116,22 @@ class CreateAppointmentAction
     public function checkSchedules()
     {
         $checkschedules = $this->schedule->where('doctor_id', $this->validated['doctor_id'])
-                        ->where('date', $this->validated['date'])
-                        ->whereHas('timeslot', function ($query) {
-                            $query->where('start', $this->validated['time_slots']['start']);
-                            $query->where('end', $this->validated['time_slots']['end']);
-                        })
-                        ->first();
+            ->where('date', $this->validated['date'])
+            ->whereHas('timeslot', function ($query) {
+                $query->where('start', $this->validated['time_slots']['start']);
+                $query->where('end', $this->validated['time_slots']['end']);
+            })
+            ->first();
 
-        if ($checkschedules){
+        if ($checkschedules) {
             return $checkschedules;
-        }else{
-            abort(Response::HTTP_BAD_REQUEST, "Schedules not available!");
+        } else {
+            // abort(Response::HTTP_NOT_FOUND, "Schedules not available!");
+            return [
+                'status' => false,
+                'message' => 'Schedules not available!',
+            ];
+
         }
     }
 }
