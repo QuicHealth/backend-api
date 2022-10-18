@@ -39,7 +39,7 @@ class CreateAppointmentAction
                 return  response([
                     'status' => false,
                     'message' => $checkBooking['message'],
-                ], 405);
+                ], 404);
 
                 // return $data;
             }
