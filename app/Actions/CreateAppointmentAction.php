@@ -162,7 +162,7 @@ class CreateAppointmentAction
             // abort(Response::HTTP_NOT_FOUND, "Schedules not available!");
             return [
                 'status' => 'error',
-                'message' => 'Schedules not available!',
+                'message' => 'Time slot not available for this doctor!',
             ];
         }
     }
