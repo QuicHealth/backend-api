@@ -102,7 +102,7 @@ class CreateAppointmentAction
 
         //save db notification
         $notification = new Notification();
-        $notification->userId = auth()->user()->id;
+        $notification->user_id = auth()->user()->id;
         $notification->receiverId = $appointment->doctor_id;
         $notification->user_type = 'Patient';
         $notification->title = 'Appointment Created';
@@ -131,7 +131,6 @@ class CreateAppointmentAction
                 'status' => false,
                 'message' => 'Schedules not available!',
             ];
-
         }
     }
 }
