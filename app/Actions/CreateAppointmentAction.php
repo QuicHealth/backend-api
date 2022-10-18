@@ -33,6 +33,17 @@ class CreateAppointmentAction
 
         if ($checkSchedules) {
 
+
+            $checkDoctorSchedules = $this->checkSchedules();
+
+            if ($checkDoctorSchedules['status'] !== 'success') {
+                return response([
+                    'status' => 'error',
+                    'message' => $checkDoctorSchedules['message'],
+                ], 404);
+            }
+
+
             $checkBooking = $this->checkAppointmentBooking();
 
             if ($checkBooking['status'] !== 'success') {
@@ -40,9 +51,9 @@ class CreateAppointmentAction
                     'status' => false,
                     'message' => $checkBooking['message'],
                 ], 404);
-
-                // return $data;
             }
+
+
 
             $appointment =  $this->createAppointment($user_id);
 
@@ -52,13 +63,13 @@ class CreateAppointmentAction
                     'status' => true,
                     'message' => 'Success! Appointment created',
                     'Appointments' => $appointment,
-                ], http_response_code());
+                ], 202);
             } else {
 
                 return response([
                     'status' => false,
                     'message' => 'Error rescheduling, pls try again',
-                ], http_response_code());
+                ], 406);
             }
         }
 
@@ -139,15 +150,18 @@ class CreateAppointmentAction
             ->whereHas('timeslot', function ($query) {
                 $query->where('start', $this->validated['time_slots']['start']);
                 $query->where('end', $this->validated['time_slots']['end']);
-            })
-            ->first();
+            })->first();
+
 
         if ($checkschedules) {
-            return $checkschedules;
+            return [
+                'status' => 'success',
+                'message' => 'Time slot available',
+            ];
         } else {
             // abort(Response::HTTP_NOT_FOUND, "Schedules not available!");
             return [
-                'status' => false,
+                'status' => 'error',
                 'message' => 'Schedules not available!',
             ];
         }
