@@ -35,10 +35,10 @@ class CreateAppointmentAction
 
             $checkBooking = $this->checkAppointmentBooking();
 
-            if ($checkBooking) {
+            if ($checkBooking['status'] !== 'success') {
                 return  response([
                     'status' => false,
-                    'message' => 'Time slot have already been booked or selected',
+                    'message' => $checkBooking['message'],
                 ], 405);
 
                 // return $data;
@@ -75,11 +75,30 @@ class CreateAppointmentAction
             ->first();
 
         if ($checkAppointmentBooking != null) {
-            if (in_array($checkAppointmentBooking->payment_status, array('pending', 'PAID'))) {
-                return $checkAppointmentBooking;
+            // if (in_array($checkAppointmentBooking->payment_status, array('pending', 'PAID'))) {
+            // return $checkAppointmentBooking;
+            // return
+            // }
+
+            if ($checkAppointmentBooking->payment_status == 'pending') {
+                return [
+                    'status' => 'warning',
+                    'message' => 'Time slot have already been selected but have not been paid, select another time slot',
+                ];
+            }
+
+            if ($checkAppointmentBooking->payment_status == 'PAID') {
+                return [
+                    'status' => "error",
+                    'message' => 'Time slot have already been selected, select another time slot',
+                ];
             }
         }
-        return $checkAppointmentBooking;
+
+        return [
+            'status' => 'success',
+            'message' => 'Time slot available',
+        ];
     }
 
     public function createAppointment($user_id)
