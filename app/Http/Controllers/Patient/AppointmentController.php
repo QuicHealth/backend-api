@@ -214,6 +214,7 @@ class AppointmentController extends Controller
         $notification = new Notification();
         $notification->user_id = $authUserId;
         $notification->receiverId = $receiverId;
+        $notification->categories = 'Appointment Cancelled';
         $notification->user_type = $usertype;
         $notification->title = $title;
         $notification->message = $message;
