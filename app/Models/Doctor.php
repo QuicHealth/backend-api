@@ -70,4 +70,12 @@ class Doctor extends Authenticatable implements JWTSubject
     {
         return $this->doctors()->get();
     }
+
+    /**
+     * Get the Notifications associated with the user.
+     */
+    public function notification()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 }

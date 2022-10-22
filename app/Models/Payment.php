@@ -25,7 +25,7 @@ class Payment extends Model
         'processor_response',
     ];
 
-        /**
+    /**
      * Get the user that owns the appointment.
      */
 
@@ -39,5 +39,4 @@ class Payment extends Model
         // Return email address only...
         return $this->user->email;
     }
-
 }

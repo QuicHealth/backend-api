@@ -13,8 +13,9 @@ class Notification extends Model
         'user_id',
         'user_type',
         'message',
-        'data',
-        'categories'
+        'title',
+        'category',
+        'read_reciept'
     ];
 
     public function user()

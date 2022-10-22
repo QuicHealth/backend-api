@@ -132,18 +132,24 @@ class CreateAppointmentAction
 
         // $appointment->notify(new CreateAppointmentNotification($appointment));
 
-        $doctorNmame = Helpers::getField(new Doctor, $appointment->doctor_id, 'name');
-        $message = "You have a new appointment with Doctor, $doctorNmame on $appointment->date at $appointment->start, has been created successfully";
+        $patientFullname = $user->firstname . ' ' . $user->lastname;
+
+        $doctorName = Helpers::getField(new Doctor, $appointment->doctor_id, 'name');
+        $patientMessage = "You have created a new appointment with Doctor, $doctorName on $appointment->date at $appointment->start, please make your payment to confirm your appointment booking .";
+        $doctorMessage = "You have a new appointment with $patientFullname on $appointment->date at $appointment->start, we will let you know when the patient makes payment.";
+
+        Helpers::saveNotification($user_id, 'patient', 'appointment', $patientMessage, 'Appointment Booking');
+        Helpers::saveNotification($appointment->doctor_id, 'doctor', 'appointment', $doctorMessage, 'Appointment Booking');
 
         //save db notification
-        $notification = new Notification();
-        $notification->user_id = auth()->user()->id;
-        $notification->receiverId = $appointment->doctor_id;
-        $notification->categories = 'Appointment';
-        $notification->user_type = 'Patient';
-        $notification->title = 'Appointment Created';
-        $notification->message = $message;
-        $notification->save();
+        // $notification = new Notification();
+        // $notification->user_id = auth()->user()->id;
+        // $notification->receiverId = $appointment->doctor_id;
+        // $notification->categories = 'Appointment';
+        // $notification->user_type = 'Patient';
+        // $notification->title = 'Appointment Created';
+        // $notification->message = $patientMessage;
+        // $notification->save();
 
         return $appointment;
     }
