@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('notifications', function (Blueprint $table) {
-            $table->string('category')->nullable();
+            $table->string('category');
         });
     }
 
