@@ -206,7 +206,7 @@ class DoctorController extends Controller
 
     public function allNotification()
     {
-        $notification = Notification::where('user_type', 'Doctor')
+        $notification = Notification::where('user_type', 'doctor')
             ->where('user_id', auth('doctor_api')->user()->id)
             ->get();
         if ($notification) {
@@ -224,7 +224,7 @@ class DoctorController extends Controller
 
     public function updateNotification($id)
     {
-        $notification = Notification::where('user_type', 'Doctor')
+        $notification = Notification::where('user_type', 'doctor')
             ->where('userId', auth('doctor_api')->user()->id)
             ->where('id', $id)
             ->firstOrFail();
