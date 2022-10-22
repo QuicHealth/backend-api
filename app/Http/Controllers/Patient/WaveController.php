@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Models\User;
+use App\Models\Doctor;
 use App\Models\Payment;
+use App\Classes\Helpers;
 use App\Models\Timeslot;
 use App\Models\Appointment;
 use App\Models\Notification;
@@ -184,12 +186,18 @@ class WaveController extends Controller
             // $payment->notify(new PaymentSuccessfulNotification($payment));
             // dd($payment);
 
+            $doctorNmame = Helpers::getField(new Doctor, '$appointment->doctor_id', 'name');
+            $charged_amount = Helpers::getField(new Payment, $payment->id, 'charged_amount');
+
+            $message = "Your payment of " . $charged_amount . " for your appointment with " . $doctorNmame . " was successful";
+
             //save notification
             $notification = new Notification();
             $notification->user_id = auth()->user()->id ?? $user_id;
+            $notification->categories = 'payment';
             $notification->user_type = 'Patient';
             $notification->title = 'Payment was Successful';
-            $notification->message = 'Payment was Successful';
+            $notification->message = $message;
             $notification->save();
         }
     }

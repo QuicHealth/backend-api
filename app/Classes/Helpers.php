@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use Illuminate\Database\Eloquent\Model;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
@@ -40,5 +41,10 @@ class Helpers
         $image = self::uploadImageToCloudinary($image, $folder, $transformation);
 
         return $image->getSecurePath();
+    }
+
+    public static function getField(Model $model, $id, $field)
+    {
+        return $model->find($id)->$field;
     }
 }

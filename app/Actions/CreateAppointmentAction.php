@@ -2,14 +2,16 @@
 
 namespace App\Actions;
 
-use App\Events\NotificationReceived;
+use App\Models\User;
+use App\Models\Doctor;
+use App\Classes\Helpers;
+use App\Models\Schedule;
 use App\Models\Appointment;
 use App\Models\Notification;
-use App\Models\Schedule;
-use App\Models\User;
-use App\Notifications\CreateAppointmentNotification;
 use Illuminate\Http\Response;
+use App\Events\NotificationReceived;
 use Lorisleiva\Actions\Concerns\AsAction;
+use App\Notifications\CreateAppointmentNotification;
 
 
 class CreateAppointmentAction
@@ -130,13 +132,17 @@ class CreateAppointmentAction
 
         // $appointment->notify(new CreateAppointmentNotification($appointment));
 
+        $doctorNmame = Helpers::getField(new Doctor, $appointment->doctor_id, 'name');
+        $message = "You have a new appointment with Doctor, $doctorNmame on $appointment->date at $appointment->start, has been created successfully";
+
         //save db notification
         $notification = new Notification();
         $notification->user_id = auth()->user()->id;
         $notification->receiverId = $appointment->doctor_id;
+        $notification->categories = 'Appointment';
         $notification->user_type = 'Patient';
         $notification->title = 'Appointment Created';
-        $notification->message = 'Appointment was Created Successful';
+        $notification->message = $message;
         $notification->save();
 
         return $appointment;
