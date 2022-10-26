@@ -185,22 +185,22 @@ class PatientController extends Controller
         ]);
     }
 
-    public function getHealthProfile(HealthProfile $healthProfile)
+    public function getHealthProfile()
     {
-        $health  = new HealthProfileService($healthProfile);
+        $health  = new HealthProfileService();
 
         return $health->profile()->get();
     }
 
-    public function updateHealthProfile(HealthProfileRequest $request, HealthProfile $healthProfile)
+    public function updateHealthProfile(HealthProfileRequest $request)
     {
         // get validated
         $validated = $request->validated();
 
         // get instance of health profile service
-        $health  = new HealthProfileService($healthProfile);
+        $healthProfile  = new HealthProfileService();
 
-        return $health->profile()->update($validated);
+        return $healthProfile->update($validated);
     }
 
     public function history()

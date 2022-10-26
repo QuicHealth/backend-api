@@ -6,19 +6,12 @@ use App\Models\HealthProfile;
 
 class HealthProfileService
 {
-    protected  $healthProfile;
-
     protected $profile;
-
-    public function __construct(HealthProfile $healthProfile)
-    {
-        $this->healthProfile = $healthProfile;
-    }
 
     public function profile()
     {
         // return the health record.
-        $this->profile = $this->healthProfile->where('user_id', auth()->user()->id)->first();
+        $this->profile = HealthProfile::where('user_id', auth()->user()->id)->first();
 
         return $this;
     }
@@ -43,23 +36,9 @@ class HealthProfileService
     public function update($data)
     {
 
-        if ($this->profile == null) {
-            $this->healthProfile->user_id = auth()->user()->id;
-        }
+        $updateHealthProfile =  HealthProfile::updateOrCreate(['user_id' => auth()->user()->id], $data);
 
-        $data['blood_group'] ? $this->healthProfile->blood_group = $data['blood_group'] : '';
-        $data['genotype'] ? $this->healthProfile->genotype = $data['genotype'] : '';
-        $data['martial_status'] ? $this->healthProfile->martial_status = $data['martial_status'] : '';
-        $data['medication'] ? $this->healthProfile->medication = $data['medication'] : '';
-        $data['family_medical_history'] ? $this->healthProfile->family_medical_history = $data['family_medical_history'] : '';
-        $data['health_condition'] ? $this->healthProfile->health_condition = $data['health_condition'] : '';
-        $data['peculiar_cases'] ? $this->healthProfile->peculiar_cases = $data['peculiar_cases'] : '';
-        $data['allergies'] ? $this->healthProfile->allergies = $data['allergies'] : '';
-        $data['Occupation'] ? $this->healthProfile->Occupation = $data['Occupation'] : '';
-        $data['past_medical_history'] ? $this->healthProfile->past_medical_history = $data['past_medical_history'] : '';
-
-
-        if ($this->healthProfile->save()) {
+        if ($updateHealthProfile) {
             return response([
                 'status' => 'success',
                 'message' => 'Health Profile updated successfully',
