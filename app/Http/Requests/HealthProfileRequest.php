@@ -24,16 +24,16 @@ class HealthProfileRequest extends FormRequest
     public function rules()
     {
         return [
-            'blood_group'     => ['sometimes', 'required', 'string'],
-            'genotype'      => ['sometimes', 'required', 'string'],
-            'martial_status'        => ['sometimes', 'required', 'string'],
-            'medication'           => ['sometimes', 'required', 'string'],
-            'family_medical_history'  => ['sometimes', 'required', 'string'],
-            'health_condition'  => ['sometimes', 'required', 'string'],
-            'peculiar_cases'  => ['sometimes', 'required', 'string'],
-            'allergies'  => ['sometimes', 'required', 'string'],
-            'Occupation'  => ['sometimes', 'required', 'string'],
-            'past_medical_history'  => ['sometimes', 'required', 'string'],
+            'blood_group'     => ['sometimes', 'required'],
+            'genotype'      => ['sometimes', 'required'],
+            'martial_status'        => ['sometimes', 'required'],
+            'medication'           => ['sometimes', 'required'],
+            'family_medical_history'  => ['sometimes', 'required'],
+            'health_condition'  => ['sometimes', 'required'],
+            'peculiar_cases'  => ['sometimes', 'required'],
+            'allergies'  => ['sometimes', 'required'],
+            'Occupation'  => ['sometimes', 'required'],
+            'past_medical_history'  => ['sometimes', 'required'],
         ];
     }
 }
