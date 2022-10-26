@@ -12,6 +12,8 @@ class NotificationService
 
     protected $notification;
 
+    protected $unreadNotification;
+
     protected $allNotifications;
 
     public function __construct($user_type, $authUserId)
@@ -26,6 +28,11 @@ class NotificationService
         $this->allNotifications = Notification::where('user_type', $this->user_type)
             ->where('user_id', $this->authUserId)
             ->get();
+
+        $this->unreadNotification = Notification::where('user_type', $this->user_type)
+            ->where('user_id', $this->authUserId)
+            ->where('read_reciept', false)
+            ->count();
 
         return $this;
     }
@@ -51,7 +58,7 @@ class NotificationService
                 'message' => 'notification found',
                 'data' => [
                     "notifications"  =>  $this->allNotifications,
-                    "num_of_notification" => count($this->allNotifications)
+                    "num_of_unreadNotifications" =>   $this->unreadNotification
                 ]
             ], 200);
         } else {

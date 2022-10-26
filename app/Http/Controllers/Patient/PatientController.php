@@ -257,7 +257,6 @@ class PatientController extends Controller
     }
 
     public function markNotificationAsRead(Request $request)
-
     {
         $user_type = "patient";
 
