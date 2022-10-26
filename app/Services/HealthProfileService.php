@@ -36,6 +36,10 @@ class HealthProfileService
     public function update($data)
     {
 
+        if (!$this->healthProfile) {
+            $this->healthProfile->user_id = auth()->user()->id;
+        }
+
         $data['blood_group'] ? $this->healthProfile->blood_group = $data['blood_group'] : '';
         $data['genotype'] ? $this->healthProfile->genotype = $data['genotype'] : '';
         $data['martial_status'] ? $this->healthProfile->martial_status = $data['martial_status'] : '';
@@ -46,6 +50,7 @@ class HealthProfileService
         $data['allergies'] ? $this->healthProfile->allergies = $data['allergies'] : '';
         $data['Occupation'] ? $this->healthProfile->Occupation = $data['Occupation'] : '';
         $data['past_medical_history'] ? $this->healthProfile->past_medical_history = $data['past_medical_history'] : '';
+
 
         if ($this->healthProfile->save()) {
             return response([
