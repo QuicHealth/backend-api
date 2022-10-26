@@ -197,9 +197,9 @@ class PatientController extends Controller
         $validated = $request->validated();
 
         // get instance of health profile service
-        // $health  = new HealthProfileService();
-        dd($validated);
-        // return $health->profile()->update($validated);
+        $health  = new HealthProfileService();
+
+        return $health->profile()->update($validated);
     }
 
     public function history()
