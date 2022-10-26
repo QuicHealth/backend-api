@@ -188,7 +188,7 @@ class PatientController extends Controller
     {
         $health  = new HealthProfileService();
 
-        return $health->profile->get();
+        return $health->profile()->get();
     }
 
     public function updateHealthProfile(HealthProfileRequest $request)
@@ -199,7 +199,7 @@ class PatientController extends Controller
         // get instance of health profile service
         $health  = new HealthProfileService();
 
-        return $health->profile->update($validated);
+        return $health->profile()->update($validated);
     }
 
     public function history()
