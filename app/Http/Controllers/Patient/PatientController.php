@@ -7,6 +7,7 @@ use App\Models\Doctor;
 use App\Models\Report;
 use App\Models\Hospital;
 use App\Models\Appointment;
+use App\Models\HealthProfile;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
@@ -184,20 +185,20 @@ class PatientController extends Controller
         ]);
     }
 
-    public function getHealthProfile()
+    public function getHealthProfile(HealthProfile $healthProfile)
     {
-        $health  = new HealthProfileService();
+        $health  = new HealthProfileService($healthProfile);
 
         return $health->profile()->get();
     }
 
-    public function updateHealthProfile(HealthProfileRequest $request)
+    public function updateHealthProfile(HealthProfileRequest $request, HealthProfile $healthProfile)
     {
         // get validated
         $validated = $request->validated();
 
         // get instance of health profile service
-        $health  = new HealthProfileService();
+        $health  = new HealthProfileService($healthProfile);
 
         return $health->profile()->update($validated);
     }

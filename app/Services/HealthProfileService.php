@@ -6,12 +6,19 @@ use App\Models\HealthProfile;
 
 class HealthProfileService
 {
-    protected $healthProfile;
+    protected  $healthProfile;
+
+    protected $profile;
+
+    public function __construct(HealthProfile $healthProfile)
+    {
+        $this->healthProfile = $healthProfile;
+    }
 
     public function profile()
     {
         // return the health record.
-        $this->healthProfile = HealthProfile::where('user_id', auth()->user()->id)->first();
+        $this->profile = $this->healthProfile->where('user_id', auth()->user()->id)->first();
 
         return $this;
     }
@@ -19,10 +26,10 @@ class HealthProfileService
 
     public function get()
     {
-        if ($this->healthProfile) {
+        if ($this->profile) {
             return response()->json([
                 'status' => 'success',
-                'data' => $this->healthProfile
+                'data' => $this->profile
             ]);
         } else {
             return response()->json([
@@ -37,7 +44,7 @@ class HealthProfileService
     {
 
         dd($this->healthProfile);
-        if (!$this->healthProfile) {
+        if (!$this->profile) {
             $this->healthProfile->user_id = auth()->user()->id;
         }
 
