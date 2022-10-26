@@ -9,13 +9,7 @@ class HealthProfile extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'blood_group', 'genotype',
-        'martial_status', 'medication',
-        'family_medical_history', 'health_condition',
-        'peculiar_cases', 'allergies',
-        'Occupation', 'past_medical_history',
-    ];
+    protected $guarded = [];
 
     /**
      * Get the user that owns the phone.
