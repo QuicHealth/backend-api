@@ -45,6 +45,9 @@ Route::prefix('v1')->group(function () {
             Route::get('get-dashboard', 'PatientController@getDashboard');
             Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
 
+            Route::get('get-health-profile', 'PatientController@getHealthProfile');
+            Route::post('update-health-profile', 'PatientController@updateHealthProfile');
+
             Route::get('settings', 'PatientController@getsetting');
             Route::post('settings', 'PatientController@updateSetting');
 
@@ -122,7 +125,8 @@ Route::prefix('v1')->group(function () {
             Route::get('notification', 'DoctorController@allNotification');
             Route::get('notification/{id}', 'DoctorController@updateNotification');
 
-            Route::post('write-report/{appointment_id}', 'ReportController@store');
+            // Route::post('write-report/{appointment_id}', 'ReportController@store');
+            Route::post('add-emr', 'DoctorController@recordHealthHistory');
         });
     });
 

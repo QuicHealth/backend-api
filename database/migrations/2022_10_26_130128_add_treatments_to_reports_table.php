@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reports', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('doctor_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('appointments_id');
-            $table->timestamps();
+        Schema::table('reports', function (Blueprint $table) {
+            $table->text('treatments')->nullable();
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reports');
+        Schema::table('reports', function (Blueprint $table) {
+            //
+        });
     }
 };

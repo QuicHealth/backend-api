@@ -17,6 +17,7 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
+use App\Models\Report;
 
 class DoctorController extends Controller
 {
@@ -193,6 +194,35 @@ class DoctorController extends Controller
 
         return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
     }
+
+    public function recordHealthHistory(Request $request)
+    {
+        $this->validate($request, [
+            'diagnosis' => 'sometimes',
+            'treatment' => 'sometimes'
+        ]);
+
+        $record = new Report();
+        $record->doctor_id = auth('doctor_api')->user()->id;
+        $record->user_id = $request->user_id;
+        $record->appointment_id = $request->appointment_id;
+        $record->diagnosis = $request->diagnosis;
+        $record->treatment = $request->treatment;
+
+        if ($record->save()) {
+            return response([
+                'status' => true,
+                'msg' => 'Health history recorded successfully',
+                'data' => $record
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'msg' => 'Error recording health history'
+        ]);
+    }
+
 
     public function updatePassword(Request $request)
     {

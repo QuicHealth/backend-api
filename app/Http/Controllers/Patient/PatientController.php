@@ -12,8 +12,10 @@ use App\Services\SettingService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
+use App\Services\HealthProfileService;
 use App\Http\Controllers\helpController;
 use App\Http\Resources\HospitalResource;
+use App\Http\Requests\HealthProfileRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use Symfony\Component\HttpFoundation\Response as RES;
 
@@ -64,17 +66,17 @@ class PatientController extends Controller
             'data' => $user,
         ]);
 
-        $status = true;
-        $message = 'Login Successful';
-        $code = RES::HTTP_OK;
-        $data = [
-            'id' => $user->id,
-            'name' => $user->firstname,
-            'name' => $user->lastname,
-            'email' => $user->email,
-            'phone_number' => $user->phone,
-        ];
-        return helpController::getResponse($status, $message, $code, $data);
+        // $status = true;
+        // $message = 'Login Successful';
+        // $code = RES::HTTP_OK;
+        // $data = [
+        //     'id' => $user->id,
+        //     'name' => $user->firstname,
+        //     'name' => $user->lastname,
+        //     'email' => $user->email,
+        //     'phone_number' => $user->phone,
+        // ];
+        // return helpController::getResponse($status, $message, $code, $data);
     }
 
     public function getDashboard()
@@ -180,6 +182,24 @@ class PatientController extends Controller
             'status' => true,
             'doctor' => new DoctorResource($doctor),
         ]);
+    }
+
+    public function getHealthProfile()
+    {
+        $health  = new HealthProfileService();
+
+        return $health->profile->get();
+    }
+
+    public function updateHealthProfile(HealthProfileRequest $request)
+    {
+        // get validated
+        $validated = $request->validated();
+
+        // get instance of health profile service
+        $health  = new HealthProfileService();
+
+        return $health->profile->update($validated);
     }
 
     public function history()
