@@ -35,6 +35,7 @@ class HealthProfileService
 
     public function update($data)
     {
+        dd($data);
         $data['blood_group'] ? $this->healthProfile->blood_group = $data['blood_group'] : '';
         $data['genotype'] ? $this->healthProfile->genotype = $data['genotype'] : '';
         $data['martial_status'] ? $this->healthProfile->martial_status = $data['martial_status'] : '';
