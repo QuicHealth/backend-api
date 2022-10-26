@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Models\Zoom;
 use App\Models\Doctor;
+use App\Models\Report;
 use App\Models\Details;
 use App\Models\Schedule;
 use App\Models\Appointment;
@@ -13,11 +14,11 @@ use App\Services\SettingService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\SetAvailablityAction;
+use App\Services\NotificationService;
 use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
-use App\Models\Report;
 
 class DoctorController extends Controller
 {
@@ -236,42 +237,24 @@ class DoctorController extends Controller
         return $this->service->settings()->saveUpdatePassword($request->all());
     }
 
-    public function allNotification()
+    public function getAllNotification()
     {
-        $notification = Notification::where('user_type', 'doctor')
-            ->where('user_id', auth('doctor_api')->user()->id)
-            ->get();
-        if ($notification) {
-            return response()->json([
-                'status' => true,
-                'message' => $notification
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error'
-            ], 401);
-        }
+        $user_type = "doctor";
+
+        $getAllNotifications = new NotificationService($user_type, auth('doctor_api')->user()->id);
+
+        return $getAllNotifications->notifications()->all();
     }
 
-    public function updateNotification($id)
-    {
-        $notification = Notification::where('user_type', 'doctor')
-            ->where('userId', auth('doctor_api')->user()->id)
-            ->where('id', $id)
-            ->firstOrFail();
-        $notification->doctorRead = true;
+    public function markNotificationAsRead(Request $request)
 
-        if ($notification->save()) {
-            return response()->json([
-                'status' => true,
-                'message' => $notification
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error'
-            ], 401);
-        }
+    {
+        $user_type = "doctor";
+
+        $notification_id = $request->notification_id ?? '';
+
+        $markAsRead = new NotificationService($user_type, auth('doctor_api')->user()->id);
+
+        return $markAsRead->notification($notification_id)->update();
     }
 }

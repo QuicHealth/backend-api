@@ -64,8 +64,8 @@ Route::prefix('v1')->group(function () {
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
             // Notifications
-            Route::get('notification', 'NotificationsController@index');
-            Route::get('notification/{id}', 'NotificationsController@update');
+            Route::get('notifications', 'PatientController@getAllNotification');
+            Route::post('notification', 'PatientController@markNotificationAsRead');
 
             // Health record
             Route::get('history', 'PatientController@history');
@@ -122,8 +122,8 @@ Route::prefix('v1')->group(function () {
             Route::get('get/appointment/details/{appointment_id}', 'DoctorController@getAppointmentDetail');
 
             // Notifications
-            Route::get('notification', 'DoctorController@allNotification');
-            Route::get('notification/{id}', 'DoctorController@updateNotification');
+            Route::get('notifications', 'DoctorController@getAllNotification');
+            Route::post('notification', 'DoctorController@markNotificationAsRead');
 
             // Route::post('write-report/{appointment_id}', 'ReportController@store');
             Route::post('add-emr', 'DoctorController@recordHealthHistory');

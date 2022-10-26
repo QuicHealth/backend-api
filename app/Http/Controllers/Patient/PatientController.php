@@ -7,10 +7,10 @@ use App\Models\Doctor;
 use App\Models\Report;
 use App\Models\Hospital;
 use App\Models\Appointment;
-use App\Models\HealthProfile;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
+use App\Services\NotificationService;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Services\HealthProfileService;
@@ -245,6 +245,27 @@ class PatientController extends Controller
         ]);
 
         return $this->service->settings()->saveUpdatePassword($request->all());
+    }
+
+    public function getAllNotification()
+    {
+        $user_type = "patient";
+
+        $getAllNotifications = new NotificationService($user_type, auth()->user()->id);
+
+        return $getAllNotifications->notifications()->all();
+    }
+
+    public function markNotificationAsRead(Request $request)
+
+    {
+        $user_type = "patient";
+
+        $notification_id = $request->notification_id ?? '';
+
+        $markAsRead = new NotificationService($user_type, auth()->user()->id);
+
+        return $markAsRead->notification($notification_id)->update();
     }
 
 
