@@ -43,8 +43,7 @@ class HealthProfileService
     public function update($data)
     {
 
-        dd($this->profile);
-        if ($this->profile) {
+        if ($this->profile == null) {
             $this->healthProfile->user_id = auth()->user()->id;
         }
 
