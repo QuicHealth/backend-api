@@ -58,7 +58,7 @@ class NotificationService
                 'message' => 'notification found',
                 'data' => [
                     "notifications"  =>  $this->allNotifications,
-                    "num_of_unreadNotifications" =>   $this->unreadNotification
+                    "new_notifications" =>   $this->unreadNotification
                 ]
             ], 200);
         } else {
