@@ -199,7 +199,7 @@ class DoctorController extends Controller
     {
         $this->validate($request, [
             'diagnosis' => 'sometimes',
-            'treatment' => 'sometimes',
+            'treatments' => 'sometimes',
             'user_id' => 'required',
             'appointment_id' => 'required'
         ]);
@@ -209,7 +209,7 @@ class DoctorController extends Controller
         $record->user_id = $request->user_id;
         $record->appointments_id = $request->appointment_id;
         $record->diagnosis = $request->diagnosis;
-        $record->treatment = $request->treatment;
+        $record->treatments = $request->treatments;
 
         if ($record->save()) {
             return response([
