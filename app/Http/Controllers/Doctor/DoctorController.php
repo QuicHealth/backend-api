@@ -199,13 +199,15 @@ class DoctorController extends Controller
     {
         $this->validate($request, [
             'diagnosis' => 'sometimes',
-            'treatment' => 'sometimes'
+            'treatment' => 'sometimes',
+            'user_id' => 'required',
+            'appointment_id' => 'required'
         ]);
 
         $record = new Report();
         $record->doctor_id = auth('doctor_api')->user()->id;
         $record->user_id = $request->user_id;
-        $record->appointment_id = $request->appointment_id;
+        $record->appointments_id = $request->appointment_id;
         $record->diagnosis = $request->diagnosis;
         $record->treatment = $request->treatment;
 
