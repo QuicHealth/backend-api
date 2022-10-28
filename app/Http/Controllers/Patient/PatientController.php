@@ -26,11 +26,11 @@ class PatientController extends Controller
 
     public function __construct()
     {
-        if (auth('auth:api')->check()) {
-            $this->service = new SettingService(new User, auth('auth:api')->user()->id);
-        } else {
-            return array('status' => false, 'message' => 'Unauthorized');
-        }
+        // if (auth('auth:api')->check()) {
+        $this->service = new SettingService(new User, auth('auth:api')->user()->id);
+        // } else {
+        //     return array('status' => false, 'message' => 'Unauthorized');
+        // }
     }
 
     public function updateProfile(UpdatePatientRequest $request, $unique_id)
