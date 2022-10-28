@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class SettingsRequest extends FormRequest
 {
     protected $userId;
+    protected $model;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +26,22 @@ class SettingsRequest extends FormRequest
      */
     public function rules()
     {
-        $this->userId = auth('doctor_api')->user()->id ?? auth('auth:api')->user()->id;
+        if (isset(auth('doctor_api')->user()->id)) {
+            $this->userId = auth('doctor_api')->user()->id;
+            $this->model = 'doctors';
+        } else {
+            $this->userId = auth()->user()->id;
+            $this->model = 'users';
+        }
 
         return [
-            'email' =>  ['required', 'unique:doctors,email,' . $this->userId],
-            'phone' => ['required', 'numeric', 'unique:doctors,email,' . $this->userId],
-            'dob' => ['required'],
-            'address' => ['required', 'string'],
-            'city' => ['required', 'string'],
-            'gender' => ['required', 'string'],
-            'emergency_number' => ['required'],
+            'email' =>  ['sometimes', 'required', 'unique:' . $this->model . ',email,' . $this->userId],
+            'phone' => ['sometimes', 'required', 'numeric', 'unique:' . $this->model . ',email,' . $this->userId],
+            'dob' => ['sometimes', 'required'],
+            'address' => ['sometimes', 'required', 'string'],
+            'city' => ['sometimes', 'required', 'string'],
+            'gender' => ['sometimes', 'required', 'string'],
+            'emergency_number' => ['sometimes', 'required'],
         ];
     }
 }
