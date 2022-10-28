@@ -26,8 +26,10 @@ class PatientController extends Controller
 
     public function __construct()
     {
-        if (auth()->check()) {
-            $this->service = new SettingService(new User, auth()->user()->id);
+        if (auth('auth:api')->check()) {
+            $this->service = new SettingService(new User, auth('auth:api')->user()->id);
+        } else {
+            return array('status' => false, 'message' => 'Unauthorized');
         }
     }
 
