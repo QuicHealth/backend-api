@@ -229,7 +229,7 @@ class PatientController extends Controller
 
     public function updateSetting(SettingsRequest $request)
     {
-
+        dd($request->all());
         $validated = $request->validated();
 
         if ($request->hasfile('image')) {
