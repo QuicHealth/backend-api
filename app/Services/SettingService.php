@@ -84,6 +84,8 @@ class SettingService
             $updateData['image'] = $uploadImage;
         }
 
+        dd($updateData);
+
         $update = $this->settingsDB->update($updateData);
 
         if ($update) {
