@@ -29,14 +29,12 @@ class SettingsRequest extends FormRequest
     {
         // if (isset(auth('doctor_api')->user()->id)) {
         if (auth('doctor_api')->check()) {
-            $this->userId = 'doctor_api' . auth('doctor_api')->user()->id;
+            $this->userId =  auth('doctor_api')->user()->id;
             $this->model = 'doctors';
         } else {
-            $this->userId = 'user_api' . auth()->user()->id;
+            $this->userId =  auth()->user()->id;
             $this->model = 'users';
         }
-
-        dd($this->model, $this->userId);
 
         return [
             'email' => ['sometimes', 'required', 'email', Rule::unique($this->model)->ignore($this->userId)],
