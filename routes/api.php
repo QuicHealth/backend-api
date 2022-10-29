@@ -48,6 +48,9 @@ Route::prefix('v1')->group(function () {
             Route::get('get-health-profile', 'PatientController@getHealthProfile');
             Route::post('update-health-profile', 'PatientController@updateHealthProfile');
 
+            Route::get('settings', 'PatientController@getsetting');
+        Route::post('settings', 'PatientController@updateSetting');
+
             Route::post('password/update', 'PatientController@updatePassword');
 
             // appointment APIs
@@ -86,8 +89,7 @@ Route::prefix('v1')->group(function () {
 
         // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
 
-        Route::get('settings', 'PatientController@getsetting');
-        Route::post('settings', 'PatientController@updateSetting');
+
     });
 
     // Route::webhooks('webhook-receiving-url');
