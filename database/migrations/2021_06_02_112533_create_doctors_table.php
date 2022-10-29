@@ -20,7 +20,7 @@ class CreateDoctorsTable extends Migration
             $table->string('unique_id')->unique();
             $table->integer('hospital_id');
             $table->string('phone');
-            $table->string('image')->nullable();
+            $table->string('profile_pic_link')->nullable();
             $table->integer('featured')->default(0);
             $table->integer('status')->default(1);
             $table->string('specialty');

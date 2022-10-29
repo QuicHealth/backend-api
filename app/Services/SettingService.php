@@ -31,7 +31,7 @@ class SettingService
     {
         $this->settingsDB =  $this->model->where('id', $this->userId)->first();
 
-        dd($this->settingsDB);
+        // dd($this->settingsDB);
 
         return $this;
     }
@@ -39,7 +39,7 @@ class SettingService
     public function get(): array
     {
         return [
-            "image" =>  $this->settingsDB->image,
+            "image" =>  $this->settingsDB->profile_pic_link,
             "email" =>  $this->settingsDB->email,
             "phone" =>  $this->settingsDB->phone,
             "address" =>  $this->settingsDB->address,
@@ -83,7 +83,7 @@ class SettingService
 
         if (isset($data['image'])) {
             $uploadImage = $this->uploadImageTocloudinary($data['image'], $folder);
-            $updateData['image'] = $uploadImage;
+            $updateData['profile_pic_link'] = $uploadImage;
         }
 
 
