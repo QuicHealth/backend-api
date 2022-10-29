@@ -80,16 +80,24 @@ class SettingService
             "emergency_number" =>  $data['emergency_number'] ?? $this->settingsDB->emergency_number,
         ];
 
+        $this->settingsDB->email = $data['email'] ?? '';
+        $this->settingsDB->phone = $data['phone'] ?? '';
+        $this->settingsDB->address = $data['address'] ?? '';
+        $this->settingsDB->dob = $data['dob'] ?? '';
+        $this->settingsDB->city = $data['city'] ?? '';
+        $this->settingsDB->gender = $data['gender'] ?? '';
+        $this->settingsDB->emergency_number = $data['emergency_number'] ?? '';
 
         if (isset($data['image'])) {
             $uploadImage = $this->uploadImageTocloudinary($data['image'], $folder);
-            $updateData['profile_pic_link'] = $uploadImage;
+            // $updateData['profile_pic_link'] = $uploadImage;
+            $this->settingsDB->profile_pic_link = $uploadImage;
         }
 
 
-        $update = $this->settingsDB->update($updateData);
+        // $update = $this->settingsDB->update($updateData);
 
-        if ($update) {
+        if ($this->settingsDB->save()) {
             return response([
                 'status' => true,
                 'message' => 'Settings updated successfully'
