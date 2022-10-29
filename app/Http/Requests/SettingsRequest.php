@@ -29,10 +29,10 @@ class SettingsRequest extends FormRequest
     {
         // if (isset(auth('doctor_api')->user()->id)) {
         if (auth('doctor_api')->check()) {
-            $this->userId = auth('doctor_api')->user()->id;
+            $this->userId = 'doctor_api' . auth('doctor_api')->user()->id;
             $this->model = 'doctors';
         } else {
-            $this->userId = auth()->user()->id;
+            $this->userId = 'user_api' . auth()->user()->id;
             $this->model = 'users';
         }
 
