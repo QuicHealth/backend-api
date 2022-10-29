@@ -31,6 +31,8 @@ class SettingService
     {
         $this->settingsDB =  $this->model->where('id', $this->userId)->first();
 
+        dd($this->settingsDB);
+
         return $this;
     }
 
@@ -86,8 +88,6 @@ class SettingService
 
 
         $update = $this->settingsDB->update($updateData);
-
-        dd($update);
 
         if ($update) {
             return response([
