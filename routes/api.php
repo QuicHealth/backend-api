@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function () {
             Route::post('update-health-profile', 'PatientController@updateHealthProfile');
 
             Route::get('settings', 'PatientController@getsetting');
-        Route::post('settings', 'PatientController@updateSetting');
+            Route::post('settings', 'PatientController@updateSetting');
 
             Route::post('password/update', 'PatientController@updatePassword');
 

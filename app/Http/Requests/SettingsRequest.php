@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SettingsRequest extends FormRequest
@@ -35,8 +36,8 @@ class SettingsRequest extends FormRequest
         }
 
         return [
-            'email' =>  ['sometimes', 'required', 'unique:' . $this->model . ',email,' . $this->userId],
-            'phone' => ['sometimes', 'required', 'numeric', 'unique:' . $this->model . ',email,' . $this->userId],
+            'email' => ['sometimes', 'required', 'email', Rule::unique($this->model)->ignore($this->userId)],
+            'phone' => ['sometimes', 'required', 'numeric', Rule::unique($this->model)->ignore($this->userId)],
             'dob' => ['sometimes', 'required'],
             'address' => ['sometimes', 'required', 'string'],
             'city' => ['sometimes', 'required', 'string'],

@@ -69,13 +69,13 @@ class SettingService
     public function saveUpdate($data, $folder = "")
     {
         $updateData = [
-            "email" => $data['email'],
-            "phone" =>  $data['phone'],
-            "address" =>  $data['address'],
-            "dob" =>  $data['dob'],
-            "city" =>  $data['city'],
-            "gender" =>  $data['gender'],
-            "emergency_number" =>  $data['emergency_number'],
+            "email" => $data['email'] ?? $this->settingsDB->email,
+            "phone" =>  $data['phone'] ?? $this->settingsDB->phone,
+            "address" =>  $data['address'] ?? $this->settingsDB->address,
+            "dob" =>  $data['dob'] ?? $this->settingsDB->dob,
+            "city" =>  $data['city'] ?? $this->settingsDB->city,
+            "gender" =>  $data['gender'] ?? $this->settingsDB->gender,
+            "emergency_number" =>  $data['emergency_number'] ?? $this->settingsDB->emergency_number,
         ];
 
 
