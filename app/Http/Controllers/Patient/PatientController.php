@@ -233,9 +233,10 @@ class PatientController extends Controller
 
         if ($request->hasfile('image')) {
             $validated['image']  = $request->file('image')->getRealPath();
+            $cloundinaryFolder = "patient";
         }
 
-        return $this->service->settings()->saveUpdate($validated, "doctor");
+        return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
     }
 
     public function updatePassword(Request $request)
