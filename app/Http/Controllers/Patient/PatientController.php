@@ -207,7 +207,7 @@ class PatientController extends Controller
 
     public function history()
     {
-        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
+        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments', 'doctor')->get();
 
         if ($healthRecord) {
             return response()->json([
