@@ -87,6 +87,8 @@ class SettingService
 
         $update = $this->settingsDB->update($updateData);
 
+        dd($update);
+
         if ($update) {
             return response([
                 'status' => true,
