@@ -36,6 +36,8 @@ class SettingsRequest extends FormRequest
             $this->model = 'users';
         }
 
+        dd($this->model, $this->userId);
+
         return [
             'email' => ['sometimes', 'required', 'email', Rule::unique($this->model)->ignore($this->userId)],
             'phone' => ['sometimes', 'required', 'numeric', Rule::unique($this->model)->ignore($this->userId)],
