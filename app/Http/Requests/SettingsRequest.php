@@ -27,7 +27,8 @@ class SettingsRequest extends FormRequest
      */
     public function rules()
     {
-        if (isset(auth('doctor_api')->user()->id)) {
+        // if (isset(auth('doctor_api')->user()->id)) {
+        if (auth('doctor_api')->check()) {
             $this->userId = auth('doctor_api')->user()->id;
             $this->model = 'doctors';
         } else {
