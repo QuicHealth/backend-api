@@ -8,7 +8,6 @@ use App\Models\Report;
 use App\Models\Details;
 use App\Models\Schedule;
 use App\Models\Appointment;
-use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
@@ -17,7 +16,6 @@ use App\Actions\SetAvailablityAction;
 use App\Services\NotificationService;
 use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
-use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
 
 class DoctorController extends Controller
@@ -194,6 +192,55 @@ class DoctorController extends Controller
         }
 
         return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
+    }
+
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            // upload to cloudinary
+            $image = $request->file('image');
+
+            $data = [
+                'image' => $image,
+                'folder' => 'patient'
+            ];
+
+            $upload =  $this->service->settings()->uploadImage($data);
+
+            if ($upload['status'] == true) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => $upload['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "error",
+                    'message' =>  $upload['message'],
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => "Failed",
+                'message' => 'No image found',
+            ]);
+        }
+    }
+
+    public function removeImage()
+    {
+        $removeImage =  Doctor::where('id', auth('doctor_api')->user()->id)->update(['profile_pic_link' => null]);
+
+        if ($removeImage) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image removed successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error removing image'
+            ]);
+        }
     }
 
     public function recordHealthHistory(Request $request)

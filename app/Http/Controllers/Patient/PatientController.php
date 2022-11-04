@@ -227,6 +227,54 @@ class PatientController extends Controller
         return  $this->service->settings()->get();
     }
 
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            // upload to cloudinary
+            $image = $request->file('image');
+            $data = [
+                'image' => $image,
+                'folder' => 'patient'
+            ];
+
+            $upload =  $this->service->settings()->uploadImage($data);
+
+            if ($upload['status'] == true) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => $upload['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "error",
+                    'message' =>  $upload['message'],
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => "Failed",
+                'message' => 'No image found',
+            ]);
+        }
+    }
+
+    public function removeImage()
+    {
+        $removeImage =  User::where('id', auth()->user()->id)->update(['profile_pic_link' => null]);
+
+        if ($removeImage) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image removed successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error removing image'
+            ]);
+        }
+    }
+
     public function updateSetting(SettingsRequest $request)
     {
         $validated = $request->validated();

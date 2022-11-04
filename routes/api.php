@@ -51,6 +51,9 @@ Route::prefix('v1')->group(function () {
             Route::get('settings', 'PatientController@getsetting');
             Route::post('settings', 'PatientController@updateSetting');
 
+            Route::post('upload_image', 'PatientController@uploadImage');
+            Route::post('remove_image', 'PatientController@removeImage');
+
             Route::post('password/update', 'PatientController@updatePassword');
 
             // appointment APIs
@@ -129,6 +132,9 @@ Route::prefix('v1')->group(function () {
 
             // Route::post('write-report/{appointment_id}', 'ReportController@store');
             Route::post('add-emr', 'DoctorController@recordHealthHistory');
+
+            Route::post('upload_image', 'DoctorController@uploadImage');
+            Route::post('remove_image', 'DoctorController@removeImage');
         });
     });
 

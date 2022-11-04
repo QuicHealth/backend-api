@@ -64,6 +64,25 @@ class SettingService
         return $this->image;
     }
 
+    public function uploadImage($data)
+    {
+        $uploadImage = $this->uploadImageTocloudinary($data['image'], $data['folder']);
+
+        $this->settingsDB->profile_pic_link = $uploadImage;
+
+        if ($this->settingsDB->save()) {
+            return response([
+                'status' => true,
+                'message' => 'Image updated successfully'
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Error uploading image, pls try again'
+        ]);
+    }
+
     /**
      * @param $data
      * @return Application|Response|ResponseFactory
