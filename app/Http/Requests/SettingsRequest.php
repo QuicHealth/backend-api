@@ -37,13 +37,13 @@ class SettingsRequest extends FormRequest
         }
 
         return [
-            'email' => ['sometimes', 'required', 'email', Rule::unique($this->model)->ignore($this->userId)],
-            'phone' => ['sometimes', 'required', 'numeric', Rule::unique($this->model)->ignore($this->userId)],
-            'dob' => ['sometimes', 'required'],
-            'address' => ['sometimes', 'required', 'string'],
-            'city' => ['sometimes', 'required', 'string'],
-            'gender' => ['sometimes', 'required', 'string'],
-            'emergency_number' => ['sometimes', 'required'],
+            'email' => ['sometimes', 'email', Rule::unique($this->model)->ignore($this->userId)],
+            'phone' => ['sometimes', 'numeric', Rule::unique($this->model)->ignore($this->userId)],
+            'dob' => ['sometimes'],
+            'address' => ['sometimes', 'string'],
+            'city' => ['sometimes', 'string'],
+            'gender' => ['sometimes', 'string'],
+            'emergency_number' => ['sometimes'],
         ];
     }
 }
