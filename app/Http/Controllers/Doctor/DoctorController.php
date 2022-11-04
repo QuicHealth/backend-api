@@ -226,7 +226,6 @@ class DoctorController extends Controller
         ]);
     }
 
-
     public function updatePassword(Request $request)
     {
         $this->validate($request, [

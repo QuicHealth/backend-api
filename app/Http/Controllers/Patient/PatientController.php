@@ -230,6 +230,7 @@ class PatientController extends Controller
     public function updateSetting(SettingsRequest $request)
     {
         $validated = $request->validated();
+        $cloundinaryFolder = "";
 
         if ($request->hasfile('image')) {
             $validated['image']  = $request->file('image')->getRealPath();
