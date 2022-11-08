@@ -34,6 +34,7 @@ class HealthProfileRequest extends FormRequest
             'allergies'  => ['sometimes', 'required'],
             'Occupation'  => ['sometimes', 'required'],
             'past_medical_history'  => ['sometimes', 'required'],
+            'past_surgery'  => ['sometimes', 'required'],
         ];
     }
 }

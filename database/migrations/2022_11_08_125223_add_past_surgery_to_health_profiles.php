@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('notifications', function (Blueprint $table) {
-            $table->string('category')->nullable();
+        Schema::table('health_profiles', function (Blueprint $table) {
+            $table->text('past_surgery')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('notifications', function (Blueprint $table) {
+        Schema::table('health_profiles', function (Blueprint $table) {
             //
         });
     }

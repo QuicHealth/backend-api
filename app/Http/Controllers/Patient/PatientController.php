@@ -231,7 +231,7 @@ class PatientController extends Controller
     {
         if ($request->hasFile('image')) {
             // upload to cloudinary
-            $image = $request->file('image');
+            $image = $request->file('image')->getRealPath();
             $data = [
                 'image' => $image,
                 'folder' => 'patient'
