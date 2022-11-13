@@ -84,21 +84,21 @@ class SettingService
 
         $uploadImage = $this->uploadImageTocloudinary($image, $folder);
 
-        dd($uploadImage);
+        //dd($this->settingsDB->profile_pic_link);
 
         $this->settingsDB->profile_pic_link = $uploadImage;
 
         if ($this->settingsDB->save()) {
-            return response([
+            return [
                 'status' => true,
                 'message' => 'Image updated successfully'
-            ]);
+            ];
         }
 
-        return response([
+        return [
             'status' => false,
             'message' => 'Error uploading image, pls try again'
-        ]);
+        ];
     }
 
     /**
