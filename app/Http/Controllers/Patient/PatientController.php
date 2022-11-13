@@ -230,14 +230,25 @@ class PatientController extends Controller
     public function uploadImage(Request $request)
     {
         if ($request->hasFile('image')) {
-            // upload to cloudinary
-            $image = $request->file('image')->getRealPath();
-            $data = [
-                'image' => $image,
-                'folder' => 'patient'
-            ];
+            // check if image extension is in array
+            // $allowedImage = ['png', 'jpg', 'jpeg'];
 
-            $upload =  $this->service->settings()->uploadImage($data);
+            // $extension =  $request->file('image')->getClientOriginalExtension();
+
+            // $check = in_array($extension, $allowedImage);
+
+            // if (!$check) {
+
+            //     return response()->json([
+            //         'status' => "error",
+            //         'message' => 'Invalid file type, only png, jpg and jpeg files are allowed',
+            //     ]);
+            // } else {
+
+            $imageFile  = $request->file('image');
+            $folder = 'patient';
+
+            $upload =  $this->service->settings()->uploadImage($imageFile, $folder);
 
             if ($upload['status'] == true) {
                 return response()->json([
@@ -250,6 +261,7 @@ class PatientController extends Controller
                     'message' =>  $upload['message'],
                 ]);
             }
+            // }
         } else {
             return response()->json([
                 'status' => "Failed",

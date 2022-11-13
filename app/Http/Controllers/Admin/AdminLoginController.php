@@ -9,19 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminLoginController extends Controller
 {
-    public function getLogin(){
+    public function getLogin()
+    {
         return view('admin.login');
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         $this->validate($request, [
-            'username'=>'required|string',
-            'password'=>'required|string'
+            'username' => 'required|string',
+            'password' => 'required|string'
         ]);
 
-        if(Auth::guard('admin')->attempt(['username'=>$request->username, 'password'=>$request->password])){
+        if (Auth::guard('admin')->attempt(['username' => $request->username, 'password' => $request->password])) {
             return redirect()->intended('admin');
-        }else{
+        } else {
             HelpController::flashSession(false, "Invalid login details");
             return back();
         }

@@ -64,9 +64,25 @@ class SettingService
         return $this->image;
     }
 
-    public function uploadImage($data)
+    public function uploadImage($imageFile, $folder)
     {
-        $uploadImage = $this->uploadImageTocloudinary($data['image'], $data['folder']);
+        $allowedImage = ['png', 'jpg', 'jpeg'];
+
+        $extension =  $imageFile->getClientOriginalExtension();
+
+        $check = in_array($extension, $allowedImage);
+
+        if (!$check) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid file type, only png, jpg and jpeg files are allowed',
+            ]);
+        }
+
+        $image = $imageFile->getRealPath();
+
+        $uploadImage = $this->uploadImageTocloudinary($image, $folder);
 
         $this->settingsDB->profile_pic_link = $uploadImage;
 
