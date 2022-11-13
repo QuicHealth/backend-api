@@ -58,7 +58,7 @@ class SettingService
             'height' => 500,
             'crop' => 'fill'
         ];
-
+        dd($file, $folder);
         $this->image = Helpers::UploadImage($file, $folder, $transformation);
 
         return $this->image;
@@ -81,8 +81,6 @@ class SettingService
         }
 
         $image = $imageFile->getRealPath();
-
-        dd($image);
 
         $uploadImage = $this->uploadImageTocloudinary($image, $folder);
 
