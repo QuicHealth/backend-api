@@ -59,9 +59,9 @@ class SettingService
             'crop' => 'fill'
         ];
 
-        $this->image = Helpers::UploadImage($file, $folder, $transformation);
+        $image = Helpers::UploadImage($file, $folder, $transformation);
 
-        return $this->image;
+        return $image;
     }
 
     public function uploadImage($imageFile, $folder)
@@ -83,6 +83,8 @@ class SettingService
         $image = $imageFile->getRealPath();
 
         $uploadImage = $this->uploadImageTocloudinary($image, $folder);
+
+        dd($uploadImage);
 
         $this->settingsDB->profile_pic_link = $uploadImage;
 
