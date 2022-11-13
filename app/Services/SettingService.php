@@ -61,8 +61,6 @@ class SettingService
 
         $this->image = Helpers::UploadImage($file, $folder, $transformation);
 
-        dd($this->image);
-
         return $this->image;
     }
 
