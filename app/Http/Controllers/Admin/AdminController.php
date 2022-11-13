@@ -310,6 +310,6 @@ class AdminController extends Controller
     {
         session()->flush();
         Auth::logout();
-        return redirect()->route('admin.login');
+        // return redirect()->route('admin.login');
     }
 }
