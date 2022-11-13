@@ -248,6 +248,8 @@ class PatientController extends Controller
             $imageFile  = $request->file('image');
             $folder = 'patient';
 
+            dd($imageFile);
+
             $upload =  $this->service->settings()->uploadImage($imageFile, $folder);
 
             if ($upload['status'] == true) {
