@@ -70,6 +70,9 @@ class SettingService
 
         $extension =  $imageFile->getClientOriginalExtension();
 
+        dd($extension);
+
+
         $check = in_array($extension, $allowedImage);
 
         if (!$check) {
