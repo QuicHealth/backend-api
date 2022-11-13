@@ -14,8 +14,8 @@ use App\Http\Controllers\Admin\AdminAuthController;
 
 // Auth::routes();
 
-Route::get('/', [AdminAuthController::class, 'login']);
-Route::get('/dashboard', [AdminController::class, 'dashboard']);
+// Route::get('/', [AdminAuthController::class, 'login']);
+// Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
 // Route::get('/home', 'HomeController@index')->name('home');
 

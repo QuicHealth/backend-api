@@ -222,7 +222,7 @@ class PatientController extends Controller
         }
     }
 
-    public function getsetting(): array
+    public function getsetting()
     {
         return  $this->service->settings()->get();
     }
