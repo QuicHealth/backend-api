@@ -70,9 +70,6 @@ class SettingService
 
         $extension =  $imageFile->getClientOriginalExtension();
 
-        dd($extension);
-
-
         $check = in_array($extension, $allowedImage);
 
         if (!$check) {
@@ -84,6 +81,8 @@ class SettingService
         }
 
         $image = $imageFile->getRealPath();
+
+        dd($image);
 
         $uploadImage = $this->uploadImageTocloudinary($image, $folder);
 
