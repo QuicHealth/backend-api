@@ -31,6 +31,8 @@ Route::prefix('v1')->group(function () {
             Route::post('reset-password', 'AuthController@reset_password');
             Route::get('verify-reset-token', 'AuthController@verify_password');
 
+            Route::post('update_password', 'PatientController@updatePassword');
+
             Route::get('get-random-doctors', 'PatientController@getRandomDoctors');
             Route::get(
                 'get-random-hospitals',
