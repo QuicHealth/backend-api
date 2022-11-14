@@ -198,14 +198,11 @@ class DoctorController extends Controller
     {
         if ($request->hasFile('image')) {
             // upload to cloudinary
-            $image = $request->file('image');
 
-            $data = [
-                'image' => $image,
-                'folder' => 'patient'
-            ];
+            $imageFile  = $request->file('image');
+            $folder = 'doctor';
 
-            $upload =  $this->service->settings()->uploadImage($data);
+            $upload =  $this->service->settings()->uploadImage($imageFile, $folder);
 
             if ($upload['status'] == true) {
                 return response()->json([
