@@ -113,6 +113,9 @@ Route::prefix('v1')->group(function () {
                 'DoctorAuthController@doctorsForgetPassword'
             );
             Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
+
+            Route::post('update_password', 'DoctorController@updatePassword');
+
             Route::post('save-schedule', 'DoctorController@setSchedule');
             Route::get('appointment-by-payment-status', 'DoctorController@appointmentByPaymentStatus');
             // Route::get('get-days', 'DoctorController@getDays');

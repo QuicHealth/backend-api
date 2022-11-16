@@ -304,7 +304,7 @@ class PatientController extends Controller
     {
         $request->validate([
             'old_password' => 'required',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:8',
         ]);
 
         return $this->service->settings()->saveUpdatePassword($request->all());

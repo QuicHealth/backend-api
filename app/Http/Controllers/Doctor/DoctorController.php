@@ -320,7 +320,7 @@ class DoctorController extends Controller
     {
         $this->validate($request, [
             'old_password' => 'required',
-            'password' => 'required|confirmed|min:6',
+            'password' => 'required|confirmed|min:8',
         ]);
 
         return $this->service->settings()->saveUpdatePassword($request->all());
