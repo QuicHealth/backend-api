@@ -134,6 +134,8 @@ Route::prefix('v1')->group(function () {
 
             // Route::post('write-report/{appointment_id}', 'ReportController@store');
             Route::post('add-emr', 'DoctorController@recordHealthHistory');
+            Route::get('get-emr/{appointment_id}', 'DoctorController@getEMR');
+            Route::post('update-emr/{appointment_id}', 'DoctorController@UpdateEMR');
 
             Route::post('upload_image', 'DoctorController@uploadImage');
             Route::post('remove_image', 'DoctorController@removeImage');

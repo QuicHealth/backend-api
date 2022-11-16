@@ -270,6 +270,52 @@ class DoctorController extends Controller
         ]);
     }
 
+    public function getEMR($appointment_id)
+    {
+        $record = Report::where('appointments_id', $appointment_id)->first();
+
+        if ($record) {
+            return response([
+                'status' => true,
+                'msg' => 'Health history found',
+                'data' => $record
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'msg' => 'Health history not found'
+        ]);
+    }
+
+    public function UpdateEMR(Request $request, $appointment_id)
+    {
+        try {
+            $this->validate($request, [
+                'diagnosis' => 'sometimes',
+                'treatments' => 'sometimes',
+            ]);
+
+            $update = Report::updateOrCreate(['appointments_id' => $appointment_id], [
+                'diagnosis' => $request->diagnosis,
+                'treatments' => $request->treatments
+            ]);
+
+            if ($update) {
+                return response([
+                    'status' => true,
+                    'message' => 'ERM updated successfully'
+                ]);
+            }
+        } catch (\Throwable $e) {
+
+            return response([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function updatePassword(Request $request)
     {
         $this->validate($request, [
