@@ -149,8 +149,9 @@ class SettingService
 
     public function saveUpdatePassword($data)
     {
+        $password = $this->settingsDB->password;
 
-        if (!Hash::check($data['old_password'], $data['password'])) {
+        if (Hash::check($data['old_password'], $password) == false) {
             return response([
                 'status' => false,
                 'message' => 'Old password is incorrect'
