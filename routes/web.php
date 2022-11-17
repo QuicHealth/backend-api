@@ -21,19 +21,30 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     Route::post('login', 'AdminLoginController@login');
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/', 'AdminController@index');
-        Route::get('hospital/{id}', 'AdminController@hospital');
-        Route::get('hospitals', 'AdminController@hospitals');
-        Route::post('add-hospital', 'AdminController@addHospital');
-        Route::post('update-hospital', 'AdminController@updateHospital');
-        Route::post('delete-hospital', 'AdminController@deleteHospital');
-
-        Route::post('add-doctor', 'AdminController@addDoctor');
-        Route::get('doctors', 'AdminController@doctors');
-        Route::get('doctor/{id}', 'AdminController@doctor');
-        Route::post('update-doctor', 'AdminController@updateDoctor');
-        Route::get('delete-doctor', 'AdminController@deleteDoctor');
-
-        Route::post('logout', 'AdminController@logout');
+        Route::get('/', 'AdminController@index')->name('admin.home');
+        Route::get('users', 'AdminController@users')->name('admin.users');
+        Route::get('doctors', 'AdminController@doctors')->name('admin.doctors');
     });
 });
+
+// Route::namespace('Admin')->prefix('admin')->group(function () {
+    // Route::get('login', 'AdminLoginController@getLogin')->name('admin.login');
+    // Route::post('login', 'AdminLoginController@login');
+
+    // Route::middleware('auth:admin')->group(function () {
+    //     Route::get('/', 'AdminController@index');
+    //     Route::get('hospital/{id}', 'AdminController@hospital');
+    //     Route::get('hospitals', 'AdminController@hospitals');
+    //     Route::post('add-hospital', 'AdminController@addHospital');
+    //     Route::post('update-hospital', 'AdminController@updateHospital');
+    //     Route::post('delete-hospital', 'AdminController@deleteHospital');
+
+        // Route::post('add-doctor', 'AdminController@addDoctor');
+        // Route::get('doctors', 'AdminController@doctors');
+        // Route::get('doctor/{id}', 'AdminController@doctor');
+        // Route::post('update-doctor', 'AdminController@updateDoctor');
+        // Route::get('delete-doctor', 'AdminController@deleteDoctor');
+
+    //     Route::post('logout', 'AdminController@logout');
+    // });
+// });

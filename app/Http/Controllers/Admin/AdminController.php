@@ -17,10 +17,27 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $hos = Hospital::all()->count();
-        $user = User::all()->count();
-        $doctor = Doctor::all()->count();
-        return view('admin.dashboard', ['hospitals' => $hos, 'user' => $user, 'doctors' => $doctor]);
+        // $hos = Hospital::all()->count();
+        // $user = User::all()->count();
+        // $doctor = Doctor::all()->count();
+        // return view('admin.dashboard', ['hospitals' => $hos, 'user' => $user, 'doctors' => $doctor]);
+        return view('admins.home');
+    }
+
+    public function users()
+    {
+        $user = User::all();
+        return view('admins.users')->with('user', $user);
+    }
+
+    public function doctors()
+    {
+        $doc = Doctor::get();
+        // $hos = Hospital::all();
+        // $spec = DB::table('specialties')->get();
+        // dd($doc);
+        // return view('admin.doctor.index', ['doc' => $doc, 'hos' => $hos, 'spec' => $spec]);
+        return view('admins.doctors', ['doc' => $doc]);
     }
 
     public function hospitals()
@@ -166,14 +183,6 @@ class AdminController extends Controller
         return redirect('admin/hospitals');
     }
 
-    public function doctors()
-    {
-        $doc = Doctor::all();
-        $hos = Hospital::all();
-        $spec = DB::table('specialties')->get();
-        return view('admin.doctor.index', ['doctors' => $doc, 'hospitals' => $hos, 'specialties' => $spec]);
-    }
-
     public function doctor($id)
     {
         $doc = Doctor::find($id);
@@ -288,12 +297,6 @@ class AdminController extends Controller
         }
         helpController::flashSession(false, 'Doctor deleted successfully');
         return redirect('admin/doctors');
-    }
-
-    public function users()
-    {
-        $users = User::all();
-        return view('admin.users.index')->with('users', $users);
     }
 
     public function user($id)
