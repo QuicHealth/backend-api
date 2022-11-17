@@ -1,18 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Hospital;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminAuthController;
 
-Route::get('/', function () {
-    //     dd(rand(111111,999999));
-    //     $hospitals = Hospital::where('status', 1)->paginate(12);
-    //    dd($hospitals);
-    //     return view('welcome');
-});
+// Route::get('/', function () {
+//     //     dd(rand(111111,999999));
+//     //     $hospitals = Hospital::where('status', 1)->paginate(12);
+//     //    dd($hospitals);
+//     //     return view('welcome');
+// });
 
 // Auth::routes();
 
-
+// Route::get('/', [AdminAuthController::class, 'login']);
+// Route::get('/dashboard', [AdminController::class, 'dashboard']);
 
 // Route::get('/home', 'HomeController@index')->name('home');
 

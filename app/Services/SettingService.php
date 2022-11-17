@@ -59,28 +59,46 @@ class SettingService
             'crop' => 'fill'
         ];
 
-        $this->image = Helpers::UploadImage($file, $folder, $transformation);
+        $image = Helpers::UploadImage($file, $folder, $transformation);
 
-        return $this->image;
+        return $image;
     }
 
-    public function uploadImage($data)
+    public function uploadImage($imageFile, $folder)
     {
-        $uploadImage = $this->uploadImageTocloudinary($data['image'], $data['folder']);
+        $allowedImage = ['png', 'jpg', 'jpeg'];
+
+        $extension =  $imageFile->getClientOriginalExtension();
+
+        $check = in_array($extension, $allowedImage);
+
+        if (!$check) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid file type, only png, jpg and jpeg files are allowed',
+            ]);
+        }
+
+        $image = $imageFile->getRealPath();
+
+        $uploadImage = $this->uploadImageTocloudinary($image, $folder);
+
+        //dd($this->settingsDB->profile_pic_link);
 
         $this->settingsDB->profile_pic_link = $uploadImage;
 
         if ($this->settingsDB->save()) {
-            return response([
+            return [
                 'status' => true,
                 'message' => 'Image updated successfully'
-            ]);
+            ];
         }
 
-        return response([
+        return [
             'status' => false,
             'message' => 'Error uploading image, pls try again'
-        ]);
+        ];
     }
 
     /**
@@ -131,8 +149,9 @@ class SettingService
 
     public function saveUpdatePassword($data)
     {
+        $password = $this->settingsDB->password;
 
-        if (!Hash::check($data['old_password'], $data['password'])) {
+        if (Hash::check($data['old_password'], $password) == false) {
             return response([
                 'status' => false,
                 'message' => 'Old password is incorrect'

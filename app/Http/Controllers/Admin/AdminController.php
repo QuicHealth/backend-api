@@ -15,7 +15,7 @@ use App\Http\Controllers\helpController;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function dashboard()
     {
         // $hos = Hospital::all()->count();
         // $user = User::all()->count();
@@ -313,6 +313,6 @@ class AdminController extends Controller
     {
         session()->flush();
         Auth::logout();
-        return redirect()->route('admin.login');
+        // return redirect()->route('admin.login');
     }
 }

@@ -31,6 +31,8 @@ Route::prefix('v1')->group(function () {
             Route::post('reset-password', 'AuthController@reset_password');
             Route::get('verify-reset-token', 'AuthController@verify_password');
 
+            Route::post('update_password', 'PatientController@updatePassword');
+
             Route::get('get-random-doctors', 'PatientController@getRandomDoctors');
             Route::get(
                 'get-random-hospitals',
@@ -111,6 +113,9 @@ Route::prefix('v1')->group(function () {
                 'DoctorAuthController@doctorsForgetPassword'
             );
             Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
+
+            Route::post('update_password', 'DoctorController@updatePassword');
+
             Route::post('save-schedule', 'DoctorController@setSchedule');
             Route::get('appointment-by-payment-status', 'DoctorController@appointmentByPaymentStatus');
             // Route::get('get-days', 'DoctorController@getDays');
@@ -132,6 +137,8 @@ Route::prefix('v1')->group(function () {
 
             // Route::post('write-report/{appointment_id}', 'ReportController@store');
             Route::post('add-emr', 'DoctorController@recordHealthHistory');
+            Route::get('get-emr/{appointment_id}', 'DoctorController@getEMR');
+            Route::post('update-emr/{appointment_id}', 'DoctorController@UpdateEMR');
 
             Route::post('upload_image', 'DoctorController@uploadImage');
             Route::post('remove_image', 'DoctorController@removeImage');
