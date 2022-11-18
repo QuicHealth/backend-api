@@ -277,14 +277,14 @@ class DoctorController extends Controller
         if ($record) {
             return response([
                 'status' => true,
-                'msg' => 'Health history found',
+                'message' => 'Health history found',
                 'data' => $record
             ]);
         }
 
         return response([
             'status' => false,
-            'msg' => 'Health history not found'
+            'message' => 'Health history not found'
         ]);
     }
 
