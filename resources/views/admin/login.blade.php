@@ -5,11 +5,11 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Skydash Admin</title>
+    <title>QuicHealth - Admin Login</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('asset/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/ti-icons/css/themify-icons.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/css/vendor.bundle.base.css') }}../../vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="{{ asset('asset/css/vendor.bundle.base.css') }}">
     <!-- endinject -->
     <!-- Plugin css for this page -->
     <!-- End plugin css for this page -->
@@ -43,9 +43,7 @@
                                         id="exampleInputPassword1" placeholder="Password">
                                 </div>
                                 <div class="mt-3">
-                                    {{-- <button type="submit" class="btn btn-primary px-5 py-2 w-100">Login</button> --}}
-                                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                                        >SIGN IN</button>
+                                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
                                 </div>
                                 <div class="my-2 d-flex justify-content-between align-items-center">
                                     <div class="form-check">

@@ -26,7 +26,15 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/', 'AdminController@index')->name('admin.home');
         Route::get('users', 'AdminController@users')->name('admin.users');
+        Route::get('verify-hospital', 'AdminController@verifyHospital')->name('admin.verifyHospital');
+        Route::get('hospitals', 'AdminController@hospitals')->name('admin.hospitals');
         Route::get('doctors', 'AdminController@doctors')->name('admin.doctors');
+
+        Route::get('admins', 'AdminController@admins')->name('admin.admins');
+
+        Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
+        Route::get('complains', 'AdminController@complains')->name('admin.complains');
+        Route::get('messages', 'AdminController@messages')->name('admin.messages');
     });
 });
 
