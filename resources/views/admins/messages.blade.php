@@ -26,23 +26,32 @@
                 <div class="card" id="leadsList">
                     <div class="card-header border-0">
 
-                        <div class="row g-4 align-items-center">
-                            <div class="col-sm-3">
-                                <div class="search-box">
-                                    <input type="text" class="form-control search" placeholder="Search for...">
-                                    <i class="ri-search-line search-icon"></i>
-                                </div>
+                        <form action="" method="" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="employeeName" class="form-label">Users Email</label>
+                                <input type="text" class="form-control" name="name" id="employeeName" placeholder="Enter Email" value="{{ old('email') }}">
+                                @error('name')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
                             </div>
-                        </div>
+                            <div class="mb-3">
+                                <label for="employeeUrl" class="form-label">Message</label>
+                                <textarea name="" class="form-control" id="" cols="30" rows="10"></textarea>
+                                @error('message')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
+                            </div>
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                            </div>
+                        </form>
+
                     </div>
-
-
-
                 </div>
-
             </div>
         </div>
-
 
     </div>
 </div>
