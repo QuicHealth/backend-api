@@ -221,7 +221,7 @@
                                     <div class="collapse menu-dropdown" id="sidebarfinancial">
                                         <ul class="nav nav-sm flex-column">
                                             <li class="nav-item">
-                                                <a class="nav-link menu-link " href="">
+                                                <a class="nav-link menu-link {{request()->is('admin/hospital/payout') ? 'active' : ''}}" href="{{route('admin.hospital.payout')}}">
                                                     <span data-key="t-financial">Hospital payout request</span>
                                                 </a>
                                             </li>
@@ -253,7 +253,7 @@
                                         </ul>
                                     </div>
                                 </li>
- 
+
                                 <li class="nav-item">
                                     <a class="nav-link menu-link collapsed" href="#sidebarsettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsettings">
                                         <i class="mdi mdi-cog-outline"></i> <span data-key="t-settings">Settings</span>
@@ -266,7 +266,7 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link menu-link " href="">
+                                                <a class="nav-link menu-link {{request()->is('admin/passwordreset') ? 'active' : ''}}" href="{{route('admin.passwordReset')}}">
                                                     </i> <span data-key="t-settings">Password reset</span>
                                                 </a>
                                             </li>
@@ -275,7 +275,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link" href="">
+                                    <a class="nav-link menu-link" href="{{ route('admin.logout') }}">
                                         <i class="mdi mdi-logout"></i> <span data-key="t-logout">{{ __('Logout') }}</span>
                                     </a>
                                 </li>

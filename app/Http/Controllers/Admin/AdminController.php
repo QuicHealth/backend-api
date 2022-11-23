@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
 use App\Models\Admin;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
@@ -339,10 +340,20 @@ class AdminController extends Controller
         return view('admins.messages');
     }
 
+    public function passwordReset()
+    {
+        return view('admins.passwordreset');
+    }
+
+    public function hospitalPayout()
+    {
+        return view('admins.hospitalPayout');
+    }
+
     public function logout()
     {
-        session()->flush();
-        Auth::logout();
-        // return redirect()->route('admin.login');
+        auth()->guard('admin')->logout();
+        Session::flush();
+        return redirect()->route('admin.login');
     }
 }
