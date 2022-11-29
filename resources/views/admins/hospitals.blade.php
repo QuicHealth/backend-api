@@ -8,12 +8,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Users</h4>
+                    <h4 class="mb-sm-0">Hospital</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Users</a></li>
-                            <li class="breadcrumb-item active">Users</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hospital Managment</a></li>
+                            <li class="breadcrumb-item active">Hospital</li>
                         </ol>
                     </div>
 
@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-sm-auto ms-auto">
                                 <div class="hstack gap-2">
-                                    <a href="" class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i>Add User</a>
+                                    <a href="" class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i>Add Hospital</a>
                                 </div>
                             </div>
                         </div>
@@ -54,14 +54,13 @@
 
                                             <th class="sort" data-sort="name">Name</th>
                                             <th class="sort" data-sort="leads_score">Email</th>
-                                            <th class="sort" data-sort="phone"scope="col">Phone</th>
                                             <th class="sort" data-sort="date" scope="col">Date Joined</th>
                                             <th class="sort" data-sort="date" scope="col">Action</th>
 
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
-                                        @foreach ($user as $users)
+                                        @foreach ($hos as $hospital)
                                             <tr>
                                                 <th scope="row">
                                                     <div class="form-check">
@@ -69,10 +68,9 @@
                                                     </div>
                                                 </th>
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a></td>
-                                                <td class="name">{{ $users->firstname }} {{ $users->lastname }}</td>
-                                                <td class="leads_score">{{ $users->email }}</td>
-                                                <td class="phone">{{ $users->phone }}</td>
-                                                <td class="date left">{{ $users->created_at }}</td>
+                                                <td class="name">{{ $hospital->name }}</td>
+                                                <td class="leads_score">{{ $hospital->email }}</td>
+                                                <td class="date left">{{ $hospital->created_at }}</td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip"

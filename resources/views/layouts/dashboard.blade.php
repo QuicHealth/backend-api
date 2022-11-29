@@ -4,7 +4,7 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>Dashboard - Show of Empathy</title>
+        <title>QuicHealth - Dashboard</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="" name="description" />
         <meta content="" name="author" />
@@ -48,19 +48,19 @@
                             <div class="navbar-brand-box horizontal-logo">
                                 <a href="{{ route('admin.home') }}" class="logo logo-dark">
                                     <span class="logo-sm">
-                                        <img src="{{ asset('assets/images/favicons/logo.jpg')}}" alt="" height="50px">
+                                        <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="50px">
                                     </span>
                                     <span class="logo-lg">
-                                        <img src="{{ asset('assets/images/favicons/logo.jpg')}}" alt="" height="50px">
+                                        <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="50px">
                                     </span>
                                 </a>
 
                                 <a href="{{ route('admin.home') }}" class="logo logo-light">
                                     <span class="logo-sm">
-                                        <img src="{{ asset('assets/images/favicons/logo.jpg')}}" alt="" height="50px">
+                                        <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="50px">
                                     </span>
                                     <span class="logo-lg">
-                                        <img src="{{ asset('assets/images/favicons/logo.jpga')}}" alt="" height="50px">
+                                        <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="50px">
                                     </span>
                                 </a>
                             </div>
@@ -145,19 +145,19 @@
 
                     <a href="{{ route('admin.home') }}" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="{{ asset('assets/images/favicons/logo.png')}}" alt="" height="30">
+                            <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="30">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ asset('assets/images/favicons/logo.png')}}" alt="" height="60">
+                            <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="" width="60%">
                         </span>
                     </a>
 
                     <a href="{{ route('admin.home') }}" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="{{ asset('assets/images/favicons/logo.png')}}" alt="" height="30">
+                            <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="30">
                         </span>
                         <span class="logo-lg">
-                            <img src="{{ asset('assets/images/favicons/logo.png')}}" alt="" height="60">
+                            <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="" height="" width="60%">
                         </span>
                     </a>
                     <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -173,39 +173,113 @@
                             <ul class="navbar-nav" id="navbar-nav">
                                 <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link {{request()->is('admin/dashboard') ? 'active' : ''}}" href="{{route('admin.home')}}">
+                                    <a class="nav-link menu-link {{request()->is('admin') ? 'active' : ''}}" href="{{route('admin.home')}}">
                                         <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Dashboards</span>
                                     </a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link " href="">
-                                        <i class="mdi mdi-pump"></i> <span data-key="t-layouts">Category</span>
+                                    <a class="nav-link menu-link collapsed" href="#sidebarhospitals" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarhospitals">
+                                        <i class="ri-layout-3-line"></i> <span data-key="t-hospitals">Hospital Managment</span>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link menu-link {{request()->is('admin/doctors') ? 'active' : ''}}" href="{{route('admin.doctors')}}">
-                                        <i class="bx bx-dollar-circle"></i> <span data-key="t-layouts">Doctors</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link menu-link {{request()->is('admin/users') ? 'active' : ''}}" href="{{route('admin.users')}}">
-                                        <i class="bx bx-user-circle"></i> <span data-key="t-layouts">Users</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link menu-link " href="">
-                                        <i class="bx bx-wallet"></i> <span data-key="t-layouts">Transactions</span>
-                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarhospitals">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a href="{{route('admin.verifyHospital')}}" class="nav-link {{request()->is('admin/verify-hospital') ? 'active' : ''}}" data-key="t-horizontal">Verify Hospital</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="{{route('admin.hospitals')}}" class="nav-link {{request()->is('admin/hospitals') ? 'active' : ''}}" data-key="t-two-column">Hospital CRUD</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/doctors') ? 'active' : ''}}" href="{{route('admin.doctors')}}">
+                                                    <span data-key="t-hospitals">Doctors CRUD</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
 
                                 <li class="nav-item">
-                                    <a class="nav-link menu-link" href="">
-                                        <i class="mdi mdi-pump"></i> <span data-key="t-layouts">Settings</span>
+                                    <a class="nav-link menu-link collapsed" href="#sidebarusers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarusers">
+                                        <i class="bx bx-user-circle"></i> <span data-key="t-users">Users</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarusers">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/users') ? 'active' : ''}}" href="{{route('admin.users')}}">
+                                                    <span data-key="t-users">Users CRUD</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link collapsed" href="#sidebarfinancial" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarfinancial">
+                                        <i class="bx bx-dollar"></i> <span data-key="t-financial">Financial Managment</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarfinancial">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/hospital/payout') ? 'active' : ''}}" href="{{route('admin.hospital.payout')}}">
+                                                    <span data-key="t-financial">Hospital payout request</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link collapsed" href="#sidebarmessages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarmessages">
+                                        <i class="mdi mdi-message-text-outline"></i> <span data-key="t-messages">Message Managment</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarmessages">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/sendMail') ? 'active' : ''}}" href="{{route('admin.email')}}">
+                                                    </i> <span data-key="t-messages">Send Email</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/complains') ? 'active' : ''}}" href="{{route('admin.complains')}}">
+                                                    </i> <span data-key="t-messages">Complains</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/messages') ? 'active' : ''}}" href="{{route('admin.messages')}}">
+                                                    </i> <span data-key="t-messages">Messages</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link collapsed" href="#sidebarsettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsettings">
+                                        <i class="mdi mdi-cog-outline"></i> <span data-key="t-settings">Settings</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarsettings">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/admins') ? 'active' : ''}}" href="{{route('admin.admins')}}">
+                                                    </i> <span data-key="t-settings">Admin CRUD</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/passwordreset') ? 'active' : ''}}" href="{{route('admin.passwordReset')}}">
+                                                    </i> <span data-key="t-settings">Password reset</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link" href="{{ route('admin.logout') }}">
+                                        <i class="mdi mdi-logout"></i> <span data-key="t-logout">{{ __('Logout') }}</span>
                                     </a>
                                 </li>
+
 
                                 {{-- <li class="nav-item">
                                     <a class="nav-link menu-link" href="{{ route('logout') }}"
@@ -236,7 +310,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Show of Empathy.
+                                <script>document.write(new Date().getFullYear())</script> © QuicHealth.
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">
@@ -329,3 +403,31 @@
     </body>
 
 </html>
+
+{{--
+    Hospital Managment => {
+        Verify Hospital,
+        Hospital CRUD,
+        Doctor CRUD,
+    }
+
+    Financial Managment => {
+        Hospital payout request,
+
+    }
+
+    Settings => {
+        Password reset,
+        Admin CRUD,
+    }
+
+    Message Managment => {
+        Send Email,
+        Complains
+        Messages
+    }
+
+    User Managment => {
+        User CRUD
+    }
+--}}

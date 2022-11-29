@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
+use App\Models\Admin;
+use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
-    public function dashboard()
+    public function index()
     {
         // $hos = Hospital::all()->count();
         // $user = User::all()->count();
@@ -40,10 +42,18 @@ class AdminController extends Controller
         return view('admins.doctors', ['doc' => $doc]);
     }
 
+    public function verifyHospital()
+    {
+        $hos = Hospital::all();
+        // return view('admin.hospital.index', ['hospitals' => $hos]);
+        return view('admins.verifyHospital', ['hos' => $hos]);
+    }
+
     public function hospitals()
     {
         $hos = Hospital::all();
-        return view('admin.hospital.index', ['hospitals' => $hos]);
+        // return view('admin.hospital.index', ['hospitals' => $hos]);
+        return view('admins.hospitals', ['hos' => $hos]);
     }
 
     public function hospital($id)
@@ -309,10 +319,41 @@ class AdminController extends Controller
         return view('admin.users.user')->with('user', $user);
     }
 
+    public function admins()
+    {
+        $admins = Admin::all();
+        return view('admins.admins', compact('admins'));
+    }
+
+    public function sendEmail()
+    {
+        return view('admins.sendEmail');
+    }
+
+    public function complains()
+    {
+        return view('admins.complains');
+    }
+
+    public function messages()
+    {
+        return view('admins.messages');
+    }
+
+    public function passwordReset()
+    {
+        return view('admins.passwordreset');
+    }
+
+    public function hospitalPayout()
+    {
+        return view('admins.hospitalPayout');
+    }
+
     public function logout()
     {
-        session()->flush();
-        Auth::logout();
-        // return redirect()->route('admin.login');
+        auth()->guard('admin')->logout();
+        Session::flush();
+        return redirect()->route('admin.login');
     }
 }
