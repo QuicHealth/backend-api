@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('appointments_id');
-            $table->text('description');
             $table->timestamps();
         });
     }

@@ -8,7 +8,6 @@ use Exception;
 
 class Zoom
 {
-
     protected $CLIENT_ID;
     protected $CLIENT_SECRET;
     protected $REDIRECT_URI;

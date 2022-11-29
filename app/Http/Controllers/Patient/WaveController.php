@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Models\User;
+use App\Models\Doctor;
 use App\Models\Payment;
+use App\Classes\Helpers;
 use App\Models\Timeslot;
 use App\Models\Appointment;
 use App\Models\Notification;
@@ -15,6 +17,7 @@ use App\Notifications\PaymentSuccessfulNotification;
 
 class WaveController extends Controller
 {
+
     public function add(Request $request)
     {
         $this->validate($request, [
@@ -184,13 +187,25 @@ class WaveController extends Controller
             // $payment->notify(new PaymentSuccessfulNotification($payment));
             // dd($payment);
 
+            $appointment = Appointment::where('id', $appointment_id)->first();
+
+            $doctorNmame = Helpers::getField(new Doctor, $appointment->doctor_id, 'name');
+            $charged_amount = Helpers::getField(new Payment, $payment->id, 'charged_amount');
+
+            $patientMessage = "Your payment of " . $charged_amount . " for your appointment with " . $doctorNmame . " was successful";
+            $doctorMessage = $user->firstname . " " . $user->lastname . " has paid for your consulation on " . $appointment->date . " at " . $appointment->time;
+
+            Helpers::saveNotification($user_id, 'patient', 'appointment', $patientMessage, 'Appointment Booking');
+            Helpers::saveNotification($appointment->doctor_id, 'doctor', 'appointment', $doctorMessage, 'Appointment Booking');
+
             //save notification
-            $notification = new Notification();
-            $notification->user_id = auth()->user()->id ?? $user_id;
-            $notification->user_type = 'Patient';
-            $notification->title = 'Payment was Successful';
-            $notification->message = 'Payment was Successful';
-            $notification->save();
+            // $notification = new Notification();
+            // $notification->user_id = auth()->user()->id ?? $user_id;
+            // $notification->categories = 'payment';
+            // $notification->user_type = 'Patient';
+            // $notification->title = 'Payment was Successful';
+            // $notification->message = $message;
+            // $notification->save();
         }
     }
 

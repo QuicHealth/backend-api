@@ -13,15 +13,17 @@ class Notification extends Model
         'user_id',
         'user_type',
         'message',
-        'data'
+        'title',
+        'category',
+        'read_reciept'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class);
+        return $this->belongsTo(Doctor::class, 'user_id');
     }
 }

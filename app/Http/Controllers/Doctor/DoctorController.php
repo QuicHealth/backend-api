@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Doctor;
 
 use App\Models\Zoom;
 use App\Models\Doctor;
+use App\Models\Report;
 use App\Models\Details;
 use App\Models\Schedule;
 use App\Models\Appointment;
-use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\SetAvailablityAction;
+use App\Services\NotificationService;
 use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
-use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
 
 class DoctorController extends Controller
@@ -194,52 +194,156 @@ class DoctorController extends Controller
         return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
     }
 
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            // upload to cloudinary
+
+            $imageFile  = $request->file('image');
+            $folder = 'doctor';
+
+            $upload =  $this->service->settings()->uploadImage($imageFile, $folder);
+
+            if ($upload['status'] == true) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => $upload['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "error",
+                    'message' =>  $upload['message'],
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => "Failed",
+                'message' => 'No image found',
+            ]);
+        }
+    }
+
+    public function removeImage()
+    {
+        $removeImage =  Doctor::where('id', auth('doctor_api')->user()->id)->update(['profile_pic_link' => null]);
+
+        if ($removeImage) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image removed successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error removing image'
+            ]);
+        }
+    }
+
+    public function recordHealthHistory(Request $request)
+    {
+        $this->validate($request, [
+            'diagnosis' => 'sometimes',
+            'treatments' => 'sometimes',
+            'user_id' => 'required',
+            'appointment_id' => 'required'
+        ]);
+
+        $record = new Report();
+        $record->doctor_id = auth('doctor_api')->user()->id;
+        $record->user_id = $request->user_id;
+        $record->appointments_id = $request->appointment_id;
+        $record->diagnosis = $request->diagnosis;
+        $record->treatments = $request->treatments;
+
+        if ($record->save()) {
+            return response([
+                'status' => true,
+                'msg' => 'Health history recorded successfully',
+                'data' => $record
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'msg' => 'Error recording health history'
+        ]);
+    }
+
+    public function getEMR($appointment_id)
+    {
+        $record = Report::where('appointments_id', $appointment_id)->first();
+
+        if ($record) {
+            return response([
+                'status' => true,
+                'message' => 'Health history found',
+                'data' => $record
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Health history not found'
+        ]);
+    }
+
+    public function UpdateEMR(Request $request, $appointment_id)
+    {
+        try {
+            $this->validate($request, [
+                'diagnosis' => 'sometimes',
+                'treatments' => 'sometimes',
+            ]);
+
+            $update = Report::updateOrCreate(['appointments_id' => $appointment_id], [
+                'diagnosis' => $request->diagnosis,
+                'treatments' => $request->treatments
+            ]);
+
+            if ($update) {
+                return response([
+                    'status' => true,
+                    'message' => 'ERM updated successfully'
+                ]);
+            }
+        } catch (\Throwable $e) {
+
+            return response([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function updatePassword(Request $request)
     {
         $this->validate($request, [
             'old_password' => 'required',
-            'password' => 'required|confirmed|min:6',
+            'password' => 'required|confirmed|min:8',
         ]);
 
         return $this->service->settings()->saveUpdatePassword($request->all());
     }
 
-    public function allNotification()
+    public function getAllNotification()
     {
-        $notification = Notification::where('user_type', 'Doctor')
-            ->where('user_id', auth('doctor_api')->user()->id)
-            ->get();
-        if ($notification) {
-            return response()->json([
-                'status' => true,
-                'message' => $notification
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error'
-            ], 401);
-        }
+        $user_type = "doctor";
+
+        $getAllNotifications = new NotificationService($user_type, auth('doctor_api')->user()->id);
+
+        return $getAllNotifications->notifications()->all();
     }
 
-    public function updateNotification($id)
-    {
-        $notification = Notification::where('user_type', 'Doctor')
-            ->where('userId', auth('doctor_api')->user()->id)
-            ->where('id', $id)
-            ->firstOrFail();
-        $notification->doctorRead = true;
+    public function markNotificationAsRead(Request $request)
 
-        if ($notification->save()) {
-            return response()->json([
-                'status' => true,
-                'message' => $notification
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Error'
-            ], 401);
-        }
+    {
+        $user_type = "doctor";
+
+        $notification_id = $request->notification_id ?? '';
+
+        $markAsRead = new NotificationService($user_type, auth('doctor_api')->user()->id);
+
+        return $markAsRead->notification($notification_id)->update();
     }
 }

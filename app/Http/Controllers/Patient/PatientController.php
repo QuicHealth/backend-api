@@ -10,10 +10,13 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
+use App\Services\NotificationService;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
+use App\Services\HealthProfileService;
 use App\Http\Controllers\helpController;
 use App\Http\Resources\HospitalResource;
+use App\Http\Requests\HealthProfileRequest;
 use App\Http\Requests\UpdatePatientRequest;
 use Symfony\Component\HttpFoundation\Response as RES;
 
@@ -25,6 +28,8 @@ class PatientController extends Controller
     {
         if (auth()->check()) {
             $this->service = new SettingService(new User, auth()->user()->id);
+        } else {
+            return array('status' => false, 'message' => 'Unauthorized');
         }
     }
 
@@ -64,17 +69,17 @@ class PatientController extends Controller
             'data' => $user,
         ]);
 
-        $status = true;
-        $message = 'Login Successful';
-        $code = RES::HTTP_OK;
-        $data = [
-            'id' => $user->id,
-            'name' => $user->firstname,
-            'name' => $user->lastname,
-            'email' => $user->email,
-            'phone_number' => $user->phone,
-        ];
-        return helpController::getResponse($status, $message, $code, $data);
+        // $status = true;
+        // $message = 'Login Successful';
+        // $code = RES::HTTP_OK;
+        // $data = [
+        //     'id' => $user->id,
+        //     'name' => $user->firstname,
+        //     'name' => $user->lastname,
+        //     'email' => $user->email,
+        //     'phone_number' => $user->phone,
+        // ];
+        // return helpController::getResponse($status, $message, $code, $data);
     }
 
     public function getDashboard()
@@ -182,9 +187,27 @@ class PatientController extends Controller
         ]);
     }
 
+    public function getHealthProfile()
+    {
+        $health  = new HealthProfileService();
+
+        return $health->profile()->get();
+    }
+
+    public function updateHealthProfile(HealthProfileRequest $request)
+    {
+        // get validated
+        $validated = $request->validated();
+
+        // get instance of health profile service
+        $healthProfile  = new HealthProfileService();
+
+        return $healthProfile->update($validated);
+    }
+
     public function history()
     {
-        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments')->get();
+        $healthRecord = Report::where('user_id', auth()->user()->id)->with('appointments', 'doctor')->get();
 
         if ($healthRecord) {
             return response()->json([
@@ -199,31 +222,112 @@ class PatientController extends Controller
         }
     }
 
-    public function getsetting(): array
+    public function getsetting()
     {
         return  $this->service->settings()->get();
     }
 
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            // check if image extension is in array
+            // $allowedImage = ['png', 'jpg', 'jpeg'];
+
+            // $extension =  $request->file('image')->getClientOriginalExtension();
+
+            // $check = in_array($extension, $allowedImage);
+
+            // if (!$check) {
+
+            //     return response()->json([
+            //         'status' => "error",
+            //         'message' => 'Invalid file type, only png, jpg and jpeg files are allowed',
+            //     ]);
+            // } else {
+
+            $imageFile  = $request->file('image');
+            $folder = 'patient';
+
+            $upload =  $this->service->settings()->uploadImage($imageFile, $folder);
+
+            if ($upload['status'] == true) {
+                return response()->json([
+                    'status' => "success",
+                    'message' => $upload['message'],
+                ]);
+            } else {
+                return response()->json([
+                    'status' => "error",
+                    'message' =>  $upload['message'],
+                ]);
+            }
+            // }
+        } else {
+            return response()->json([
+                'status' => "Failed",
+                'message' => 'No image found',
+            ]);
+        }
+    }
+
+    public function removeImage()
+    {
+        $removeImage =  User::where('id', auth()->user()->id)->update(['profile_pic_link' => null]);
+
+        if ($removeImage) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Image removed successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error removing image'
+            ]);
+        }
+    }
+
     public function updateSetting(SettingsRequest $request)
     {
-
         $validated = $request->validated();
+        $cloundinaryFolder = "";
 
         if ($request->hasfile('image')) {
             $validated['image']  = $request->file('image')->getRealPath();
+            $cloundinaryFolder = "patient";
         }
 
-        return $this->service->settings()->saveUpdate($validated, "doctor");
+        return $this->service->settings()->saveUpdate($validated, $cloundinaryFolder);
     }
 
     public function updatePassword(Request $request)
     {
         $request->validate([
             'old_password' => 'required',
-            'password' => 'required|confirmed',
+            'password' => 'required|confirmed|min:8',
         ]);
 
         return $this->service->settings()->saveUpdatePassword($request->all());
+    }
+
+    public function getAllNotification()
+    {
+        $user_type = "patient";
+
+        $getAllNotifications = new NotificationService($user_type, auth()->user()->id);
+
+        return $getAllNotifications->notifications()->all();
+    }
+
+    public function markNotificationAsRead(Request $request)
+    {
+        $user_type = "patient";
+
+        $notification_id = $request->notification_id ?? '';
+
+        $markAsRead = new NotificationService($user_type, auth()->user()->id);
+
+        return $markAsRead->notification($notification_id)->update();
     }
 
 

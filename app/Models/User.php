@@ -47,6 +47,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function fullname()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
     /**
      * Get the Health Profile associated with the user.
      */
@@ -69,7 +74,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function notification()
     {
-        return $this->hasMany(Notification::class);
+        return $this->hasMany(Notification::class, 'user_id');
     }
 
     public function routeNotificationForMail($notification)

@@ -1,49 +1,82 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-   <head>
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}">
-      <!-- Typography CSS -->
-      <link rel="stylesheet" href="{{asset('assets/css/typography.css')}}">
-      <!-- Style CSS -->
-      <link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
-      <!-- Responsive CSS -->
-      {{-- <link rel="stylesheet" href="{{asset('assets/css/responsive.css')}}"> --}}
-      <link rel="stylesheet" href="{{asset('assets/css/main.css')}}">
 
-   </head>
-   <body>
-        <section class="sign-in-page">
-            <div class="container bg-white p-0 rounded">
-                <div class="row no-gutters mt-3">
-                    <div class="col-sm-12 align-self-center">
-                        <div class="sign-in-from px-3">
-                            <h4 class="my-3 text-center">Admin login</h4>
-                            <form class="py-2 px-3 pb-5" method="POST" action="/admin/login">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>QuicHealth - Admin Login</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ asset('asset/feather/feather.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/ti-icons/css/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{{ asset('css/vertical-layout-light/style.css') }}">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../../images/favicon.png" />
+</head>
+
+<body>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="content-wrapper d-flex align-items-center auth px-0">
+                <div class="row w-100 mx-0">
+                    <div class="col-lg-4 mx-auto">
+                        <div class="auth-form-light text-left py-5 px-4 px-sm-5">
+                            <div class="brand-logo">
+                                <img src="{{ asset('logo/quicHealth_logo2.jpg') }}" alt="logo">
+                            </div>
+                            <h4>Hello! let's get started</h4>
+                            <h6 class="font-weight-light">Sign in to continue.</h6>
+                            <form class="pt-3" method="POST" action="/admin/login">
                                 @include('admin.inc.notification')
                                 @csrf
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Username</label>
-                                    <input type="text" class="form-control mb-0" id="exampleInputEmail1" name="username" value="admin" placeholder="Username">
+                                    <input type="name" name="username" value="admin" class="form-control form-control-lg" id="exampleInputEmail1"
+                                        placeholder="Username">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" class="form-control mb-0" id="exampleInputPassword1" value="123456" name="password" placeholder="Password">
+                                    <input type="password" name="password" value="123456" class="form-control form-control-lg"
+                                        id="exampleInputPassword1" placeholder="Password">
                                 </div>
-                                <div>
-                                    <button type="submit" class="btn btn-primary px-5 py-2 w-100">Login</button>
+                                <div class="mt-3">
+                                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">SIGN IN</button>
                                 </div>
+                                <div class="my-2 d-flex justify-content-between align-items-center">
+                                    <div class="form-check">
+                                        <label class="form-check-label text-muted">
+                                            <input type="checkbox" class="form-check-input">
+                                            Keep me signed in
+                                        </label>
+                                    </div>
+                                    <a href="#" class="auth-link text-black">Forgot password?</a>
+                                </div>
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-        <!-- Sign in END -->
-      <!-- Optional JavaScript -->
-      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-      <script src="{{asset('assets/js/jquery.min.js')}}"></script>
-   </body>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="{{ asset('asset/js/vendor.bundle.base.js') }} "></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="{{ asset('js/off-canvas.js') }}"></script>
+    <script src="{{ asset('js/hoverable-collapse.js') }}"></script>
+    <script src="{{ asset('js/template.js') }}"></script>
+    <script src="{{ asset('js/settings.js') }}"></script>
+    <script src="{{ asset('js/todolist.js') }}"></script>
+    <!-- endinject -->
+</body>
+
 </html>

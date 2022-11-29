@@ -31,6 +31,8 @@ Route::prefix('v1')->group(function () {
             Route::post('reset-password', 'AuthController@reset_password');
             Route::get('verify-reset-token', 'AuthController@verify_password');
 
+            Route::post('update_password', 'PatientController@updatePassword');
+
             Route::get('get-random-doctors', 'PatientController@getRandomDoctors');
             Route::get(
                 'get-random-hospitals',
@@ -45,8 +47,14 @@ Route::prefix('v1')->group(function () {
             Route::get('get-dashboard', 'PatientController@getDashboard');
             Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
 
+            Route::get('get-health-profile', 'PatientController@getHealthProfile');
+            Route::post('update-health-profile', 'PatientController@updateHealthProfile');
+
             Route::get('settings', 'PatientController@getsetting');
             Route::post('settings', 'PatientController@updateSetting');
+
+            Route::post('upload_image', 'PatientController@uploadImage');
+            Route::post('remove_image', 'PatientController@removeImage');
 
             Route::post('password/update', 'PatientController@updatePassword');
 
@@ -61,8 +69,8 @@ Route::prefix('v1')->group(function () {
             Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
 
             // Notifications
-            Route::get('notification', 'NotificationsController@index');
-            Route::get('notification/{id}', 'NotificationsController@update');
+            Route::get('notifications', 'PatientController@getAllNotification');
+            Route::post('notification', 'PatientController@markNotificationAsRead');
 
             // Health record
             Route::get('history', 'PatientController@history');
@@ -85,6 +93,8 @@ Route::prefix('v1')->group(function () {
         Route::get('redirect', 'ZoomMeetingController@redirect');
 
         // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
+
+
     });
 
     // Route::webhooks('webhook-receiving-url');
@@ -103,6 +113,9 @@ Route::prefix('v1')->group(function () {
                 'DoctorAuthController@doctorsForgetPassword'
             );
             Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
+
+            Route::post('update_password', 'DoctorController@updatePassword');
+
             Route::post('save-schedule', 'DoctorController@setSchedule');
             Route::get('appointment-by-payment-status', 'DoctorController@appointmentByPaymentStatus');
             // Route::get('get-days', 'DoctorController@getDays');
@@ -119,10 +132,16 @@ Route::prefix('v1')->group(function () {
             Route::get('get/appointment/details/{appointment_id}', 'DoctorController@getAppointmentDetail');
 
             // Notifications
-            Route::get('notification', 'DoctorController@allNotification');
-            Route::get('notification/{id}', 'DoctorController@updateNotification');
+            Route::get('notifications', 'DoctorController@getAllNotification');
+            Route::post('notification', 'DoctorController@markNotificationAsRead');
 
-            Route::post('write-report/{appointment_id}', 'ReportController@store');
+            // Route::post('write-report/{appointment_id}', 'ReportController@store');
+            Route::post('add-emr', 'DoctorController@recordHealthHistory');
+            Route::get('get-emr/{appointment_id}', 'DoctorController@getEMR');
+            Route::post('update-emr/{appointment_id}', 'DoctorController@UpdateEMR');
+
+            Route::post('upload_image', 'DoctorController@uploadImage');
+            Route::post('remove_image', 'DoctorController@removeImage');
         });
     });
 
