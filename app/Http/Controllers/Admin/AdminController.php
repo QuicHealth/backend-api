@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
 use App\Models\Admin;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
@@ -30,6 +31,23 @@ class AdminController extends Controller
     {
         $user = User::all();
         return view('admins.users')->with('user', $user);
+    }
+
+    public function userId($id)
+    {
+        $user = User::findorFail($id);
+        return view('admins.userDetails')->with('user', $user);
+    }
+
+    public function blockUserId($id)
+    {
+        $user = User::findorFail($id);
+        $user->deleted_at = Carbon::now();
+        if($user->save())
+        {
+            helpController::flashSession(true, 'User block successfully');
+            return back()->with(session());
+        }
     }
 
     public function doctors()

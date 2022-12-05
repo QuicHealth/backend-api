@@ -55,6 +55,7 @@
                                             <th class="sort" data-sort="name">Name</th>
                                             <th class="sort" data-sort="leads_score">Email</th>
                                             <th class="sort" data-sort="phone"scope="col">Phone</th>
+                                            <th class="sort" data-sort="status"scope="col">Status</th>
                                             <th class="sort" data-sort="date" scope="col">Date Joined</th>
                                             <th class="sort" data-sort="date" scope="col">Action</th>
 
@@ -72,19 +73,24 @@
                                                 <td class="name">{{ $users->firstname }} {{ $users->lastname }}</td>
                                                 <td class="leads_score">{{ $users->email }}</td>
                                                 <td class="phone">{{ $users->phone }}</td>
+                                                @if ($users->deleted_at == Null)
+                                                    <td class="status"><span class="badge badge-soft-success text-uppercase">Active</span></td>
+                                                @elseif ($users->deleted_at == !Null)
+                                                    <td class="status"><span class="badge badge-soft-danger text-uppercase">Block</span></td>
+                                                @endif
                                                 <td class="date left">{{ $users->created_at }}</td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href=""
+                                                            <a href="{{ url('admin/user/'. $users->id) }}"
                                                                 class="text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item remove" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a href=""
+                                                            <a href="{{ url('admin/user/'. $users->id.'/block') }}"
                                                                 class="text-danger d-inline-block remove-item-btn">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
