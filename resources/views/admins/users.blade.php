@@ -70,7 +70,7 @@
                                                     </div>
                                                 </th>
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a></td>
-                                                <td class="name">{{ $users->firstname }} {{ $users->lastname }}</td>
+                                                <td class="name">{{ $users->fullname() }}</td>
                                                 <td class="leads_score">{{ $users->email }}</td>
                                                 <td class="phone">{{ $users->phone }}</td>
                                                 @if ($users->deleted_at == Null)

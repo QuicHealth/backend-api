@@ -109,12 +109,9 @@
                                             <div class="card-body">
                                                 <h5 class="card-title mb-3">About</h5>
                                                 <p>{{ $doc->bio }}</p>
-                                                <p>You always want to make sure that your fonts work well together and try to limit the number of fonts you use to three or less. Experiment and play around with the fonts that you already have in the software you’re working with reputable font websites. This may be the most commonly encountered tip I received from the designers I spoke with. They highly encourage that you use different fonts in one design, but do not over-exaggerate and go overboard.</p>
-
                                             </div>
                                         </div>
                                     </div>
-
 
                                     <div class="col-lg-12">
                                         <div class="card-header border-0 align-items-center d-flex">
@@ -156,29 +153,29 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="list form-check-all">
-                                                                @foreach ($doc->appointments as $docs)
+                                                                @foreach ($doc->appointments as $appoint)
                                                                     <tr>
                                                                         <th scope="row">
                                                                             <div class="form-check">
                                                                                 <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
                                                                             </div>
                                                                         </th>
-                                                                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">{{ $docs->id }}</a></td>
-                                                                        <td class="name">{{ $docs->user->fullname() }}</td>
-                                                                        <td class="leads_score">{{ $docs->date }}</td>
-                                                                        <td class="phone">{{ $docs->start }}</td>
-                                                                        <td class="phone">{{ $docs->end }}</td>
-                                                                        @if ($docs->payment_status == 'pending')
+                                                                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">{{ $appoint->id }}</a></td>
+                                                                        <td class="name">{{ $appoint->user->fullname() }}</td>
+                                                                        <td class="leads_score">{{ $appoint->date }}</td>
+                                                                        <td class="phone">{{ $appoint->start }}</td>
+                                                                        <td class="phone">{{ $appoint->end }}</td>
+                                                                        @if ($appoint->payment_status == 'pending')
                                                                             <td class="status"><span class="badge badge-soft-warning text-uppercase">Pending</span></td>
-                                                                        @elseif ($docs->payment_status == 'done')
+                                                                        @elseif ($appoint->payment_status == 'done')
                                                                             <td class="status"><span class="badge badge-soft-success text-uppercase">Done</span></td>
                                                                         @endif
-                                                                        @if ($docs->status == 'pending')
+                                                                        @if ($appoint->status == 'pending')
                                                                             <td class="status"><span class="badge badge-soft-warning text-uppercase">Pending</span></td>
-                                                                        @elseif ($docs->status == 'done')
+                                                                        @elseif ($appoint->status == 'done')
                                                                             <td class="status"><span class="badge badge-soft-success text-uppercase">Done</span></td>
                                                                         @endif
-                                                                        <td class="date left">{{ $docs->created_at }}</td>
+                                                                        <td class="date left">{{ $appoint->created_at }}</td>
                                                                         <td>
                                                                             <ul class="list-inline hstack gap-2 mb-0">
                                                                                 <li class="list-inline-item edit" data-bs-toggle="tooltip"

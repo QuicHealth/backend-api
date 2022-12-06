@@ -79,9 +79,10 @@ class AdminController extends Controller
         $hos = Hospital::find($id);
         if (!$hos) {
             helpController::flashSession(false, 'Hospital not found');
-            return redirect('admin/hospitals');
+            return redirect('admin/hospital');
         }
-        return view('admin.hospital.hospital', ['hospital' => $hos]);
+        return view('admins.hospitalDetails', ['hos' => $hos]);
+        // return view('admin.hospital.hospital', ['hospital' => $hos]);
     }
 
     public function addHospital(Request $request)
@@ -218,9 +219,10 @@ class AdminController extends Controller
         $hos = Hospital::all();
         if (!$doc) {
             helpController::flashSession(false, 'Doctor not found');
-            return redirect('admin/doctors');
+            return redirect('admin/doctor');
         }
-        return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
+        // return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
+        return view('admins.doctorDetails', ['doc' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
     }
 
     public function addDoctor(Request $request)
