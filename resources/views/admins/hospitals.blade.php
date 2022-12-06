@@ -75,7 +75,7 @@
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip"
                                                             data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href=""
+                                                            <a href="{{ url('admin/hospital/'. $hospital->id) }}"
                                                                 class="text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
