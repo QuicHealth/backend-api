@@ -4,6 +4,7 @@ use App\Hospital;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminAuthController;
+use Illuminate\Support\Facades\Auth;
 
 // Route::get('/', function () {
 //     //     dd(rand(111111,999999));
@@ -38,10 +39,13 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             Route::get('verify', 'AdminController@verifyHospital')->name('admin.verifyHospital');
             Route::get('/', 'AdminController@hospitals')->name('admin.hospitals');
             Route::get('{id}', 'AdminController@hospital')->name('admin.hospital.detail');
+            // Route::post('add1', 'AdminController@addHospital')->name('admin.hospital.add1');
+            Route::post('add', 'AdminController@addHospital')->name('admin.hospital.add');
 
             Route::get('payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
+            // Route::get('/save', 'AdminController@saveHospital')->name('admin.hospital.save');
         });
-        // Route::post('add-hospital', 'AdminController@addHospital');
+        // Route::post('add-hospital', 'AdminController@addHospital')->name('admin.hospital.add');
         // Route::post('update-hospital', 'AdminController@updateHospital');
         // Route::post('delete-hospital', 'AdminController@deleteHospital');
 

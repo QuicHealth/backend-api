@@ -58,22 +58,24 @@
                                                 <th><span class="fw-medium">Location:</span></th>
                                                 <td>{{ $hos->address }}</td>
                                             </tr>
-                                            <tr>
-                                                <th><span class="fw-medium">Bank Account:</span></th>
-                                                <td>{{ $hos->settings->bank }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th><span class="fw-medium">Account No.:</span></th>
-                                                <td>{{ $hos->settings->acc_no }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th><span class="fw-medium">Account Name:</span></th>
-                                                <td>{{ $hos->settings->acc_name }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th><span class="fw-medium">Amount:</span></th>
-                                                <td>₦{{ number_format( $hos->settings->amount) }}</td>
-                                            </tr>
+                                            @if (!empty($hos->settings))
+                                                <tr>
+                                                    <th><span class="fw-medium">Bank Account:</span></th>.
+                                                    <td>{{ $hos->settings->bank }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><span class="fw-medium">Account No.:</span></th>
+                                                    <td>{{ $hos->settings->acc_no }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><span class="fw-medium">Account Name:</span></th>
+                                                    <td>{{ $hos->settings->acc_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th><span class="fw-medium">Amount:</span></th>
+                                                    <td>₦{{ number_format( $hos->settings->amount) }}</td>
+                                                </tr>   
+                                            @endif
                                             <tr>
                                                 <th><span class="fw-medium">Joining Date:</span></th>
                                                 <td>{{ $hos->created_at }}</td>

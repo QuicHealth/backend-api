@@ -63,15 +63,14 @@ class AdminController extends Controller
     public function verifyHospital()
     {
         $hos = Hospital::all();
-        // return view('admin.hospital.index', ['hospitals' => $hos]);
-        return view('admins.verifyHospital', ['hos' => $hos]);
+        return view('admins.hospital.verify', ['hos' => $hos]);
     }
 
     public function hospitals()
     {
         $hos = Hospital::all();
         // return view('admin.hospital.index', ['hospitals' => $hos]);
-        return view('admins.hospitals', ['hos' => $hos]);
+        return view('admins.hospital.index', ['hos' => $hos]);
     }
 
     public function hospital($id)
@@ -81,7 +80,7 @@ class AdminController extends Controller
             helpController::flashSession(false, 'Hospital not found');
             return redirect('admin/hospital');
         }
-        return view('admins.hospitalDetails', ['hos' => $hos]);
+        return view('admins.hospital.details', ['hos' => $hos]);
         // return view('admin.hospital.hospital', ['hospital' => $hos]);
     }
 
@@ -100,11 +99,11 @@ class AdminController extends Controller
         $password = rand(111111, 999999);
         $data = [
             'email' => $request->email,
-            'subject' => 'Welcome Mail',
+            'subject' => 'Welcome To QuicHealth',
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-            'Welcome to Quichealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
+            'Welcome to QuicHealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
