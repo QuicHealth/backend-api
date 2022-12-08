@@ -74,7 +74,7 @@
                                                 <tr>
                                                     <th><span class="fw-medium">Amount:</span></th>
                                                     <td>₦{{ number_format( $hos->settings->amount) }}</td>
-                                                </tr>   
+                                                </tr>
                                             @endif
                                             <tr>
                                                 <th><span class="fw-medium">Joining Date:</span></th>

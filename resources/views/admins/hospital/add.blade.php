@@ -1,7 +1,7 @@
 <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header bg-light p-3">
-            <h5 class="modal-title" id="exampleModalLabel">&nbsp;</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Add Hospital</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
         </div>
         <form action="{{ url('admin/hospital/add') }}" method="POST" enctype="multipart/form-data">
@@ -60,8 +60,8 @@
                     </div>
                     <div class="col-md-6">
                         <div>
-                            <label for="amount-field" class="form-label">State</label>
-                            <input type="text" name="country" id="amount-field" class="form-control" placeholder="Country" required />
+                            <label for="amount-field" class="form-label">Country</label>
+                            <input type="text" name="country" id="amount-field" value="Nigeria" class="form-control" placeholder="Country" readonly required />
                             @error('country')
                                 <p class="text-danger">{{$message}}</p>
                             @enderror
@@ -72,8 +72,7 @@
             <div class="modal-footer">
                 <div class="hstack gap-2 justify-content-end">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success" id="add-btn">Add Order</button>
-                    <button type="button" class="btn btn-success" id="edit-btn">Update</button>
+                    <button type="submit" class="btn btn-success" id="add-btn">Add Hospital</button>
                 </div>
             </div>
         </form>

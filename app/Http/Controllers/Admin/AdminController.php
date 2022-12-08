@@ -42,11 +42,10 @@ class AdminController extends Controller
     public function blockUserId($id)
     {
         $user = User::findorFail($id);
-        $user->deleted_at = Carbon::now();
-        if($user->save())
+        if($user->delete())
         {
             helpController::flashSession(true, 'User block successfully');
-            return back()->with(session());
+            return back();
         }
     }
 
@@ -89,7 +88,7 @@ class AdminController extends Controller
         $this->validate($request, [
             'name' => 'required|string|unique:hospitals',
             'email' => 'required|email|unique:hospitals',
-            'phone' => 'required',
+            'phone' => 'required|numeric|unique:hospitals',
             'address' => 'required|string',
             'city' => 'required|string',
             'state' => 'required|string',
@@ -103,7 +102,7 @@ class AdminController extends Controller
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-            'Welcome to QuicHealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
+            'Welcome to QuicHealth, we are happy to have you here. Your hospital profile has been created, below are login details. Login and update your profile <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
@@ -150,10 +149,10 @@ class AdminController extends Controller
         return back();
     }
 
-    public function updateHospital(Request $request)
+    public function updateHospital($id, Request $request)
     {
         $this->validate($request, [
-            'hospital' => 'required|integer',
+            // 'hospital' => 'required|integer',
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required',
@@ -163,10 +162,10 @@ class AdminController extends Controller
             'country' => 'required|string',
         ]);
 
-        $hos = Hospital::find($request->hospital);
+        $hos = Hospital::findOrFail($id);
         if (!$hos) {
             helpController::flashSession(false, 'Hospital not found');
-            return redirect('admin/hospitals');
+            return redirect('admin/hospital');
         }
         $hos->name = $request->name;
         $hos->email = $request->email;
@@ -191,16 +190,12 @@ class AdminController extends Controller
         return back();
     }
 
-    public function deleteHospital(Request $request)
+    public function deleteHospital($id)
     {
-        $this->validate($request, [
-            'hospital' => 'required|integer',
-        ]);
-
-        $hos = Hospital::find($request->hospital);
+        $hos = Hospital::findorFail($id);
         if (!$hos) {
             helpController::flashSession(false, 'Hospital not found');
-            return redirect('admin/hospitals');
+            return redirect('admin/hospital');
         }
 
         if (!$hos->delete()) {
@@ -208,7 +203,7 @@ class AdminController extends Controller
             return back();
         }
         helpController::flashSession(false, 'Hospital deleted successfully');
-        return redirect('admin/hospitals');
+        return redirect('admin/hospital');
     }
 
     public function doctor($id)
