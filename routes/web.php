@@ -29,11 +29,11 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
 
         Route::prefix('user')->group(function () {
             Route::get('/', 'AdminController@users')->name('admin.users');
-            // Route::post('add', 'AdminController@addHospital')->name('admin.hospital.add');
+            Route::post('add', 'AdminController@addUser')->name('admin.user.add');
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'AdminController@userId')->name('admin.user.details');
-                // Route::post('update', 'AdminController@updateHospital')->name('admin.hospital.update');
-                Route::get('block', 'AdminController@blockUserId')->name('admin.user.block');
+                Route::post('update', 'AdminController@updateUser')->name('admin.user.update');
+                Route::get('delete', 'AdminController@deleteUser')->name('admin.user.delete');
             });
         });
 

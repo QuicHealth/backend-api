@@ -29,22 +29,121 @@ class AdminController extends Controller
 
     public function users()
     {
-        $user = User::all();
-        return view('admins.users')->with('user', $user);
+        $users = User::all();
+        return view('admins.user.index')->with('users', $users);
     }
 
     public function userId($id)
     {
         $user = User::findorFail($id);
-        return view('admins.userDetails')->with('user', $user);
+        return view('admins.user.details')->with('user', $user);
     }
 
-    public function blockUserId($id)
+    public function addUser(Request $request)
+    {
+        $this->validate($request, [
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|numeric|unique:users',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required'
+        ]);
+
+        $password = rand(111111, 999999);
+        $data = [
+            'email' => $request->email,
+            'subject' => 'Welcome To QuicHealth',
+            'name' => 'Welcome',
+            'view' => 'mail.mail',
+            'content' =>
+            'Welcome to QuicHealth, we are happy to have you here. Your profile has been created, below are login details. Login and update your profile <br>
+                First Name: ' .
+                $request->firstname .
+                'Last Name: ' .
+                $request->lastname .
+                '<br> Email: ' .
+                $request->email .
+                '<br> Password: ' .
+                $password .
+                '<br> Phone: ' .
+                $request->phone .
+                '<br> Address: ' .
+                $request->address .
+                '<br> City: ' .
+                $request->city .
+                '<br> Gender: ' .
+                $request->gender,
+        ];
+
+        MailSendingJob::dispatch($data);
+
+        $hos = new User();
+        $hos->firstname = $request->firstname;
+        $hos->lastname = $request->lastname;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->gender = $request->gender;
+        $hos->password = bcrypt($password);
+
+        if (!$hos->save()) {
+            helpController::flashSession(false, 'Error saving User');
+            return back();
+        }
+        helpController::flashSession(true, 'User saved successfully');
+        return back();
+    }
+
+    public function updateUser($id, Request $request)
+    {
+        $this->validate($request, [
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required'
+        ]);
+
+        $hos = User::findOrFail($id);
+        if (!$hos) {
+            helpController::flashSession(false, 'User not found');
+            return redirect('admin/user');
+        }
+        $hos->firstname = $request->firstname;
+        $hos->lastname = $request->lastname;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->gender = $request->gender;
+
+        if ($request['longitude']) {
+            $hos->longitude = $request['longitude'];
+        }
+        if ($request['latitude']) {
+            $hos->latitude = $request['latitude'];
+        }
+
+        if (!$hos->save()) {
+            helpController::flashSession(false, 'Error updating user');
+            return back();
+        }
+        helpController::flashSession(true, 'User updated successfully');
+        return back();
+    }
+
+    public function deleteUser($id)
     {
         $user = User::findorFail($id);
         if($user->delete())
         {
-            helpController::flashSession(true, 'User block successfully');
+            helpController::flashSession(true, 'User deleted successfully');
             return back();
         }
     }
