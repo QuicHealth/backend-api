@@ -29,8 +29,10 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
 
         Route::prefix('user')->group(function () {
             Route::get('/', 'AdminController@users')->name('admin.users');
+            // Route::post('add', 'AdminController@addHospital')->name('admin.hospital.add');
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'AdminController@userId')->name('admin.user.details');
+                // Route::post('update', 'AdminController@updateHospital')->name('admin.hospital.update');
                 Route::get('block', 'AdminController@blockUserId')->name('admin.user.block');
             });
         });
@@ -38,25 +40,26 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
         Route::prefix('hospital')->group(function () {
             Route::get('verify', 'AdminController@verifyHospital')->name('admin.verifyHospital');
             Route::get('/', 'AdminController@hospitals')->name('admin.hospitals');
+            Route::post('add', 'AdminController@addHospital')->name('admin.hospital.add');
+
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'AdminController@hospital')->name('admin.hospital.detail');
                 Route::post('update', 'AdminController@updateHospital')->name('admin.hospital.update');
                 Route::get('delete', 'AdminController@deleteHospital');
             });
-            Route::post('add', 'AdminController@addHospital')->name('admin.hospital.add');
 
             Route::get('payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
         });
-        // Route::post('add-hospital', 'AdminController@addHospital')->name('admin.hospital.add');
-        // Route::post('update-hospital', 'AdminController@updateHospital');
 
         Route::prefix('doctor')->group(function () {
             Route::get('/', 'AdminController@doctors')->name('admin.doctors');
-            Route::get('{id}', 'AdminController@doctor');
+            Route::post('add', 'AdminController@addDoctor');
+            Route::prefix('{id}')->group(function () {
+                Route::get('/', 'AdminController@doctor')->name('admin.doctor.detail');
+                Route::post('update', 'AdminController@updateDoctor')->name('admin.doctor.update');
+                Route::get('delete', 'AdminController@deleteDoctor');
+            });
         });
-        // Route::post('add-doctor', 'AdminController@addDoctor');
-        // Route::post('update-doctor', 'AdminController@updateDoctor');
-        // Route::get('delete-doctor', 'AdminController@deleteDoctor');
 
         Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
         Route::get('complains', 'AdminController@complains')->name('admin.complains');

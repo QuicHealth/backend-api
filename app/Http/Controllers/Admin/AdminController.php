@@ -49,16 +49,6 @@ class AdminController extends Controller
         }
     }
 
-    public function doctors()
-    {
-        $doc = Doctor::get();
-        // $hos = Hospital::all();
-        // $spec = DB::table('specialties')->get();
-        // dd($doc);
-        // return view('admin.doctor.index', ['doc' => $doc, 'hos' => $hos, 'spec' => $spec]);
-        return view('admins.doctors', ['doc' => $doc]);
-    }
-
     public function verifyHospital()
     {
         $hos = Hospital::all();
@@ -206,6 +196,16 @@ class AdminController extends Controller
         return redirect('admin/hospital');
     }
 
+    public function doctors()
+    {
+        $doc = Doctor::get();
+        $hos = Hospital::all();
+        // $spec = DB::table('specialties')->get();
+        // dd($doc);
+        // return view('admin.doctor.index', ['doc' => $doc, 'hos' => $hos, 'spec' => $spec]);
+        return view('admins.doctor.index', ['doc' => $doc, 'hos' => $hos]);
+    }
+
     public function doctor($id)
     {
         $doc = Doctor::find($id);
@@ -216,7 +216,7 @@ class AdminController extends Controller
             return redirect('admin/doctor');
         }
         // return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
-        return view('admins.doctorDetails', ['doc' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
+        return view('admins.doctor.details', ['doc' => $doc, 'specialties' => $spec, 'hos' => $hos]);
     }
 
     public function addDoctor(Request $request)
@@ -225,9 +225,9 @@ class AdminController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:doctors',
             'hospital' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|numeric',
             'address' => 'required|string',
-            'specialty' => 'required|integer',
+            // 'specialty' => 'required|integer',
         ]);
 
         $password = rand(111111, 999999);
@@ -248,11 +248,12 @@ class AdminController extends Controller
         }
         $data = [
             'email' => $request->email,
-            'subject' => 'Welcome Mail',
+            'subject' => 'Welcome To QuicHealth',
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-            'Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
+            'Hi ' . $request->name.
+            '<br> Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
@@ -272,19 +273,20 @@ class AdminController extends Controller
         return back();
     }
 
-    public function updateDoctor(Request $request)
+    public function updateDoctor($id, Request $request)
     {
         $this->validate($request, [
-            'doctor' => 'required|integer',
-            'hospital' => 'required|integer',
+            // 'doctor' => 'required|integer',
+            'hospital' => 'required',
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required',
-            'specialty' => 'required|integer',
+            // 'specialty' => 'required|integer',
             'address' => 'required|string',
+            'city' => 'required|string',
         ]);
 
-        $hos = Doctor::find($request->doctor);
+        $hos = Doctor::find($id);
         if (!$hos) {
             helpController::flashSession(false, 'Doctor not found');
             return redirect('admin/doctors');
@@ -294,6 +296,7 @@ class AdminController extends Controller
         $hos->address = $request->address;
         $hos->phone = $request->phone;
         $hos->hospital_id = $request->hospital;
+        $hos->city = $request->city;
 
         if (!$hos->save()) {
             helpController::flashSession(false, 'Error updating doctor');
