@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
 use App\Models\Admin;
+use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
@@ -435,6 +436,17 @@ class AdminController extends Controller
         return view('admin.users.user')->with('user', $user);
     }
 
+    public function payment()
+    {
+        $payments = Payment::all();
+        return view('admins.financial.payment', compact('payments'));
+    }
+
+    public function hospitalPayout()
+    {
+        return view('admins.financial.hospitalPayout');
+    }
+
     public function admins()
     {
         $admins = Admin::all();
@@ -459,11 +471,6 @@ class AdminController extends Controller
     public function passwordReset()
     {
         return view('admins.passwordreset');
-    }
-
-    public function hospitalPayout()
-    {
-        return view('admins.hospitalPayout');
     }
 
     public function logout()

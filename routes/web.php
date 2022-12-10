@@ -38,9 +38,9 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
         });
 
         Route::prefix('hospital')->group(function () {
-            Route::get('verify', 'AdminController@verifyHospital')->name('admin.verifyHospital');
             Route::get('/', 'AdminController@hospitals')->name('admin.hospitals');
             Route::post('add', 'AdminController@addHospital')->name('admin.hospital.add');
+            Route::get('verify', 'AdminController@verifyHospital')->name('admin.verifyHospital');
 
             Route::prefix('{id}')->group(function () {
                 Route::get('/', 'AdminController@hospital')->name('admin.hospital.detail');
@@ -48,7 +48,6 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
                 Route::get('delete', 'AdminController@deleteHospital');
             });
 
-            Route::get('payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
         });
 
         Route::prefix('doctor')->group(function () {
@@ -61,12 +60,21 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             });
         });
 
-        Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
-        Route::get('complains', 'AdminController@complains')->name('admin.complains');
-        Route::get('messages', 'AdminController@messages')->name('admin.messages');
+        Route::prefix('financial')->group(function () {
+            Route::get('payments', 'AdminController@payment')->name('admin.financial.payment');
+            Route::get('payout', 'AdminController@hospitalPayout')->name('admin.financial.hospitalpayout');
+        });
 
-        Route::get('admins', 'AdminController@admins')->name('admin.admins');
-        Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
+        Route::prefix('messages')->group(function () {
+            Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
+            Route::get('complains', 'AdminController@complains')->name('admin.complains');
+            Route::get('messages', 'AdminController@messages')->name('admin.messages');
+        });
+
+        Route::prefix('settings')->group(function () {
+            Route::get('admins', 'AdminController@admins')->name('admin.admins');
+            Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
+        });
 
         Route::get('logout', 'AdminController@logout')->name('admin.logout');
     });

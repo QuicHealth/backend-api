@@ -221,7 +221,16 @@
                                     <div class="collapse menu-dropdown" id="sidebarfinancial">
                                         <ul class="nav nav-sm flex-column">
                                             <li class="nav-item">
-                                                <a class="nav-link menu-link {{request()->is('admin/hospital/payout') ? 'active' : ''}}" href="{{route('admin.hospital.payout')}}">
+                                                <a class="nav-link menu-link {{request()->is('admin/financial/payment') ? 'active' : ''}}" href="{{route('admin.financial.payment')}}">
+                                                    <span data-key="t-financial">All Payments</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="collapse menu-dropdown" id="sidebarfinancial">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/financial/hospital/payout') ? 'active' : ''}}" href="{{route('admin.financial.hospitalpayout')}}">
                                                     <span data-key="t-financial">Hospital payout request</span>
                                                 </a>
                                             </li>
