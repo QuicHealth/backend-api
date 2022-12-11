@@ -72,8 +72,12 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
         });
 
         Route::prefix('settings')->group(function () {
-            Route::get('admins', 'AdminController@admins')->name('admin.admins');
             Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
+            
+            Route::prefix('admin')->group(function () {
+                Route::get('/', 'AdminController@admins')->name('admin.admins');
+                Route::post('add', 'AdminController@addAdmin')->name('admin.admins.add');
+            });
         });
 
         Route::get('logout', 'AdminController@logout')->name('admin.logout');

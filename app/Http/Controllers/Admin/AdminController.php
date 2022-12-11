@@ -447,12 +447,6 @@ class AdminController extends Controller
         return view('admins.financial.hospitalPayout');
     }
 
-    public function admins()
-    {
-        $admins = Admin::all();
-        return view('admins.admins', compact('admins'));
-    }
-
     public function sendEmail()
     {
         return view('admins.sendEmail');
@@ -466,6 +460,71 @@ class AdminController extends Controller
     public function messages()
     {
         return view('admins.messages');
+    }
+
+    public function admins()
+    {
+        $admins = Admin::all();
+        return view('admins.admins.index', compact('admins'));
+    }
+
+    public function addAdmin(Request $request)
+    {
+        $this->validate($request, [
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|numeric|unique:users',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required'
+        ]);
+
+        $password = rand(111111, 999999);
+        $data = [
+            'email' => $request->email,
+            'subject' => 'Welcome To QuicHealth',
+            'name' => 'Welcome',
+            'view' => 'mail.mail',
+            'content' =>
+            'Welcome to QuicHealth, we are happy to have you here. Your profile has been created, below are login details. Login and update your profile <br>
+                First Name: ' .
+                $request->firstname .
+                'Last Name: ' .
+                $request->lastname .
+                '<br> Email: ' .
+                $request->email .
+                '<br> Password: ' .
+                $password .
+                '<br> Phone: ' .
+                $request->phone .
+                '<br> Address: ' .
+                $request->address .
+                '<br> City: ' .
+                $request->city .
+                '<br> Gender: ' .
+                $request->gender,
+        ];
+
+        MailSendingJob::dispatch($data);
+
+        $hos = new User();
+        $hos->firstname = $request->firstname;
+        $hos->lastname = $request->lastname;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->gender = $request->gender;
+        $hos->password = bcrypt($password);
+
+        if (!$hos->save()) {
+            helpController::flashSession(false, 'Error saving User');
+            return back();
+        }
+        helpController::flashSession(true, 'User saved successfully');
+        return back();
     }
 
     public function passwordReset()
