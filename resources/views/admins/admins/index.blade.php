@@ -74,23 +74,30 @@
                                                 <td class="date left">{{ $admin->created_at }}</td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
-                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                            data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                            <a href=""
-                                                                class="text-primary d-inline-block edit-item-btn">
+                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
+                                                            <a href="" class="text-primary d-inline-block">
+                                                                <i class="ri-eye-fill fs-16"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                            <a href="#showModal{{ $admin->id }}" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
                                                                 <i class="ri-pencil-fill fs-16"></i>
                                                             </a>
                                                         </li>
-                                                        <li class="list-inline-item remove" data-bs-toggle="tooltip"
-                                                            data-bs-trigger="hover" data-bs-placement="top" title="Remove">
-                                                            <a href=""
-                                                                class="text-danger d-inline-block remove-item-btn">
+                                                        <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                            <a class="text-danger d-inline-block remove-item-btn" data-bs-toggle="modal" href="#deleteOrder{{ $admin->id }}">
                                                                 <i class="ri-delete-bin-5-fill fs-16"></i>
                                                             </a>
                                                         </li>
                                                     </ul>
                                                 </td>
                                             </tr>
+                                            <div class="modal fade flip" id="deleteOrder{{ $admin->id }}" tabindex="-1" aria-hidden="true">
+                                                @include('admins.admins.delete')
+                                            </div>
+                                            <div class="modal fade zoomIn" id="showModal{{ $admin->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                @include('admins.admins.update')
+                                            </div>
                                         @endforeach
                                     </tbody>
                                 </table>
