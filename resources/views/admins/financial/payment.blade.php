@@ -8,12 +8,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Users</h4>
+                    <h4 class="mb-sm-0">Payments</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Users</a></li>
-                            <li class="breadcrumb-item active">Users</li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Financial Managment</a></li>
+                            <li class="breadcrumb-item active">Payments</li>
                         </ol>
                     </div>
 
@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-sm-auto ms-auto">
                                 <div class="hstack gap-2">
-                                    <a href="" class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i>Add User</a>
+                                    {{-- <a href="" class="btn btn-success add-btn"><i class="ri-add-line align-bottom me-1"></i> Add Donation</a> --}}
                                 </div>
                             </div>
                         </div>
@@ -46,33 +46,39 @@
                                 <table class="table align-middle" id="customerTable">
                                     <thead class="table-light">
                                         <tr>
-                                            <th scope="col" style="width: 50px;">
+                                            {{-- <th scope="col" style="width: 50px;">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" id="checkAll" value="option">
                                                 </div>
-                                            </th>
+                                            </th> --}}
 
-                                            <th class="sort" data-sort="name">Name</th>
-                                            <th class="sort" data-sort="leads_score">Email</th>
-                                            <th class="sort" data-sort="phone"scope="col">Phone</th>
-                                            <th class="sort" data-sort="date" scope="col">Date Joined</th>
-                                            <th class="sort" data-sort="date" scope="col">Action</th>
+                                            <th class="sort" data-sort="name">No</th>
+                                            <th class="sort" data-sort="name">Customer Name</th>
+                                            <th class="sort" data-sort="name">Customer Email</th>
+                                            <th class="sort" data-sort="leads_score">Appointments Details</th>
+                                            <th class="sort" data-sort="leads_score">Amount</th>
+                                            <th class="sort" data-sort="leads_score">Payment Status</th>
+                                            <th class="sort" data-sort="leads_score">Transaction Id</th>
+                                            <th class="sort" data-sort="date" scope="col">Date</th>
+                                            <th class="sort" data-sort="date">Action</th>
 
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
-                                        @foreach ($user as $users)
+                                        @foreach ($payments as $payment)
                                             <tr>
-                                                <th scope="row">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
-                                                    </div>
-                                                </th>
-                                                <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a></td>
-                                                <td class="name">{{ $users->firstname }} {{ $users->lastname }}</td>
-                                                <td class="leads_score">{{ $users->email }}</td>
-                                                <td class="phone">{{ $users->phone }}</td>
-                                                <td class="date left">{{ $users->created_at }}</td>
+                                                <td class="id" style=""><a href="javascript:void(0);" class="fw-medium link-primary">1</a></td>
+                                                <td>{{ $payment->user->fullname() }}</td>
+                                                <td>{{ $payment->user->email }}</td>
+                                                <td>{{ $payment->appointments_id }}</td>
+                                                <td>₦{{ number_format($payment->amount)}}</td>
+                                                @if ($payment->paymentStatus == "PAID")
+                                                    <td class="status"><span class="badge badge-soft-success text-uppercase">Paid</span></td>
+                                                @elseif ($payment->paymentStatus === 'pending')
+                                                    <td class="status"><span class="badge badge-soft-danger text-uppercase">Pending</span></td>
+                                                @endif
+                                                <td>{{ $payment->transaction_id }}</td>
+                                                <td>{{ $payment->created_at }}</td>
                                                 <td>
                                                     <ul class="list-inline hstack gap-2 mb-0">
                                                         <li class="list-inline-item edit" data-bs-toggle="tooltip"
@@ -93,6 +99,11 @@
                                                 </td>
                                             </tr>
                                         @endforeach
+                                        {{-- <th scope="row">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                            </div>
+                                        </th> --}}
                                     </tbody>
                                 </table>
                                 <div class="noresult" style="display: none">
@@ -115,28 +126,6 @@
                                     <a class="page-item pagination-next" href="#">
                                         Next
                                     </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-labelledby="deleteRecordLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
-                                    </div>
-                                    <div class="modal-body p-5 text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px"></lord-icon>
-                                        <div class="mt-4 text-center">
-                                            <h4 class="fs-semibold">You are about to delete a lead ?</h4>
-                                            <p class="text-muted fs-14 mb-4 pt-1">Deleting your lead will remove all of your information from our database.</p>
-                                            <div class="hstack gap-2 justify-content-center remove">
-                                                <button class="btn btn-link link-success fw-medium text-decoration-none" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                                <button class="btn btn-danger" id="delete-record">Yes, Delete It!!</button>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

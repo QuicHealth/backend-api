@@ -13,6 +13,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
 use App\Models\Admin;
+use App\Models\Payment;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
@@ -28,32 +30,136 @@ class AdminController extends Controller
 
     public function users()
     {
-        $user = User::all();
-        return view('admins.users')->with('user', $user);
+        $users = User::all();
+        return view('admins.user.index')->with('users', $users);
     }
 
-    public function doctors()
+    public function userId($id)
     {
-        $doc = Doctor::get();
-        // $hos = Hospital::all();
-        // $spec = DB::table('specialties')->get();
-        // dd($doc);
-        // return view('admin.doctor.index', ['doc' => $doc, 'hos' => $hos, 'spec' => $spec]);
-        return view('admins.doctors', ['doc' => $doc]);
+        $user = User::findorFail($id);
+        return view('admins.user.details')->with('user', $user);
+    }
+
+    public function addUser(Request $request)
+    {
+        $this->validate($request, [
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|numeric|unique:users',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required'
+        ]);
+
+        $password = rand(111111, 999999);
+        $data = [
+            'email' => $request->email,
+            'subject' => 'Welcome To QuicHealth',
+            'name' => 'Welcome',
+            'view' => 'mail.mail',
+            'content' =>
+            'Welcome to QuicHealth, we are happy to have you here. Your profile has been created, below are login details. Login and update your profile <br>
+                First Name: ' .
+                $request->firstname .
+                'Last Name: ' .
+                $request->lastname .
+                '<br> Email: ' .
+                $request->email .
+                '<br> Password: ' .
+                $password .
+                '<br> Phone: ' .
+                $request->phone .
+                '<br> Address: ' .
+                $request->address .
+                '<br> City: ' .
+                $request->city .
+                '<br> Gender: ' .
+                $request->gender,
+        ];
+
+        MailSendingJob::dispatch($data);
+
+        $hos = new User();
+        $hos->firstname = $request->firstname;
+        $hos->lastname = $request->lastname;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->gender = $request->gender;
+        $hos->password = bcrypt($password);
+
+        if (!$hos->save()) {
+            helpController::flashSession(false, 'Error saving User');
+            return back();
+        }
+        helpController::flashSession(true, 'User saved successfully');
+        return back();
+    }
+
+    public function updateUser($id, Request $request)
+    {
+        $this->validate($request, [
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required'
+        ]);
+
+        $hos = User::findOrFail($id);
+        if (!$hos) {
+            helpController::flashSession(false, 'User not found');
+            return redirect('admin/user');
+        }
+        $hos->firstname = $request->firstname;
+        $hos->lastname = $request->lastname;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->gender = $request->gender;
+
+        if ($request['longitude']) {
+            $hos->longitude = $request['longitude'];
+        }
+        if ($request['latitude']) {
+            $hos->latitude = $request['latitude'];
+        }
+
+        if (!$hos->save()) {
+            helpController::flashSession(false, 'Error updating user');
+            return back();
+        }
+        helpController::flashSession(true, 'User updated successfully');
+        return back();
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::findorFail($id);
+        if($user->delete())
+        {
+            helpController::flashSession(true, 'User deleted successfully');
+            return back();
+        }
     }
 
     public function verifyHospital()
     {
         $hos = Hospital::all();
-        // return view('admin.hospital.index', ['hospitals' => $hos]);
-        return view('admins.verifyHospital', ['hos' => $hos]);
+        return view('admins.hospital.verify', ['hos' => $hos]);
     }
 
     public function hospitals()
     {
         $hos = Hospital::all();
         // return view('admin.hospital.index', ['hospitals' => $hos]);
-        return view('admins.hospitals', ['hos' => $hos]);
+        return view('admins.hospital.index', ['hos' => $hos]);
     }
 
     public function hospital($id)
@@ -61,9 +167,10 @@ class AdminController extends Controller
         $hos = Hospital::find($id);
         if (!$hos) {
             helpController::flashSession(false, 'Hospital not found');
-            return redirect('admin/hospitals');
+            return redirect('admin/hospital');
         }
-        return view('admin.hospital.hospital', ['hospital' => $hos]);
+        return view('admins.hospital.details', ['hos' => $hos]);
+        // return view('admin.hospital.hospital', ['hospital' => $hos]);
     }
 
     public function addHospital(Request $request)
@@ -71,7 +178,7 @@ class AdminController extends Controller
         $this->validate($request, [
             'name' => 'required|string|unique:hospitals',
             'email' => 'required|email|unique:hospitals',
-            'phone' => 'required',
+            'phone' => 'required|numeric|unique:hospitals',
             'address' => 'required|string',
             'city' => 'required|string',
             'state' => 'required|string',
@@ -81,11 +188,11 @@ class AdminController extends Controller
         $password = rand(111111, 999999);
         $data = [
             'email' => $request->email,
-            'subject' => 'Welcome Mail',
+            'subject' => 'Welcome To QuicHealth',
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-            'Welcome to Quichealth, we are happy to have you here. Your hospital profile has been created, below are login details <br>
+            'Welcome to QuicHealth, we are happy to have you here. Your hospital profile has been created, below are login details. Login and update your profile <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
@@ -132,10 +239,10 @@ class AdminController extends Controller
         return back();
     }
 
-    public function updateHospital(Request $request)
+    public function updateHospital($id, Request $request)
     {
         $this->validate($request, [
-            'hospital' => 'required|integer',
+            // 'hospital' => 'required|integer',
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required',
@@ -145,10 +252,10 @@ class AdminController extends Controller
             'country' => 'required|string',
         ]);
 
-        $hos = Hospital::find($request->hospital);
+        $hos = Hospital::findOrFail($id);
         if (!$hos) {
             helpController::flashSession(false, 'Hospital not found');
-            return redirect('admin/hospitals');
+            return redirect('admin/hospital');
         }
         $hos->name = $request->name;
         $hos->email = $request->email;
@@ -173,16 +280,12 @@ class AdminController extends Controller
         return back();
     }
 
-    public function deleteHospital(Request $request)
+    public function deleteHospital($id)
     {
-        $this->validate($request, [
-            'hospital' => 'required|integer',
-        ]);
-
-        $hos = Hospital::find($request->hospital);
+        $hos = Hospital::findorFail($id);
         if (!$hos) {
             helpController::flashSession(false, 'Hospital not found');
-            return redirect('admin/hospitals');
+            return redirect('admin/hospital');
         }
 
         if (!$hos->delete()) {
@@ -190,7 +293,17 @@ class AdminController extends Controller
             return back();
         }
         helpController::flashSession(false, 'Hospital deleted successfully');
-        return redirect('admin/hospitals');
+        return redirect('admin/hospital');
+    }
+
+    public function doctors()
+    {
+        $doc = Doctor::get();
+        $hos = Hospital::all();
+        // $spec = DB::table('specialties')->get();
+        // dd($doc);
+        // return view('admin.doctor.index', ['doc' => $doc, 'hos' => $hos, 'spec' => $spec]);
+        return view('admins.doctor.index', ['doc' => $doc, 'hos' => $hos]);
     }
 
     public function doctor($id)
@@ -200,9 +313,10 @@ class AdminController extends Controller
         $hos = Hospital::all();
         if (!$doc) {
             helpController::flashSession(false, 'Doctor not found');
-            return redirect('admin/doctors');
+            return redirect('admin/doctor');
         }
-        return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
+        // return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
+        return view('admins.doctor.details', ['doc' => $doc, 'specialties' => $spec, 'hos' => $hos]);
     }
 
     public function addDoctor(Request $request)
@@ -211,9 +325,9 @@ class AdminController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:doctors',
             'hospital' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|numeric',
             'address' => 'required|string',
-            'specialty' => 'required|integer',
+            // 'specialty' => 'required|integer',
         ]);
 
         $password = rand(111111, 999999);
@@ -234,11 +348,12 @@ class AdminController extends Controller
         }
         $data = [
             'email' => $request->email,
-            'subject' => 'Welcome Mail',
+            'subject' => 'Welcome To QuicHealth',
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-            'Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
+            'Hi ' . $request->name.
+            '<br> Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
@@ -258,19 +373,20 @@ class AdminController extends Controller
         return back();
     }
 
-    public function updateDoctor(Request $request)
+    public function updateDoctor($id, Request $request)
     {
         $this->validate($request, [
-            'doctor' => 'required|integer',
-            'hospital' => 'required|integer',
+            // 'doctor' => 'required|integer',
+            'hospital' => 'required',
             'name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required',
-            'specialty' => 'required|integer',
+            // 'specialty' => 'required|integer',
             'address' => 'required|string',
+            'city' => 'required|string',
         ]);
 
-        $hos = Doctor::find($request->doctor);
+        $hos = Doctor::find($id);
         if (!$hos) {
             helpController::flashSession(false, 'Doctor not found');
             return redirect('admin/doctors');
@@ -280,6 +396,7 @@ class AdminController extends Controller
         $hos->address = $request->address;
         $hos->phone = $request->phone;
         $hos->hospital_id = $request->hospital;
+        $hos->city = $request->city;
 
         if (!$hos->save()) {
             helpController::flashSession(false, 'Error updating doctor');
@@ -319,10 +436,15 @@ class AdminController extends Controller
         return view('admin.users.user')->with('user', $user);
     }
 
-    public function admins()
+    public function payment()
     {
-        $admins = Admin::all();
-        return view('admins.admins', compact('admins'));
+        $payments = Payment::all();
+        return view('admins.financial.payment', compact('payments'));
+    }
+
+    public function hospitalPayout()
+    {
+        return view('admins.financial.hospitalPayout');
     }
 
     public function sendEmail()
@@ -340,14 +462,74 @@ class AdminController extends Controller
         return view('admins.messages');
     }
 
+    public function admins()
+    {
+        $admins = Admin::all();
+        return view('admins.admins.index', compact('admins'));
+    }
+
+    public function addAdmin(Request $request)
+    {
+        $this->validate($request, [
+            'firstname' => 'required|string',
+            'lastname' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|numeric|unique:users',
+            'address' => 'required|string',
+            'city' => 'required|string',
+            'gender' => 'required'
+        ]);
+
+        $password = rand(111111, 999999);
+        $data = [
+            'email' => $request->email,
+            'subject' => 'Welcome To QuicHealth',
+            'name' => 'Welcome',
+            'view' => 'mail.mail',
+            'content' =>
+            'Welcome to QuicHealth, we are happy to have you here. Your profile has been created, below are login details. Login and update your profile <br>
+                First Name: ' .
+                $request->firstname .
+                'Last Name: ' .
+                $request->lastname .
+                '<br> Email: ' .
+                $request->email .
+                '<br> Password: ' .
+                $password .
+                '<br> Phone: ' .
+                $request->phone .
+                '<br> Address: ' .
+                $request->address .
+                '<br> City: ' .
+                $request->city .
+                '<br> Gender: ' .
+                $request->gender,
+        ];
+
+        MailSendingJob::dispatch($data);
+
+        $hos = new User();
+        $hos->firstname = $request->firstname;
+        $hos->lastname = $request->lastname;
+        $hos->email = $request->email;
+        $hos->phone = $request->phone;
+        $hos->unique_id = uniqid();
+        $hos->address = $request->address;
+        $hos->city = $request->city;
+        $hos->gender = $request->gender;
+        $hos->password = bcrypt($password);
+
+        if (!$hos->save()) {
+            helpController::flashSession(false, 'Error saving User');
+            return back();
+        }
+        helpController::flashSession(true, 'User saved successfully');
+        return back();
+    }
+
     public function passwordReset()
     {
         return view('admins.passwordreset');
-    }
-
-    public function hospitalPayout()
-    {
-        return view('admins.hospitalPayout');
     }
 
     public function logout()
