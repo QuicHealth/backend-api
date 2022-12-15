@@ -23,26 +23,26 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     Route::get('login', 'AdminLoginController@getLogin')->name('admin.login');
     Route::post('login', 'AdminLoginController@login');
 
-    Route::middleware('auth:admin')->group(function () {
-        Route::get('/', 'AdminController@index')->name('admin.home');
+    // Route::middleware('auth:admin')->group(function () {
+    Route::get('/', 'AdminController@index')->name('admin.home');
 
-        Route::get('users', 'AdminController@users')->name('admin.users');
+    Route::get('users', 'AdminController@users')->name('admin.users');
 
-        Route::get('verify-hospital', 'AdminController@verifyHospital')->name('admin.verifyHospital');
-        Route::get('hospitals', 'AdminController@hospitals')->name('admin.hospitals');
-        Route::get('doctors', 'AdminController@doctors')->name('admin.doctors');
+    Route::get('verify-hospital', 'AdminController@verifyHospital')->name('admin.verifyHospital');
+    Route::get('hospitals', 'AdminController@hospitals')->name('admin.hospitals');
+    Route::get('doctors', 'AdminController@doctors')->name('admin.doctors');
 
-        Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
-        Route::get('complains', 'AdminController@complains')->name('admin.complains');
-        Route::get('messages', 'AdminController@messages')->name('admin.messages');
+    Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
+    Route::get('complains', 'AdminController@complains')->name('admin.complains');
+    Route::get('messages', 'AdminController@messages')->name('admin.messages');
 
-        Route::get('admins', 'AdminController@admins')->name('admin.admins');
-        Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
+    Route::get('admins', 'AdminController@admins')->name('admin.admins');
+    Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
 
-        Route::get('hospital/payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
+    Route::get('hospital/payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
 
-        Route::get('logout', 'AdminController@logout')->name('admin.logout');
-    });
+    Route::get('logout', 'AdminController@logout')->name('admin.logout');
+    // });
 });
 
 // Route::namespace('Admin')->prefix('admin')->group(function () {
