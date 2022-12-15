@@ -236,6 +236,7 @@
                             </div>
                         </li>
 
+<<<<<<< HEAD
                         <li class="nav-item">
                             <a class="nav-link menu-link collapsed" href="#sidebarfinancial"
                                 data-bs-toggle="collapse" role="button" aria-expanded="false"
@@ -253,6 +254,31 @@
                                 </ul>
                             </div>
                         </li>
+=======
+                                <li class="nav-item">
+                                    <a class="nav-link menu-link collapsed" href="#sidebarfinancial" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarfinancial">
+                                        <i class="bx bx-dollar"></i> <span data-key="t-financial">Financial Managment</span>
+                                    </a>
+                                    <div class="collapse menu-dropdown" id="sidebarfinancial">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/financial/payment') ? 'active' : ''}}" href="{{route('admin.financial.payment')}}">
+                                                    <span data-key="t-financial">All Payments</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="collapse menu-dropdown" id="sidebarfinancial">
+                                        <ul class="nav nav-sm flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link menu-link {{request()->is('admin/financial/hospital/payout') ? 'active' : ''}}" href="{{route('admin.financial.hospitalpayout')}}">
+                                                    <span data-key="t-financial">Hospital payout request</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+>>>>>>> 26a8fa79af47fd69fe98fb07412222c127ef0c8a
 
                         <li class="nav-item">
                             <a class="nav-link menu-link collapsed" href="#sidebarmessages" data-bs-toggle="collapse"
