@@ -1,0 +1,19 @@
+[
+    {
+        "name":"server_1",
+
+        "ip":"159.65.31.130",
+
+        "username":"quichealth",
+
+        "password":"quic4Health",
+
+        "port":"22",
+
+        "beforeHooks":"",
+
+        "afterHooks":"",
+
+        "path": "/var/www/quichealth"
+    }
+]
