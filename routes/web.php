@@ -28,7 +28,7 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     Route::get('/', 'AdminController@index')->name('admin.home');
 
 
-    Route::get('users', 'AdminController@users')->name('admin.users');
+    Route::get('users', 'AdminController@users')->name('get_cusers');
 
     Route::get('verify-hospital', 'AdminController@verifyHospital')->name('admin.verifyHospital');
     Route::get('hospitals', 'AdminController@hospitals')->name('admin.hospitals');
