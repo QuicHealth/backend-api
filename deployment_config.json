@@ -14,6 +14,6 @@
 
         "afterHooks":"",
 
-        "path": "/var/www"
+        "path": "/var/www/quichealth"
     }
 ]
