@@ -27,7 +27,7 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     // Route::middleware('auth:admin')->group(function () {
     Route::get('/', 'AdminController@index')->name('admin.home');
 
-<<<<<<< HEAD
+
     Route::get('users', 'AdminController@users')->name('admin.users');
 
     Route::get('verify-hospital', 'AdminController@verifyHospital')->name('admin.verifyHospital');
@@ -42,7 +42,7 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
 
     Route::get('hospital/payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
-=======
+
         Route::prefix('user')->group(function () {
             Route::get('/', 'AdminController@users')->name('admin.users');
             Route::post('add', 'AdminController@addUser')->name('admin.user.add');
@@ -89,13 +89,13 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
 
         Route::prefix('settings')->group(function () {
             Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
-            
+
             Route::prefix('admin')->group(function () {
                 Route::get('/', 'AdminController@admins')->name('admin.admins');
                 Route::post('add', 'AdminController@addAdmin')->name('admin.admins.add');
             });
         });
->>>>>>> 26a8fa79af47fd69fe98fb07412222c127ef0c8a
+
 
     Route::get('logout', 'AdminController@logout')->name('admin.logout');
     // });

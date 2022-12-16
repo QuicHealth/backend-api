@@ -164,3 +164,15 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
+
+/**
+ * PLEASE DONT TOUCH THIS NOTE
+ * ***************************
+ *
+ * Had the same error, solved it by running sudo mysql which logged me in as root without a password,
+ * then I ran ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'mynewpassword';
+
+ * Following this I was able to run mysql_secure_installation again and this time
+ * I got to choose to use existing password (the one I set with above SQL command).
+ * However now I can no longer login without a password, running sudo mysql now denies root user access.
+ */
