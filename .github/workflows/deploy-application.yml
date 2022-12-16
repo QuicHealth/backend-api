@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-build
-          path: ${github.sha}".tar.gz
+          path: ${{ github.sha }}.tar.gz
