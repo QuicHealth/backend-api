@@ -6,12 +6,9 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use Illuminate\Support\Facades\Auth;
 
-// Route::get('/', function () {
-//     //     dd(rand(111111,999999));
-//     //     $hospitals = Hospital::where('status', 1)->paginate(12);
-//     //    dd($hospitals);
-//     //     return view('welcome');
-// });
+Route::get('/', function () {
+    return redirect('/admin/login');
+});
 
 // Auth::routes();
 
@@ -37,9 +34,6 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     // Route::get('sendMail', 'AdminController@sendEmail')->name('admin.email');
     // Route::get('complains', 'AdminController@complains')->name('admin.complains');
     // Route::get('messages', 'AdminController@messages')->name('admin.messages');
-
-    Route::get('admins', 'AdminController@admins')->name('admin.admins');
-    Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
 
 
     Route::prefix('user')->group(function () {
