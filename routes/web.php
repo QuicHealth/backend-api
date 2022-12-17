@@ -38,10 +38,9 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     // Route::get('complains', 'AdminController@complains')->name('admin.complains');
     // Route::get('messages', 'AdminController@messages')->name('admin.messages');
 
-    // Route::get('admins', 'AdminController@admins')->name('admin.admins');
-    // Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
+    Route::get('admins', 'AdminController@admins')->name('admin.admins');
+    Route::get('passwordreset', 'AdminController@passwordReset')->name('admin.passwordReset');
 
-    // Route::get('hospital/payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
 
     Route::prefix('user')->group(function () {
         Route::get('/', 'AdminController@users')->name('admin.users');
@@ -78,6 +77,8 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
     Route::prefix('financial')->group(function () {
         Route::get('payments', 'AdminController@payment')->name('admin.financial.payment');
         Route::get('payout', 'AdminController@hospitalPayout')->name('admin.financial.hospitalpayout');
+        // Route::get('hospital/payout', 'AdminController@hospitalPayout')->name('admin.hospital.payout');
+
     });
 
     Route::prefix('messages')->group(function () {

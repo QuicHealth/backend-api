@@ -142,8 +142,7 @@ class AdminController extends Controller
     public function deleteUser($id)
     {
         $user = User::findorFail($id);
-        if($user->delete())
-        {
+        if ($user->delete()) {
             helpController::flashSession(true, 'User deleted successfully');
             return back();
         }
@@ -352,8 +351,8 @@ class AdminController extends Controller
             'name' => 'Welcome',
             'view' => 'mail.mail',
             'content' =>
-            'Hi ' . $request->name.
-            '<br> Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
+            'Hi ' . $request->name .
+                '<br> Welcome to Quichealth, we are happy to have you here. Your doctor profile has been created, below are profile details <br>
                 Name: ' .
                 $request->name .
                 '<br> Email: ' .
