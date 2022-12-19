@@ -8,7 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Quichealth, Bringing HealthCare to your finger tips, at the comfort of your couch ">
     <meta name="author" content="Quichealth Team">
+
     <title>QuicHealth - Admin Login</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo/quicHealth_logo1.jpg') }}">
+
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('asset/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/ti-icons/css/themify-icons.css') }}">
