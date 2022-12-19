@@ -1,8 +1,7 @@
 <?php
 
 use App\Models\Admin;
-use App\Models\Doctor;
-use App\Models\Hospital;
+use App\Models\ZoomToken;
 use Illuminate\Database\Seeder;
 
 
@@ -24,7 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
         // $this->call(UserSeeder::class);
 
-        // Hospital::factory(10)->create();
+        ZoomToken::factory()->create();
         // Doctor::factory(10)->create();
     }
 }

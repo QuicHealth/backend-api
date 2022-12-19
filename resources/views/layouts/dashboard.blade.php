@@ -6,10 +6,11 @@
     <meta charset="utf-8" />
     <title>QuicHealth - Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="" name="description" />
-    <meta content="" name="author" />
+    <meta name="description"
+        content="Quichealth, Bringing HealthCare to your finger tips, at the comfort of your couch syringehospitalwoman_health_workermask">
+    <meta name="author" content="Quichealth Team">
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicons/logo.jpg') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo/quicHealth_logo1.jpg') }}">
 
     <link href="{{ asset('dashboard/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
 
