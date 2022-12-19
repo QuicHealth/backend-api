@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('gender');
             $table->string('phone');
             $table->string('password');
-            $table->string('dob');
+            $table->string('dob')->nullable();
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

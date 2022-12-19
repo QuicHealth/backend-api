@@ -34,13 +34,16 @@
                                 </div>
                                 <div class="col-sm-auto ms-auto">
                                     <div class="hstack gap-2">
-                                        <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal">
+                                        <button type="button" class="btn btn-success add-btn" data-bs-toggle="modal"
+                                            id="create-btn" data-bs-target="#showModal">
                                             <i class="ri-add-line align-bottom me-1"></i>Add Hospital
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        @include('admin.inc.notification')
+
                         <div class="card-body">
                             <div>
                                 <div class="table-responsive table-card">
@@ -74,16 +77,25 @@
                                                             class="fw-medium link-primary">#VZ2101</a></td>
                                                     <td class="name">{{ $hospital->name }}</td>
                                                     <td class="leads_score">{{ $hospital->email }}</td>
-                                                    <td class="date left">{{ $hospital->created_at }}</td>
+                                                    <td class="date left">
+                                                        {{ \Carbon\Carbon::parse($hospital->created_at)->toFormattedDateString() }}
+                                                    </td>
                                                     <td>
                                                         <ul class="list-inline hstack gap-2 mb-0">
-                                                            <li class="list-inline-item" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="View">
-                                                                <a href="{{ url('admin/hospital/' . $hospital->id) }}" class="text-primary d-inline-block">
+                                                            <li class="list-inline-item" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top"
+                                                                title="View">
+                                                                <a href="{{ url('admin/hospital/' . $hospital->unique_id) }}"
+                                                                    class="text-primary d-inline-block">
                                                                     <i class="ri-eye-fill fs-16"></i>
                                                                 </a>
                                                             </li>
-                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                <a href="#showModal{{ $hospital->id }}" data-bs-toggle="modal" class="text-primary d-inline-block edit-item-btn">
+                                                            <li class="list-inline-item edit" data-bs-toggle="tooltip"
+                                                                data-bs-trigger="hover" data-bs-placement="top"
+                                                                title="Edit">
+                                                                <a href="#showModal{{ $hospital->unique_id }}"
+                                                                    data-bs-toggle="modal"
+                                                                    class="text-primary d-inline-block edit-item-btn">
                                                                     <i class="ri-pencil-fill fs-16"></i>
                                                                 </a>
                                                             </li>
@@ -91,17 +103,21 @@
                                                                 data-bs-trigger="hover" data-bs-placement="top"
                                                                 title="Remove">
                                                                 <a class="text-danger d-inline-block remove-item-btn"
-                                                                    data-bs-toggle="modal" href="#deleteOrder{{ $hospital->id }}">
+                                                                    data-bs-toggle="modal"
+                                                                    href="#deleteOrder{{ $hospital->unique_id }}">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
                                                                 </a>
                                                             </li>
                                                         </ul>
                                                     </td>
                                                 </tr>
-                                                <div class="modal fade flip" id="deleteOrder{{ $hospital->id }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade flip" id="deleteOrder{{ $hospital->unique_id }}"
+                                                    tabindex="-1" aria-hidden="true">
                                                     @include('admins.hospital.delete')
                                                 </div>
-                                                <div class="modal fade zoomIn" id="showModal{{ $hospital->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade zoomIn" id="showModal{{ $hospital->unique_id }}"
+                                                    tabindex="-1" aria-labelledby="exampleModalLabel"
+                                                    aria-hidden="true">
                                                     @include('admins.hospital.update')
                                                 </div>
                                             @endforeach

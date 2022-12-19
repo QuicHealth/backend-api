@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Doctor;
-use App\Hospital;
+use App\Models\Doctor;
+use App\Models\Hospital;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class DoctorFactory extends Factory

@@ -75,6 +75,7 @@ class Handler extends ExceptionHandler
             );
         }
         if ($e instanceof MethodNotAllowedHttpException) {
+
             return $this->notAllowedResponse(__('errors.method_not_allowed'));
         }
 

@@ -21,7 +21,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xxl-3">
+                <div class="col-12">
                     <div class="card">
 
                         <div class="card-body p-4">
@@ -33,31 +33,66 @@
                                 </div>
                                 <div class="mt-4 text-center">
                                     <h5 class="mb-1">{{ $hos->name }}</h5>
-                                    <p class="text-muted">Since {{ $hos->created_at }}</p>
+                                    <p class="text-muted">Since
+                                        {{ \Carbon\Carbon::parse($hos->created_at)->toFormattedDateString() }}</p>
                                 </div>
-                                <div class="table-responsive">
+                                <div class="table-responsive align-content-center">
                                     <table class="table mb-0 table-borderless">
                                         <tbody>
                                             <tr>
                                                 <th><span class="fw-medium">Hospital Name:</span></th>
-                                                <td>{{ $hos->name }}</td>
+                                                <td>
+                                                    <h3>
+                                                        <span class="badge bg-primary text-lg">{{ $hos->name }}</span>
+                                                    </h3>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th><span class="fw-medium">Email:</span></th>
-                                                <td>{{ $hos->email }}</td>
+                                                <td>
+                                                    <h3>
+                                                        <span class="badge bg-secondary text-lg">{{ $hos->email }}</span>
+                                                    </h3>
+
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th><span class="fw-medium">No. of Doctors:</span></th>
-                                                <td>{{ $hos->doctors->count() }}</td>
+                                                <td>
+                                                    <h3>
+                                                        <span
+                                                            class="badge bg-info text-dark">{{ $hos->doctors->count() }}</span>
+                                                    </h3>
+
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th><span class="fw-medium">Contact No.:</span></th>
-                                                <td>{{ $hos->phone }}</td>
+                                                <td>
+                                                    <h3>
+                                                        <span class="badge bg-secondary text-white">{{ $hos->phone }}
+                                                        </span>
+                                                    </h3>
+
+                                                </td>
                                             </tr>
+                                            <tr>
+                                                <th><span class="fw-medium">Verification:</span></th>
+                                                <td>
+                                                    @if ($hos->verified == true)
+                                                        <h3> <span class="badge bg-success">verified</span> </h3>
+                                                    @else
+                                                        <h3> <span class="badge bg-warning text-dark">not verified</span>
+                                                        </h3>
+                                                    @endif
+                                                </td>
+                                            </tr>
+
                                             <tr>
                                                 <th><span class="fw-medium">Location:</span></th>
                                                 <td>{{ $hos->address }}</td>
                                             </tr>
+
                                             @if (!empty($hos->settings))
                                                 <tr>
                                                     <th><span class="fw-medium">Bank Account:</span></th>.
@@ -73,12 +108,14 @@
                                                 </tr>
                                                 <tr>
                                                     <th><span class="fw-medium">Amount:</span></th>
-                                                    <td>₦{{ number_format( $hos->settings->amount) }}</td>
+                                                    <td>₦{{ number_format($hos->settings->amount) }}</td>
                                                 </tr>
                                             @endif
                                             <tr>
                                                 <th><span class="fw-medium">Joining Date:</span></th>
-                                                <td>{{ $hos->created_at }}</td>
+                                                <td>
+                                                    {{ \Carbon\Carbon::parse($hos->created_at)->toFormattedDateString() }}
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -112,7 +149,8 @@
                                             <tr>
                                                 <th scope="col" style="width: 50px;">
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                        <input class="form-check-input" type="checkbox" id="checkAll"
+                                                            value="option">
                                                     </div>
                                                 </th>
 
@@ -130,26 +168,32 @@
                                                 <tr>
                                                     <th scope="row">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                            <input class="form-check-input" type="checkbox" name="checkAll"
+                                                                value="option1">
                                                         </div>
                                                     </th>
-                                                    <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">#VZ2101</a></td>
+                                                    <td class="id" style="display:none;"><a href="javascript:void(0);"
+                                                            class="fw-medium link-primary">#VZ2101</a></td>
                                                     <td class="name">{{ $docs->name }}</td>
                                                     <td class="leads_score">{{ $docs->email }}</td>
                                                     <td class="phone">{{ $docs->phone }}</td>
                                                     <td class="phone">{{ $docs->gender }}</td>
-                                                    <td class="date left">{{ $docs->created_at }}</td>
+                                                    <td class="date left">
+                                                        {{ \Carbon\Carbon::parse($docs->created_at)->toFormattedDateString() }}
+                                                    </td>
                                                     <td>
                                                         <ul class="list-inline hstack gap-2 mb-0">
                                                             <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top" title="Edit">
-                                                                <a href="{{ url('admin/doctor/'. $docs->id) }}"
-                                                                    class="text-primary d-inline-block edit-item-btn">
-                                                                    <i class="ri-pencil-fill fs-16"></i>
+                                                                data-bs-trigger="hover" data-bs-placement="top"
+                                                                title="Edit">
+                                                                <a href="{{ url('admin/doctor/' . $docs->unique_id) }}"
+                                                                    class="text-primary d-inline-block ">
+                                                                    <i class="ri-eye-fill fs-16"></i>
                                                                 </a>
                                                             </li>
                                                             <li class="list-inline-item remove" data-bs-toggle="tooltip"
-                                                                data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                data-bs-trigger="hover" data-bs-placement="top"
+                                                                title="Remove">
                                                                 <a href=""
                                                                     class="text-danger d-inline-block remove-item-btn">
                                                                     <i class="ri-delete-bin-5-fill fs-16"></i>
@@ -167,7 +211,8 @@
                                                 colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px">
                                             </lord-icon>
                                             <h5 class="mt-2">Sorry! No Result Found</h5>
-                                            <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any
+                                            <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find
+                                                any
                                                 orders for you search.</p>
                                         </div>
                                     </div>
@@ -185,21 +230,29 @@
                                 </div>
                             </div>
 
-                            <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-labelledby="deleteRecordLabel"
-                                aria-hidden="true">
+                            <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"
+                                aria-labelledby="deleteRecordLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close" id="btn-close"></button>
                                         </div>
                                         <div class="modal-body p-5 text-center">
-                                            <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px"></lord-icon>
+                                            <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                                colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px">
+                                            </lord-icon>
                                             <div class="mt-4 text-center">
                                                 <h4 class="fs-semibold">You are about to delete a lead ?</h4>
-                                                <p class="text-muted fs-14 mb-4 pt-1">Deleting your lead will remove all of your information from our database.</p>
+                                                <p class="text-muted fs-14 mb-4 pt-1">Deleting your lead will remove all of
+                                                    your information from our database.</p>
                                                 <div class="hstack gap-2 justify-content-center remove">
-                                                    <button class="btn btn-link link-success fw-medium text-decoration-none" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                                    <button class="btn btn-danger" id="delete-record">Yes, Delete It!!</button>
+                                                    <button
+                                                        class="btn btn-link link-success fw-medium text-decoration-none"
+                                                        data-bs-dismiss="modal"><i
+                                                            class="ri-close-line me-1 align-middle"></i> Close</button>
+                                                    <button class="btn btn-danger" id="delete-record">Yes, Delete
+                                                        It!!</button>
                                                 </div>
                                             </div>
                                         </div>

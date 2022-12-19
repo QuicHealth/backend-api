@@ -13,7 +13,7 @@
                     <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
                         <i class="ri-close-line me-1 align-middle"></i>Close
                     </button>
-                    <a href="{{ url('admin/doctor/' . $docs->id . '/delete') }}" class="btn btn-danger">Yes, Delete It</a>
+                    <a href="{{ url('admin/doctor/' . $docs->unique_id . '/delete') }}" class="btn btn-danger">Yes, Delete It</a>
                 </div>
             </div>
         </div>

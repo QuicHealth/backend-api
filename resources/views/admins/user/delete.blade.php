@@ -10,10 +10,13 @@
                     all their information from the database.
                 </p>
                 <div class="hstack gap-2 justify-content-center remove">
-                    <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
+                    <button class="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close"
+                        data-bs-dismiss="modal">
                         <i class="ri-close-line me-1 align-middle"></i>Close
                     </button>
-                    <a href="{{ url('admin/user/' . $user->id . '/delete') }}" class="btn btn-danger">Yes, Delete It</a>
+                    <a href="{{ url('admin/user/' . $user->unique_id . '/delete') }}" class="btn btn-danger">
+                        Yes, Delete it
+                    </a>
                 </div>
             </div>
         </div>

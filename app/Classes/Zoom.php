@@ -78,7 +78,15 @@ class Zoom
         );
 
         if ($saveNewToken) {
-            return ['status' => true, 'message' => 'Token saved successfully'];
+            return [
+                'status' => true,
+                'access_token' => $response_token['access_token'],
+                'refresh_token' => $response_token['refresh_token'],
+                'expires_in' => $response_token['expires_in'],
+                'token_type' => $response_token['token_type'],
+                'scope' => $response_token['scope'],
+                'message' => 'Token saved successfully'
+            ];
         } else {
             return ['status' => false, 'message' => 'Token not saved'];
         }

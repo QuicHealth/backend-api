@@ -23,7 +23,7 @@ class CreateDoctorsTable extends Migration
             $table->string('profile_pic_link')->nullable();
             $table->integer('featured')->default(0);
             $table->integer('status')->default(1);
-            $table->string('specialty');
+            $table->string('specialty')->nullable();
             $table->text('address');
             $table->softDeletes();
             $table->timestamps();

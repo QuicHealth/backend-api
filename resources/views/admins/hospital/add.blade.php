@@ -11,31 +11,35 @@
 
                 <div class="mb-3">
                     <label for="customername-field" class="form-label">Hospital Name</label>
-                    <input type="text" id="customername-field" name="name" class="form-control" placeholder="Enter name" required />
+                    <input type="text" id="customername-field" name="name" class="form-control"
+                        placeholder="Enter name" required />
                     @error('name')
-                        <p class="text-danger">{{$message}}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="customername-field" class="form-label">Hospital Email</label>
-                    <input type="email" name="email" id="customername-field" class="form-control" placeholder="Enter email" required />
+                    <input type="email" name="email" id="customername-field" class="form-control"
+                        placeholder="Enter email" required />
                     @error('email')
-                        <p class="text-danger">{{$message}}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mb-3">
                     <label for="customername-field" class="form-label">Hospital Phone</label>
-                    <input type="number" name="phone" id="customername-field" class="form-control" placeholder="Enter Phone" required />
+                    <input type="text" name="phone" id="customername-field" class="form-control"
+                        placeholder="Enter Phone" required />
                     @error('phone')
-                        <p class="text-danger">{{$message}}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
                 <div class="mb-3">
                     <label for="customername-field" class="form-label">Address</label>
-                    <input type="text" name="address" id="customername-field" class="form-control" placeholder="Enter Address" required />
+                    <input type="text" name="address" id="customername-field" class="form-control"
+                        placeholder="Enter Address" required />
                     @error('address')
-                        <p class="text-danger">{{$message}}</p>
+                        <p class="text-danger">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -43,27 +47,30 @@
                     <div class="col-md-6">
                         <div>
                             <label for="amount-field" class="form-label">City</label>
-                            <input type="text" name="city" id="amount-field" class="form-control" placeholder="City" required />
+                            <input type="text" name="city" id="amount-field" class="form-control"
+                                placeholder="City" required />
                             @error('city')
-                                <p class="text-danger">{{$message}}</p>
+                                <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div>
                             <label for="amount-field" class="form-label">State</label>
-                            <input type="text" name="state" id="amount-field" class="form-control" placeholder="State" required />
+                            <input type="text" name="state" id="amount-field" class="form-control"
+                                placeholder="State" required />
                             @error('state')
-                                <p class="text-danger">{{$message}}</p>
+                                <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div>
                             <label for="amount-field" class="form-label">Country</label>
-                            <input type="text" name="country" id="amount-field" value="Nigeria" class="form-control" placeholder="Country" readonly required />
+                            <input type="text" name="country" id="amount-field" value="Nigeria" class="form-control"
+                                placeholder="Country" readonly required />
                             @error('country')
-                                <p class="text-danger">{{$message}}</p>
+                                <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>

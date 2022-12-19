@@ -1,19 +1,19 @@
 @extends('layouts.dashboard')
 
 @section('content')
-
     <div class="page-content">
         <div class="container-fluid">
             <div class="profile-foreground position-relative mx-n4 mt-n4">
                 <div class="profile-wid-bg">
-                    <img src="{{ asset('dashboard/images/profile-bg.jpg')}}" alt="" class="profile-wid-img" />
+                    <img src="{{ asset('dashboard/images/profile-bg.jpg') }}" alt="" class="profile-wid-img" />
                 </div>
             </div>
             <div class="pt-4 mb-4 mb-lg-3 pb-lg-4">
                 <div class="row g-4">
                     <div class="col-auto">
                         <div class="avatar-lg">
-                            <img src="{{ asset('dashboard/images/users/avatar-1.jpg')}}" alt="user-img" class="img-thumbnail rounded-circle" />
+                            <img src="{{ $doc->profile_pic_link ?? asset('dashboard/images/users/avatar-1.jpg') }}"
+                                alt="user-img" class="img-thumbnail rounded-circle" />
                         </div>
                     </div>
                     <div class="col">
@@ -21,7 +21,9 @@
                             <h3 class="text-white mb-1">{{ $doc->name }}</h3>
                             <p class="text-white-75">{{ $doc->address }}</p>
                             <div class="hstack text-white-50 gap-1">
-                                <div class="me-2"><i class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>{{ $doc->state }}, Nigeria</div>
+                                <div class="me-2"><i
+                                        class="ri-map-pin-user-line me-1 text-white-75 fs-16 align-middle"></i>{{ $doc->city }},
+                                    Nigeria</div>
                             </div>
                         </div>
                     </div>
@@ -42,7 +44,8 @@
                                 </li> --}}
                             </ul>
                             <div class="flex-shrink-0">
-                                <a href="" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Edit Profile</a>
+                                <a href="" class="btn btn-success"><i class="ri-edit-box-line align-bottom"></i> Edit
+                                    Profile</a>
                             </div>
                         </div>
 
@@ -123,7 +126,8 @@
                                                 <div class="row g-4 align-items-center">
                                                     <div class="col-sm-3">
                                                         <div class="search-box">
-                                                            <input type="text" class="form-control search" placeholder="Search for...">
+                                                            <input type="text" class="form-control search"
+                                                                placeholder="Search for...">
                                                             <i class="ri-search-line search-icon"></i>
                                                         </div>
                                                     </div>
@@ -137,18 +141,25 @@
                                                                 <tr>
                                                                     <th scope="col" style="width: 50px;">
                                                                         <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                                                            <input class="form-check-input" type="checkbox"
+                                                                                id="checkAll" value="option">
                                                                         </div>
                                                                     </th>
 
                                                                     <th class="sort" data-sort="name">Patients Name</th>
                                                                     <th class="sort" data-sort="leads_score">Date</th>
-                                                                    <th class="sort" data-sort="phone"scope="col">Start Time</th>
-                                                                    <th class="sort" data-sort="phone"scope="col">End Time</th>
-                                                                    <th class="sort" data-sort="phone"scope="col">Payment Status</th>
-                                                                    <th class="sort" data-sort="phone"scope="col">Status</th>
-                                                                    <th class="sort" data-sort="date" scope="col">Date Joined</th>
-                                                                    <th class="sort" data-sort="date" scope="col">Action</th>
+                                                                    <th class="sort" data-sort="phone"scope="col">
+                                                                        Start Time</th>
+                                                                    <th class="sort" data-sort="phone"scope="col">
+                                                                        End Time</th>
+                                                                    <th class="sort" data-sort="phone"scope="col">
+                                                                        Payment Status</th>
+                                                                    <th class="sort" data-sort="phone"scope="col">
+                                                                        Status</th>
+                                                                    <th class="sort" data-sort="date" scope="col">
+                                                                        Date Joined</th>
+                                                                    <th class="sort" data-sort="date" scope="col">
+                                                                        Action</th>
 
                                                                 </tr>
                                                             </thead>
@@ -157,39 +168,62 @@
                                                                     <tr>
                                                                         <th scope="row">
                                                                             <div class="form-check">
-                                                                                <input class="form-check-input" type="checkbox" name="checkAll" value="option1">
+                                                                                <input class="form-check-input"
+                                                                                    type="checkbox" name="checkAll"
+                                                                                    value="option1">
                                                                             </div>
                                                                         </th>
-                                                                        <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">{{ $appoint->id }}</a></td>
-                                                                        <td class="name">{{ $appoint->user->fullname() }}</td>
+                                                                        <td class="id" style="display:none;"><a
+                                                                                href="javascript:void(0);"
+                                                                                class="fw-medium link-primary">{{ $appoint->id }}</a>
+                                                                        </td>
+                                                                        <td class="name">
+                                                                            {{ $appoint->user->fullname() }}</td>
                                                                         <td class="leads_score">{{ $appoint->date }}</td>
                                                                         <td class="phone">{{ $appoint->start }}</td>
                                                                         <td class="phone">{{ $appoint->end }}</td>
                                                                         @if ($appoint->payment_status == 'pending')
-                                                                            <td class="status"><span class="badge badge-soft-warning text-uppercase">Pending</span></td>
+                                                                            <td class="status"><span
+                                                                                    class="badge badge-soft-warning text-uppercase">Pending</span>
+                                                                            </td>
                                                                         @elseif ($appoint->payment_status == 'done')
-                                                                            <td class="status"><span class="badge badge-soft-success text-uppercase">Done</span></td>
+                                                                            <td class="status"><span
+                                                                                    class="badge badge-soft-success text-uppercase">Done</span>
+                                                                            </td>
                                                                         @endif
                                                                         @if ($appoint->status == 'pending')
-                                                                            <td class="status"><span class="badge badge-soft-warning text-uppercase">Pending</span></td>
+                                                                            <td class="status"><span
+                                                                                    class="badge badge-soft-warning text-uppercase">Pending</span>
+                                                                            </td>
                                                                         @elseif ($appoint->status == 'done')
-                                                                            <td class="status"><span class="badge badge-soft-success text-uppercase">Done</span></td>
+                                                                            <td class="status"><span
+                                                                                    class="badge badge-soft-success text-uppercase">Done</span>
+                                                                            </td>
                                                                         @endif
-                                                                        <td class="date left">{{ $appoint->created_at }}</td>
+                                                                        <td class="date left">{{ $appoint->created_at }}
+                                                                        </td>
                                                                         <td>
                                                                             <ul class="list-inline hstack gap-2 mb-0">
-                                                                                <li class="list-inline-item edit" data-bs-toggle="tooltip"
-                                                                                    data-bs-trigger="hover" data-bs-placement="top" title="Edit">
+                                                                                <li class="list-inline-item edit"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-trigger="hover"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Edit">
                                                                                     <a href=""
                                                                                         class="text-primary d-inline-block edit-item-btn">
-                                                                                        <i class="ri-pencil-fill fs-16"></i>
+                                                                                        <i
+                                                                                            class="ri-pencil-fill fs-16"></i>
                                                                                     </a>
                                                                                 </li>
-                                                                                <li class="list-inline-item remove" data-bs-toggle="tooltip"
-                                                                                    data-bs-trigger="hover" data-bs-placement="top" title="Remove">
+                                                                                <li class="list-inline-item remove"
+                                                                                    data-bs-toggle="tooltip"
+                                                                                    data-bs-trigger="hover"
+                                                                                    data-bs-placement="top"
+                                                                                    title="Remove">
                                                                                     <a href=""
                                                                                         class="text-danger d-inline-block remove-item-btn">
-                                                                                        <i class="ri-delete-bin-5-fill fs-16"></i>
+                                                                                        <i
+                                                                                            class="ri-delete-bin-5-fill fs-16"></i>
                                                                                     </a>
                                                                                 </li>
                                                                             </ul>
@@ -200,11 +234,14 @@
                                                         </table>
                                                         <div class="noresult" style="display: none">
                                                             <div class="text-center">
-                                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"
-                                                                    colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px">
+                                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json"
+                                                                    trigger="loop"
+                                                                    colors="primary:#121331,secondary:#08a88a"
+                                                                    style="width:75px;height:75px">
                                                                 </lord-icon>
                                                                 <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                                <p class="text-muted mb-0">We've searched more than 150+ Orders We did not find any
+                                                                <p class="text-muted mb-0">We've searched more than 150+
+                                                                    Orders We did not find any
                                                                     orders for you search.</p>
                                                             </div>
                                                         </div>
@@ -222,21 +259,35 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-labelledby="deleteRecordLabel"
-                                                    aria-hidden="true">
+                                                <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1"
+                                                    aria-labelledby="deleteRecordLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"
+                                                                    id="btn-close"></button>
                                                             </div>
                                                             <div class="modal-body p-5 text-center">
-                                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px"></lord-icon>
+                                                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json"
+                                                                    trigger="loop"
+                                                                    colors="primary:#405189,secondary:#f06548"
+                                                                    style="width:90px;height:90px"></lord-icon>
                                                                 <div class="mt-4 text-center">
-                                                                    <h4 class="fs-semibold">You are about to delete a lead ?</h4>
-                                                                    <p class="text-muted fs-14 mb-4 pt-1">Deleting your lead will remove all of your information from our database.</p>
-                                                                    <div class="hstack gap-2 justify-content-center remove">
-                                                                        <button class="btn btn-link link-success fw-medium text-decoration-none" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                                                        <button class="btn btn-danger" id="delete-record">Yes, Delete It!!</button>
+                                                                    <h4 class="fs-semibold">You are about to delete a lead
+                                                                        ?</h4>
+                                                                    <p class="text-muted fs-14 mb-4 pt-1">Deleting your
+                                                                        lead will remove all of your information from our
+                                                                        database.</p>
+                                                                    <div
+                                                                        class="hstack gap-2 justify-content-center remove">
+                                                                        <button
+                                                                            class="btn btn-link link-success fw-medium text-decoration-none"
+                                                                            data-bs-dismiss="modal"><i
+                                                                                class="ri-close-line me-1 align-middle"></i>
+                                                                            Close</button>
+                                                                        <button class="btn btn-danger"
+                                                                            id="delete-record">Yes, Delete It!!</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 
 trait HasResponse
 {
@@ -147,7 +148,7 @@ trait HasResponse
      * @param array $data
      * @return JsonResponse
      */
-    public function notFoundResponse($message, array $data = []): JsonResponse
+    public function notFoundResponse($message, array $data = [])
     {
         $response = [
             'status' => config('quichealth.status.failed'),
@@ -159,7 +160,13 @@ trait HasResponse
             $response['data'] = $data;
         }
 
-        return Response::json($response, 404);
+        $request = new Request();
+
+        if (!$request->expectsJson()) {
+            return redirect('/admin/404');
+        } else {
+            return Response::json($response, 404);
+        }
     }
 
     /**
@@ -169,7 +176,7 @@ trait HasResponse
      * @param array $data
      * @return JsonResponse
      */
-    public function notAllowedResponse($message, array $data = []): JsonResponse
+    public function notAllowedResponse($message, array $data = [])
     {
         $response = [
             'status' => config('quichealth.status.failed'),
@@ -181,7 +188,13 @@ trait HasResponse
             $response['data'] = $data;
         }
 
-        return Response::json($response, 403);
+        $request = new Request();
+
+        if (!$request->expectsJson()) {
+            return redirect('/admin/login');
+        } else {
+            return Response::json($response, 403);
+        }
     }
 
     /**
