@@ -6,8 +6,7 @@
     <meta charset="utf-8" />
     <title>QuicHealth - Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Quichealth, Bringing HealthCare to your finger tips, at the comfort of your couch syringehospitalwoman_health_workermask">
+    <meta name="description" content="Quichealth, Bringing HealthCare to your finger tips, at the comfort of your couch ">
     <meta name="author" content="Quichealth Team">
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('logo/quicHealth_logo1.jpg') }}">

@@ -5,6 +5,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quichealth, Bringing HealthCare to your finger tips, at the comfort of your couch ">
+    <meta name="author" content="Quichealth Team">
     <title>QuicHealth - Admin Login</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="{{ asset('asset/feather/feather.css') }}">
