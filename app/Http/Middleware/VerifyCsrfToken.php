@@ -14,5 +14,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'webhook-receiving-url',
+        'http://localhost:3000'
     ];
 }
