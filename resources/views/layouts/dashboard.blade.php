@@ -180,136 +180,139 @@
                 <div class="container-fluid">
                     <div id="two-column-menu">
                     </div>
-                    {{-- @if (Auth::user()->utype === 'ADM') --}}
-                    <ul class="navbar-nav" id="navbar-nav">
-                        <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link {{ request()->is('admin') ? 'active' : '' }}"
-                                href="{{ route('admin.home') }}">
-                                <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Dashboards</span>
-                            </a>
-                        </li>
+                    {{-- @if(Auth::user()->utype === 'ADM') --}}
+                        <ul class="navbar-nav" id="navbar-nav">
+                            <li class="menu-title"><span data-key="t-menu">Menu</span></li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link {{request()->is('admin') ? 'active' : ''}}" href="{{route('admin.home')}}">
+                                    <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Dashboards</span>
+                                </a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarhospitals"
-                                data-bs-toggle="collapse" role="button" aria-expanded="false"
-                                aria-controls="sidebarhospitals">
-                                <i class="ri-layout-3-line"></i> <span data-key="t-hospitals">Hospital
-                                    Managment</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarhospitals">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.verifyHospital') }}"
-                                            class="nav-link {{ request()->is('admin/verify-hospital') ? 'active' : '' }}"
-                                            data-key="t-horizontal">Verify Hospital</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{ route('admin.hospitals') }}"
-                                            class="nav-link {{ request()->is('admin/hospitals') ? 'active' : '' }}"
-                                            data-key="t-two-column">Hospital CRUD</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-link {{ request()->is('admin/doctors') ? 'active' : '' }}"
-                                            href="{{ route('admin.doctors') }}">
-                                            <span data-key="t-hospitals">Doctors CRUD</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link collapsed" href="#sidebarhospitals" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarhospitals">
+                                    <i class="ri-layout-3-line"></i> <span data-key="t-hospitals">Hospital Managment</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarhospitals">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{route('admin.verifyHospital')}}" class="nav-link {{request()->is('admin/verify-hospital') ? 'active' : ''}}" data-key="t-horizontal">Verify Hospital</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{route('admin.hospitals')}}" class="nav-link {{request()->is('admin/hospitals') ? 'active' : ''}}" data-key="t-two-column">Hospital CRUD</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/doctors') ? 'active' : ''}}" href="{{route('admin.doctors')}}">
+                                                <span data-key="t-hospitals">Doctors CRUD</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarusers" data-bs-toggle="collapse"
-                                role="button" aria-expanded="false" aria-controls="sidebarusers">
-                                <i class="bx bx-user-circle"></i> <span data-key="t-users">Users</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarusers">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-link {{ request()->is('admin/users') ? 'active' : '' }}"
-                                            href="{{ route('admin.users') }}">
-                                            <span data-key="t-users">Users CRUD</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link collapsed" href="#sidebarusers" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarusers">
+                                    <i class="bx bx-user-circle"></i> <span data-key="t-users">Users</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarusers">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/users') ? 'active' : ''}}" href="{{route('admin.users')}}">
+                                                <span data-key="t-users">Users CRUD</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                        <a class="nav-link menu-link collapsed" href="#sidebarfinancial" data-bs-toggle="collapse"
-                            role="button" aria-expanded="false" aria-controls="sidebarfinancial">
-                            <i class="bx bx-dollar"></i> <span data-key="t-financial">Financial Managment</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="sidebarfinancial">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link menu-link {{ request()->is('admin/financial/payment') ? 'active' : '' }}"
-                                        href="{{ route('admin.financial.payment') }}">
-                                        <span data-key="t-financial">All Payments</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="collapse menu-dropdown" id="sidebarfinancial">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link menu-link {{ request()->is('admin/financial/hospital/payout') ? 'active' : '' }}"
-                                        href="{{ route('admin.financial.hospitalpayout') }}">
-                                        <span data-key="t-financial">Hospital payout request</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link menu-link {{ request()->is('admin/messages') ? 'active' : '' }}"
-                                        href="{{ route('admin.messages') }}">
-                                        </i> <span data-key="t-messages">Messages</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link collapsed" href="#sidebarfinancial" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarfinancial">
+                                    <i class="bx bx-dollar"></i> <span data-key="t-financial">Financial Managment</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarfinancial">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/financial/payment') ? 'active' : ''}}" href="{{route('admin.financial.payment')}}">
+                                                <span data-key="t-financial">All Payments</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="collapse menu-dropdown" id="sidebarfinancial">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/financial/hospital/payout') ? 'active' : ''}}" href="{{route('admin.financial.hospitalpayout')}}">
+                                                <span data-key="t-financial">Hospital payout request</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarsettings" data-bs-toggle="collapse"
-                                role="button" aria-expanded="false" aria-controls="sidebarsettings">
-                                <i class="mdi mdi-cog-outline"></i> <span data-key="t-settings">Settings</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarsettings">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-link {{ request()->is('admin/admins') ? 'active' : '' }}"
-                                            href="{{ route('admin.admins') }}">
-                                            </i> <span data-key="t-settings">Admin CRUD</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link menu-link {{ request()->is('admin/passwordreset') ? 'active' : '' }}"
-                                            href="{{ route('admin.passwordReset') }}">
-                                            </i> <span data-key="t-settings">Password reset</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link collapsed" href="#sidebarmessages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarmessages">
+                                    <i class="mdi mdi-message-text-outline"></i> <span data-key="t-messages">Message Managment</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarmessages">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/sendMail') ? 'active' : ''}}" href="{{route('admin.email')}}">
+                                                </i> <span data-key="t-messages">Send Email</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/complains') ? 'active' : ''}}" href="{{route('admin.complains')}}">
+                                                </i> <span data-key="t-messages">Complains</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/messages') ? 'active' : ''}}" href="{{route('admin.messages')}}">
+                                                </i> <span data-key="t-messages">Messages</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ route('admin.logout') }}">
-                                <i class="mdi mdi-logout"></i> <span data-key="t-logout">{{ __('Logout') }}</span>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link collapsed" href="#sidebarsettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarsettings">
+                                    <i class="mdi mdi-cog-outline"></i> <span data-key="t-settings">Settings</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarsettings">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/admins') ? 'active' : ''}}" href="{{route('admin.admins')}}">
+                                                </i> <span data-key="t-settings">Admin CRUD</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/passwordreset') ? 'active' : ''}}" href="{{route('admin.passwordReset')}}">
+                                                </i> <span data-key="t-settings">Password reset</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ route('admin.logout') }}">
+                                    <i class="mdi mdi-logout"></i> <span data-key="t-logout">{{ __('Logout') }}</span>
+                                </a>
+                            </li>
 
 
-                        {{-- <li class="nav-item">
-                                    <a class="nav-link menu-link" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        <i class="mdi mdi-logout"></i> <span data-key="t-logout">{{ __('Logout') }}</span>
-                                    </a>
-                                </li>
+                            {{-- <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="mdi mdi-logout"></i> <span data-key="t-logout">{{ __('Logout') }}</span>
+                                </a>
+                            </li>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form> --}}
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form> --}}
 
-                    </ul>
+                        </ul>
                     {{-- @endif --}}
                 </div>
 
