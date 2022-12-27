@@ -227,12 +227,12 @@
 
                             <li class="nav-item">
                                 <a class="nav-link menu-link collapsed" href="#sidebarmeeting" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarmeeting">
-                                    <i class="bx bx-users-circle"></i> <span data-key="t-meetings">Meetings</span>
+                                    <i class="bx bx-user-circle"></i> <span data-key="t-meetings">Meetings</span>
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarmeeting">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link {{request()->is('admin/meeting/payment') ? 'active' : ''}}" href="{{route('admin.meeting.index')}}">
+                                            <a class="nav-link menu-link {{request()->is('admin/meetings') ? 'active' : ''}}" href="{{route('admin.meeting.index')}}">
                                                 <span data-key="t-meetings">All Meetings</span>
                                             </a>
                                         </li>
@@ -241,7 +241,7 @@
                                 <div class="collapse menu-dropdown" id="sidebarmeeting">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link {{request()->is('admin/meeting/payment') ? 'active' : ''}}" href="{{route('admin.financial.payment')}}">
+                                            <a class="nav-link menu-link {{request()->is('admin/meeting') ? 'active' : ''}}" href="{{route('admin.financial.payment')}}">
                                                 <span data-key="t-meetings">Upcoming Meetings</span>
                                             </a>
                                         </li>
@@ -250,7 +250,7 @@
                                 <div class="collapse menu-dropdown" id="sidebarmeeting">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link {{request()->is('admin/meeting/hospital/payout') ? 'active' : ''}}" href="{{route('admin.financial.hospitalpayout')}}">
+                                            <a class="nav-link menu-link {{request()->is('admin/meeting') ? 'active' : ''}}" href="{{route('admin.financial.hospitalpayout')}}">
                                                 <span data-key="t-meetings">Pass Meeting</span>
                                             </a>
                                         </li>
