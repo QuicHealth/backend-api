@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\helpController;
 use App\Models\Admin;
+use App\Models\Appointment;
 use App\Models\Payment;
 use Carbon\Carbon;
 
@@ -562,6 +563,14 @@ class AdminController extends Controller
         }
         helpController::flashSession(true, 'User saved successfully');
         return back();
+    }
+
+    public function meeting()
+    {
+        $appointments = Appointment::latest()->get();
+        // dd($appointments);
+        return view('admins.meeting.index', compact('appointments'));
+        // return view('admins.meeting.index');
     }
 
     public function passwordReset()

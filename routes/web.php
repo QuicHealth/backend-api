@@ -72,6 +72,10 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             });
         });
 
+        Route::prefix('meetings')->group(function () {
+            Route::get('/', 'AdminController@meeting')->name('admin.meeting.index');
+        });
+
         Route::prefix('financial')->group(function () {
             Route::get('payments', 'AdminController@payment')->name('admin.financial.payment');
             Route::get('payout', 'AdminController@hospitalPayout')->name('admin.financial.hospitalpayout');
