@@ -565,12 +565,30 @@ class AdminController extends Controller
         return back();
     }
 
-    public function meeting()
+    public function meetings()
     {
         $appointments = Appointment::latest()->get();
         // dd($appointments);
         return view('admins.meeting.index', compact('appointments'));
-        // return view('admins.meeting.index');
+    }
+
+    public function upcomingMeeting()
+    {
+        $now = Carbon::now()->toDateString();
+        $appointments = Appointment::where('date', '>', $now)->latest()->get();
+        if(1 > 2)
+        {
+            dd('yes');
+        }
+        return view('admins.meeting.upcoming', compact('appointments'));
+    }
+
+    public function passedMeeting()
+    {
+        $now = Carbon::now()->toDateString();
+        $appointments = Appointment::where('date', '<', $now)->latest()->get();
+        // dd($appointments);
+        return view('admins.meeting.passed', compact('appointments'));
     }
 
     public function passwordReset()

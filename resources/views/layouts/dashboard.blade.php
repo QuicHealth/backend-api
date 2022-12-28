@@ -241,7 +241,7 @@
                                 <div class="collapse menu-dropdown" id="sidebarmeeting">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link {{request()->is('admin/meeting') ? 'active' : ''}}" href="{{route('admin.financial.payment')}}">
+                                            <a class="nav-link menu-link {{request()->is('admin/meetings/upcoming') ? 'active' : ''}}" href="{{route('admin.meeting.upcoming')}}">
                                                 <span data-key="t-meetings">Upcoming Meetings</span>
                                             </a>
                                         </li>
@@ -250,8 +250,8 @@
                                 <div class="collapse menu-dropdown" id="sidebarmeeting">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link menu-link {{request()->is('admin/meeting') ? 'active' : ''}}" href="{{route('admin.financial.hospitalpayout')}}">
-                                                <span data-key="t-meetings">Pass Meeting</span>
+                                            <a class="nav-link menu-link {{request()->is('admin/meetings/passed') ? 'active' : ''}}" href="{{route('admin.meeting.passed')}}">
+                                                <span data-key="t-meetings">Passed Meeting</span>
                                             </a>
                                         </li>
                                     </ul>
