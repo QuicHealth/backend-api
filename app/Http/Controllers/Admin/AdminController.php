@@ -576,10 +576,6 @@ class AdminController extends Controller
     {
         $now = Carbon::now()->toDateString();
         $appointments = Appointment::where('date', '>', $now)->latest()->get();
-        if(1 > 2)
-        {
-            dd('yes');
-        }
         return view('admins.meeting.upcoming', compact('appointments'));
     }
 
