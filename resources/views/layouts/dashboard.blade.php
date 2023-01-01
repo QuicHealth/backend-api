@@ -230,7 +230,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link menu-link collapsed" href="#sidebarmeeting" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarmeeting">
-                                    <i class="bx bx-user-circle"></i> <span data-key="t-meetings">Meetings</span>
+                                    <i class="ri-video-chat-line"></i> <span data-key="t-meetings">Meetings</span>
                                 </a>
                                 <div class="collapse menu-dropdown" id="sidebarmeeting">
                                     <ul class="nav nav-sm flex-column">
