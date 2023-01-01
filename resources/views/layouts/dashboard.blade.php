@@ -34,9 +34,12 @@
 
     <link href="{{ asset('dashboard/css/custom.min.css') }}" rel="stylesheet" type="text/css" />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
         integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> --}}
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 
 <body>
@@ -219,6 +222,39 @@
                                         <li class="nav-item">
                                             <a class="nav-link menu-link {{request()->is('admin/users') ? 'active' : ''}}" href="{{route('admin.users')}}">
                                                 <span data-key="t-users">Users CRUD</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link collapsed" href="#sidebarmeeting" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarmeeting">
+                                    <i class="ri-video-chat-line"></i> <span data-key="t-meetings">Meetings</span>
+                                </a>
+                                <div class="collapse menu-dropdown" id="sidebarmeeting">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/meetings') ? 'active' : ''}}" href="{{route('admin.meeting.index')}}">
+                                                <span data-key="t-meetings">All Meetings</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="collapse menu-dropdown" id="sidebarmeeting">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/meetings/upcoming') ? 'active' : ''}}" href="{{route('admin.meeting.upcoming')}}">
+                                                <span data-key="t-meetings">Upcoming Meetings</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="collapse menu-dropdown" id="sidebarmeeting">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link menu-link {{request()->is('admin/meetings/passed') ? 'active' : ''}}" href="{{route('admin.meeting.passed')}}">
+                                                <span data-key="t-meetings">Passed Meeting</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -414,18 +450,12 @@
 
     <script src="{{ asset('dashboard/js/app.js') }}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
-        integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    @if (Session::has('message'))
+    @if (Session::has('success'))
         <script>
-            toastr.success("{!! Session::get('message') !!}")
+            toastr.success("{!! Session::get('success') !!}")
         </script>
     @elseif(Session::has('error'))
         <script>

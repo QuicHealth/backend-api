@@ -20,7 +20,7 @@
                 <div class="col-lg-12">
                     <div class="iq-edit-list-data">
                         <div class="tab-content">
-                            @include('admin.inc.notification')
+                            {{-- @include('admin.inc.notification') --}}
                             <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
                                 <div class="row mx-0 px-0">
                                     <div class="col-sm-8 mt-2 px-0">
@@ -41,7 +41,7 @@
                                                         <label for="fname">Name:</label>
                                                         <input type="text" class="form-control" id="fname" name="name" value="{{$doctor->name}}">
                                                     </div>
-                                                    
+
                                                     <div class="form-group">
                                                         <label for="email">Email:</label>
                                                         <input type="email" class="form-control" id="email" name="email" value="{{$doctor->email}}">
@@ -61,7 +61,7 @@
                                                         </select>
                                                         {{-- <input type="text" class="form-control" id="city" name="city" value="{{$doctor->hospital->name}}"> --}}
                                                     </div>
-                                                    
+
                                                     <div class="form-group">
                                                         <label for="add">Specialty:</label>
                                                         <select class="form-control selectpicker" name="specialty" id="hos">

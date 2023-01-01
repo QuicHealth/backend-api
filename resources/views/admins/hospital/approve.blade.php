@@ -17,7 +17,7 @@
 
                 <div class="mt-4 text-center">
                     <h5 class="mb-1">{{ $hospital->name }}</h5>
-                    <p class="text-muted">Added on {{ \Carbon\Carbon::parse($hospital->created_at)->diffForhumans() }}
+                    <p class="text-muted">Added {{ \Carbon\Carbon::parse($hospital->created_at)->diffForhumans() }}
                     </p>
                 </div>
 

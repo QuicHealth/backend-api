@@ -72,6 +72,12 @@ Route::namespace('Admin')->prefix('admin')->group(function () {
             });
         });
 
+        Route::prefix('meetings')->group(function () {
+            Route::get('/', 'AdminController@meetings')->name('admin.meeting.index');
+            Route::get('/upcoming', 'AdminController@upcomingMeeting')->name('admin.meeting.upcoming');
+            Route::get('/passed', 'AdminController@passedMeeting')->name('admin.meeting.passed');
+        });
+
         Route::prefix('financial')->group(function () {
             Route::get('payments', 'AdminController@payment')->name('admin.financial.payment');
             Route::get('payout', 'AdminController@hospitalPayout')->name('admin.financial.hospitalpayout');

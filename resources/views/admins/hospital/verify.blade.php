@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                         </div>
-                        @include('admin.inc.notification')
+                        {{-- @include('admin.inc.notification') --}}
 
                         <div class="card-body">
                             <div>

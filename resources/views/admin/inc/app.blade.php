@@ -74,7 +74,7 @@
                 </div>
             </div>
             @include('admin.inc.navbar')
-            @include('admin.inc.notification')
+            {{-- @include('admin.inc.notification') --}}
             @yield('content')
 
         </div>

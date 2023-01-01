@@ -36,10 +36,12 @@ class AdminAuthController extends Controller
         if (Auth::guard('admin')->attempt($credentials)) {
 
             $request->session()->regenerate();
+            session()->flash('success','Welcome Back');
             return redirect()->intended('admin');
         } else {
-            HelpController::flashSession(false, "Invalid login details");
-            return back();
+            // HelpController::flashSession(false, "Invalid login details");
+            // session()->flash('error','Invalid login details');
+            return back()->with('error','Invalid login details');
         }
     }
 
