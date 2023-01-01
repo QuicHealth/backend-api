@@ -105,11 +105,12 @@ class AdminController extends Controller
         $hos->password = bcrypt($password);
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error saving User');
+            // helpController::flashSession(false, 'Error saving User');
+            session()->flash('error','Error saving User');
             return back();
         }
-        helpController::flashSession(true, 'User saved successfully');
-        return back();
+        // helpController::flashSession(true, 'User saved successfully');
+        return back()->with('success','User saved successfully.');
     }
 
     public function updateUser($unique_id, Request $request)
@@ -126,7 +127,8 @@ class AdminController extends Controller
 
         $hos = User::where("unique_id", $unique_id)->first();
         if (!$hos) {
-            helpController::flashSession(false, 'User not found');
+            // helpController::flashSession(false, 'User not found');
+            session()->flash('error','User not found');
             return redirect('admin/user');
         }
         $hos->firstname = $request->firstname;
@@ -145,10 +147,12 @@ class AdminController extends Controller
         }
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error updating user');
+            // helpController::flashSession(false, 'Error updating user');
+            session()->flash('error','Error updating User');
             return back();
         }
-        helpController::flashSession(true, 'User updated successfully');
+        // helpController::flashSession(true, 'User updated successfully');
+        session()->flash('success','User updated successfully');
         return back();
     }
 
@@ -156,7 +160,8 @@ class AdminController extends Controller
     {
         $user = User::where("unique_id", $unique_id)->first();
         if ($user->delete()) {
-            helpController::flashSession(true, 'User deleted successfully');
+            // helpController::flashSession(true, 'User deleted successfully');
+            session()->flash('success','User deleted successfully');
             return back();
         }
     }
@@ -180,7 +185,8 @@ class AdminController extends Controller
     {
         $hos = Hospital::where("unique_id", $unique_id)->first();
         if (!$hos) {
-            helpController::flashSession(false, 'Hospital not found');
+            // helpController::flashSession(false, 'Hospital not found');
+            session()->flash('error','Hospital not found');
             return redirect('admin/hospital');
         }
         return view('admins.hospital.details', ['hos' => $hos]);
@@ -247,10 +253,12 @@ class AdminController extends Controller
         }
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error saving hospital');
+            // helpController::flashSession(false, 'Error saving hospital');
+            session()->flash('error','Error saving hospital');
             return back();
         }
-        helpController::flashSession(true, 'Hospital saved successfully');
+        // helpController::flashSession(true, 'Hospital saved successfully');
+        session()->flash('success','Hospital saved successfully');
         return back();
     }
 
@@ -259,7 +267,8 @@ class AdminController extends Controller
 
         $hospital = Hospital::where("unique_id", $unique_id)->first();
         if (!$hospital) {
-            helpController::flashSession(false, 'Hospital not found');
+            // helpController::flashSession(false, 'Hospital not found');
+            session()->flash('error','Hospital not found');
             return redirect('admin/hospital/verify');
         }
 
@@ -269,10 +278,12 @@ class AdminController extends Controller
 
 
         if (!$hospital->save()) {
-            helpController::flashSession(false, 'Error approving hospital');
+            // helpController::flashSession(false, 'Error approving hospital');
+            session()->flash('error','Error approving Hospit5al');
             return back();
         }
-        helpController::flashSession(true, 'Hospital approved successfully');
+        // helpController::flashSession(true, 'Hospital approved successfully');
+        session()->flash('success','Hospital approved successfully');
         return back();
     }
 
@@ -291,7 +302,8 @@ class AdminController extends Controller
 
         $hos = Hospital::where("unique_id", $unique_id)->first();
         if (!$hos) {
-            helpController::flashSession(false, 'Hospital not found');
+            // helpController::flashSession(false, 'Hospital not found');
+            session()->flash('error','Hospital not found');
             return redirect('admin/hospital');
         }
         $hos->name = $request->name;
@@ -310,10 +322,12 @@ class AdminController extends Controller
         }
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error updating hospital');
+            // helpController::flashSession(false, 'Error updating hospital');
+            session()->flash('error','Error updating Hospital');
             return back();
         }
-        helpController::flashSession(true, 'Hospital updated successfully');
+        // helpController::flashSession(true, 'Hospital updated successfully');
+        session()->flash('success','Hospital updated successfully');
         return back();
     }
 
@@ -321,15 +335,18 @@ class AdminController extends Controller
     {
         $hos = Hospital::where("unique_id", $unique_id)->first();
         if (!$hos) {
-            helpController::flashSession(false, 'Hospital not found');
+            // helpController::flashSession(false, 'Hospital not found');
+            session()->flash('error','Hospital not found');
             return redirect('admin/hospital');
         }
 
         if (!$hos->delete()) {
-            helpController::flashSession(false, 'Error deleting hospital');
+            // helpController::flashSession(false, 'Error deleting hospital');
+            session()->flash('error','Error deleting Hospital');
             return back();
         }
-        helpController::flashSession(false, 'Hospital deleted successfully');
+        // helpController::flashSession(false, 'Hospital deleted successfully');
+        session()->flash('success','Hospital deleted successfully');
         return redirect('admin/hospital');
     }
 
@@ -349,7 +366,8 @@ class AdminController extends Controller
         $spec = DB::table('specialties')->get();
         $hos = Hospital::all();
         if (!$doc) {
-            helpController::flashSession(false, 'Doctor not found');
+            // helpController::flashSession(false, 'Doctor not found');
+            session()->flash('error','Doctor not found');
             return redirect('admin/doctor');
         }
         // return view('admin.doctor.doctor', ['doctor' => $doc, 'specialties' => $spec, 'hospitals' => $hos]);
@@ -381,7 +399,8 @@ class AdminController extends Controller
         $hos->hospital_id = $request->hospital;
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error saving doctor');
+            // helpController::flashSession(false, 'Error saving doctor');
+            session()->flash('error','Error saving doctor');
             return back();
         }
         // $data = [
@@ -407,7 +426,8 @@ class AdminController extends Controller
         // ];
         // MailSendingJob::dispatch($data);
 
-        helpController::flashSession(true, 'Doctor saved successfully');
+        // helpController::flashSession(true, 'Doctor saved successfully');
+        session()->flash('success','Doctor saved succesfully');
         return back();
     }
 
@@ -426,7 +446,8 @@ class AdminController extends Controller
 
         $hos = Doctor::where("unique_id", $unique_id)->first();
         if (!$hos) {
-            helpController::flashSession(false, 'Doctor not found');
+            // helpController::flashSession(false, 'Doctor not found');
+            session()->flash('error','Doctor not found');
             return redirect('admin/doctors');
         }
         $hos->name = $request->name;
@@ -437,10 +458,12 @@ class AdminController extends Controller
         $hos->city = $request->city;
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error updating doctor');
+            // helpController::flashSession(false, 'Error updating doctor');
+            session()->flash('error','Error updating Doctor');
             return back();
         }
-        helpController::flashSession(true, 'Doctor updated successfully');
+        // helpController::flashSession(true, 'Doctor updated successfully');
+        session()->flash('success','Doctor updated successfully');
         return back();
     }
 
@@ -452,15 +475,18 @@ class AdminController extends Controller
 
         $hos = Doctor::where("unique_id", $request->doctor)->first();
         if (!$hos) {
-            helpController::flashSession(false, 'Doctor not found');
+            // helpController::flashSession(false, 'Doctor not found');
+            session()->flash('error','Doctor not found');
             return redirect('admin/doctors');
         }
 
         if (!$hos->delete()) {
-            helpController::flashSession(false, 'Error deleting doctor');
+            // helpController::flashSession(false, 'Error deleting doctor');
+            session()->flash('error','Error deleting doctor');
             return back();
         }
-        helpController::flashSession(false, 'Doctor deleted successfully');
+        // helpController::flashSession(false, 'Doctor deleted successfully');
+            session()->flash('error','Doctor deleted successfully');
         return redirect('admin/doctors');
     }
 
@@ -468,7 +494,8 @@ class AdminController extends Controller
     {
         $user = User::find($id);
         if (!$user) {
-            HelpController::flashSession(false, 'User not found');
+            // HelpController::flashSession(false, 'User not found');
+            session()->flash('error','User not found');
             return redirect('admin/users');
         }
         return view('admin.users.user')->with('user', $user);
@@ -558,10 +585,12 @@ class AdminController extends Controller
         $hos->password = bcrypt($password);
 
         if (!$hos->save()) {
-            helpController::flashSession(false, 'Error saving User');
+            // helpController::flashSession(false, 'Error saving User');
+            session()->flash('error','Error saving user');
             return back();
         }
-        helpController::flashSession(true, 'User saved successfully');
+        // helpController::flashSession(true, 'User saved successfully');
+        session()->flash('success','User saved successfully');
         return back();
     }
 

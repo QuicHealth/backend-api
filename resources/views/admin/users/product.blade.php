@@ -19,7 +19,7 @@
                         </div>
                         <div class="iq-card-body">
                             <form method="POST" action="/admin/edit-product">
-                                @include('admin.inc.notification')
+                                {{-- @include('admin.inc.notification') --}}
                                 @csrf
                                 <input type="hidden" name="product_id" id="" value="{{$product->id}}">
                                 <div class="form-group">

@@ -5,7 +5,7 @@
 @section('content')
     <div id="content-page" class="content-page">
         <div class="container-fluid">
-            @include('admin.inc.notification')
+            {{-- @include('admin.inc.notification') --}}
             <div class="row">
                 <div class="col-sm-12 px-0">
                     <div class="iq-card">
