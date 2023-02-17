@@ -19,6 +19,7 @@ jobs:
 
       - name: Compile css and Javascript
         run: |
+          $env:NODE_OPTIONS = "--openssl-legacy-provider"
           npm install
           npm run prod
 
