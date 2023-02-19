@@ -97,8 +97,6 @@ class ZoomMeetingController extends Controller
 
             $meeting = $this->createMeeting($data);
 
-            dd($meeting);
-
             if ($meeting) {
 
                 $start_at = new Carbon($meeting['data']['start_time']);
