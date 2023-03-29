@@ -17,8 +17,6 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('appointments_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('customer_name');
-            $table->string('customer_email');
             $table->string('amount');
             $table->string('paymentStatus');
             // $table->string('status');

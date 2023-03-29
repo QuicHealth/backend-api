@@ -6,9 +6,11 @@ use App\Models\Payment;
 use App\Facades\Monnify;
 use Illuminate\Http\Request;
 use App\Classes\StringGenerator;
+use App\Services\PaymentServices;
 use App\Actions\MakePaymentAction;
 use App\Actions\UpdatePaymentAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
 use App\Events\NewWebHookCallReceived;
 use App\Models\Payment as WebHookCall;
 
@@ -41,6 +43,18 @@ class PaymentController extends Controller
         $response = MakePaymentAction::run($this->payload);
 
         return $response;
+    }
+
+    public function savePayment(PaymentRequest $request)
+    {
+
+        // get validated date
+        $validatedData = $request->validated();
+
+        $paymentServices = new PaymentServices();
+
+        // save the payment
+        return $paymentServices->savePayment($validatedData);
     }
 
     public function txnCompletion(Request $request)

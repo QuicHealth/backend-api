@@ -10,7 +10,7 @@ class Payment extends Model
 {
     use HasFactory, Notifiable;
 
-    protected $guarded = [];
+    // protected $guarded = [];
 
     protected $fillable = [
         'user_id',
@@ -23,6 +23,8 @@ class Payment extends Model
         'transaction_id',
         'charged_amount',
         'processor_response',
+        'payment_gateway_type',
+        'currency'
     ];
 
     /**

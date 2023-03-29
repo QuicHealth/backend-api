@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUniqueIdToUsersTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUniqueIdToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('unique_id')->unique()->nullable();
+        Schema::table('payments', function (Blueprint $table) {
+            $table->string('payment_gateway_type');
         });
     }
 
@@ -25,8 +25,8 @@ class AddUniqueIdToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('payment', function (Blueprint $table) {
             //
         });
     }
-}
+};

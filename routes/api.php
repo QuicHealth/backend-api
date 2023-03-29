@@ -2,6 +2,17 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Patient\AuthController;
+use App\Http\Controllers\Patient\WaveController;
+use App\Http\Controllers\Doctor\DoctorController;
+use App\Http\Controllers\Patient\PatientController;
+use App\Http\Controllers\Patient\PaymentController;
+use App\Http\Controllers\Doctor\DoctorAuthController;
+use App\Http\Controllers\Hospital\HospitalController;
+use App\Http\Controllers\Hospital\SettingsController;
+use App\Http\Controllers\Patient\AppointmentController;
+use App\Http\Controllers\Patient\ZoomMeetingController;
+use App\Http\Controllers\Hospital\HospitalAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,75 +35,78 @@ Route::prefix('v1')->group(function () {
 
         Route::namespace('Patient')->group(function () {
 
-            Route::post('register', 'AuthController@register');
-            Route::post('login', 'AuthController@login');
+            Route::post('register', [AuthController::class, 'register']);
+            Route::post('login', [AuthController::class, 'login']);
 
             Route::middleware('auth:api')->group(function () {
 
-                Route::post('forget-password', 'AuthController@forget_password');
-                Route::post('reset-password', 'AuthController@reset_password');
-                Route::get('verify-reset-token', 'AuthController@verify_password');
+                Route::post('forget-password', [AuthController::class, 'forget_password']);
+                Route::post('reset-password', [AuthController::class, 'reset_password']);
+                Route::get('verify-reset-token', [AuthController::class, 'verify_password']);
 
-                Route::post('update_password', 'PatientController@updatePassword');
+                Route::post('update_password', [PatientController::class, 'updatePassword']);
 
-                Route::get('get-random-doctors', 'PatientController@getRandomDoctors');
-                Route::get(
-                    'get-random-hospitals',
-                    'PatientController@getRandomHospitals'
-                );
-                Route::post('logout', 'AuthController@logout');
-                Route::get('get-doctors', 'PatientController@getDoctors');
-                Route::get('get-doctor/{unique_id}', 'PatientController@getDoctor');
-                Route::get('get-hospitals', 'PatientController@getHospitals');
-                Route::get('get-hospital/{unique_id}', 'PatientController@getHospital');
+                Route::get('get-random-doctors', [PatientController::class, 'getRandomDoctors']);
+                Route::get('get-random-hospitals', [PatientController::class, 'getRandomHospitals']);
 
-                Route::get('get-dashboard', 'PatientController@getDashboard');
-                Route::post('update-profile/{unique_id}', 'PatientController@updateProfile');
+                Route::post('logout', [AuthController::class, 'logout']);
+                Route::get('get-doctors', [PatientController::class, 'getDoctors']);
+                Route::get('get-doctor/{unique_id}', [PatientController::class, 'getDoctor']);
+                Route::get('get-hospitals', [PatientController::class, 'getHospitals']);
+                Route::get('get-hospital/{unique_id}', [PatientController::class, 'getHospital']);
 
-                Route::get('get-health-profile', 'PatientController@getHealthProfile');
-                Route::post('update-health-profile', 'PatientController@updateHealthProfile');
+                Route::get('get-dashboard', [PatientController::class, 'getDashboard']);
+                Route::post('update-profile/{unique_id}', [PatientController::class, 'updateProfile']);
 
-                Route::get('settings', 'PatientController@getsetting');
-                Route::post('settings', 'PatientController@updateSetting');
+                Route::get('get-health-profile', [PatientController::class, 'getHealthProfile']);
+                Route::post('update-health-profile', [PatientController::class, 'updateHealthProfile']);
 
-                Route::post('upload_image', 'PatientController@uploadImage');
-                Route::post('remove_image', 'PatientController@removeImage');
+                Route::get('settings', [PatientController::class, 'getsetting']);
+                Route::post('settings', [PatientController::class, 'updateSetting']);
 
-                Route::post('password/update', 'PatientController@updatePassword');
+                Route::post('upload_image', [PatientController::class, 'uploadImage']);
+                Route::post('remove_image', [PatientController::class, 'removeImage']);
+
+                Route::post('password/update', [PatientController::class, 'updatePassword']);
 
                 // appointment APIs
-                Route::post('create-appointment', 'AppointmentController@createAppointment');
-                Route::post('appointment/details', 'AppointmentController@appointmentDetails');
-                Route::get('appointments', 'AppointmentController@getAll');
-                Route::get('appointment-by-payment-status', 'AppointmentController@appointmentByPaymentStatus');
-                Route::get('appointment/{id}', 'AppointmentController@findAppointment');
-                Route::put('reschedule-appointment/{id}', 'AppointmentController@rescheduleAppointment');
-                Route::post('cancel-appointment/{id}', 'AppointmentController@cancelAppointment');
-                Route::get('appointment-report/{id}', 'AppointmentController@viewAppointmentReport');
+                Route::post('create-appointment', [AppointmentController::class, 'createAppointment']);
+                Route::post('appointment/details', [AppointmentController::class, 'appointmentDetails']);
+                Route::get('appointments', [AppointmentController::class, 'getAll']);
+                Route::get('appointment-by-payment-status', [AppointmentController::class, 'appointmentByPaymentStatus']);
+                Route::get('appointment/{id}', [AppointmentController::class, 'findAppointment']);
+                Route::put('reschedule-appointment/{id}', [AppointmentController::class, 'rescheduleAppointment']);
+                Route::post('cancel-appointment/{id}', [AppointmentController::class, 'cancelAppointment']);
+                Route::get('appointment-report/{id}', [AppointmentController::class, 'viewAppointmentReport']);
 
                 // Notifications
-                Route::get('notifications', 'PatientController@getAllNotification');
-                Route::post('notification', 'PatientController@markNotificationAsRead');
+                Route::get('notifications', [PatientController::class, 'getAllNotification']);
+                Route::post('notification', [PatientController::class, 'markNotificationAsRead']);
 
                 // Health record
-                Route::get('history', 'PatientController@history');
+                Route::get('history', [PatientController::class, 'history']);
 
-                Route::post('payment', 'WaveController@add');
+                Route::post('payment', [WaveController::class, 'add']);
+
+                Route::post('save_payment', [PaymentController::class, 'savePayment']);
+
 
                 //Zoom APIs
                 // Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
                 // Route::get('redirect', 'ZoomMeetingController@redirect');
-                Route::post('refresh-token', 'ZoomMeetingController@refreshToken');
-                Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
+                Route::post('refresh-token', [ZoomMeetingController::class, 'refreshToken']);
+                Route::post('create-zoom-meeting', [ZoomMeetingController::class, 'createZoomMeeting']);
 
-                Route::get('get-zoom-meetings', 'ZoomMeetingController@getMeetingsByPatient');
+                Route::get('get-zoom-meetings', [ZoomMeetingController::class, 'getMeetingsByPatient']);
             });
             // Payment APIs
 
-            Route::get('payment/status', 'WaveController@status')->name('payment.status');
+            Route::get('payment/status', [WaveController::class, 'status'])->name('payment.status');
 
-            Route::get('zoom', 'ZoomMeetingController@getZoomUrl');
-            Route::get('redirect', 'ZoomMeetingController@redirect');
+
+
+            Route::get('zoom', [ZoomMeetingController::class, 'getZoomUrl']);
+            Route::get('redirect', [ZoomMeetingController::class, 'redirect']);
 
             // Route::post('create-zoom-meeting', 'ZoomMeetingController@createZoomMeeting');
 
@@ -100,65 +114,62 @@ Route::prefix('v1')->group(function () {
 
         Route::namespace('Doctor')->prefix('doctor')->group(function () {
 
-            Route::Post('doctor-login', 'DoctorAuthController@doctorsLogin');
+            Route::Post('doctor-login', [DoctorAuthController::class, 'doctorsLogin']);
 
-            Route::post('add-test-Doctor', 'DoctorController@testDoctor');
+            Route::post('add-test-Doctor', [DoctorController::class, 'testDoctor']);
 
             Route::middleware('auth:doctor_api')->group(function () {
 
-                Route::Post(
-                    'doctor-forget-password',
-                    'DoctorAuthController@doctorsForgetPassword'
-                );
-                Route::Post('doctor-reset-password', 'DoctorAuthController@reset_password');
+                Route::Post('doctor-forget-password', [DoctorAuthController::class, 'doctorsForgetPassword']);
+                Route::Post('doctor-reset-password', [DoctorAuthController::class, 'reset_password']);
 
-                Route::post('update_password', 'DoctorController@updatePassword');
+                Route::post('update_password', [DoctorController::class, 'updatePassword']);
 
-                Route::post('save-schedule', 'DoctorController@setSchedule');
-                Route::get('appointment-by-payment-status', 'DoctorController@appointmentByPaymentStatus');
+                Route::post('save-schedule', [DoctorController::class, 'setSchedule']);
+                Route::get('appointment-by-payment-status', [DoctorController::class, 'appointmentByPaymentStatus']);
                 // Route::get('get-days', 'DoctorController@getDays');
-                Route::get('get-zoom-meetings', 'DoctorController@getMeetingsByDoctor');
-                Route::get('get-schedule', 'DoctorController@getSchedule');
-                Route::get('search-by-date/{date}', 'DoctorController@searchSchedule');
-                Route::get('get-dashboard', 'DoctorController@getDoctorsDashboard');
+                Route::get('get-zoom-meetings', [DoctorController::class, 'getMeetingsByDoctor']);
+                Route::get('get-schedule', [DoctorController::class, 'getSchedule']);
+                Route::get('search-by-date/{date}', [DoctorController::class, 'searchSchedule']);
+                Route::get('get-dashboard', [DoctorController::class, 'getDoctorsDashboard']);
 
-                Route::get('settings', 'DoctorController@getsetting');
-                Route::post('settings', 'DoctorController@updateSetting');
+                Route::get('settings', [DoctorController::class, 'getsetting']);
+                Route::post('settings', [DoctorController::class, 'updateSetting']);
 
-                Route::post('password/update', 'DoctorController@updatePassword');
+                Route::post('password/update', [DoctorController::class, 'updatePassword']);
 
-                Route::get('get/appointment/details/{appointment_id}', 'DoctorController@getAppointmentDetail');
+                Route::get('get/appointment/details/{appointment_id}', [DoctorController::class, 'getAppointmentDetail']);
 
                 // Notifications
-                Route::get('notifications', 'DoctorController@getAllNotification');
-                Route::post('notification', 'DoctorController@markNotificationAsRead');
+                Route::get('notifications', [DoctorController::class, 'getAllNotification']);
+                Route::post('notification', [DoctorController::class, 'markNotificationAsRead']);
 
                 // Route::post('write-report/{appointment_id}', 'ReportController@store');
-                Route::post('add-emr', 'DoctorController@recordHealthHistory');
-                Route::get('get-emr/{appointment_id}', 'DoctorController@getEMR');
-                Route::post('update-emr/{appointment_id}', 'DoctorController@UpdateEMR');
+                Route::post('add-emr', [DoctorController::class, 'recordHealthHistory']);
+                Route::get('get-emr/{appointment_id}', [DoctorController::class, 'getEMR']);
+                Route::post('update-emr/{appointment_id}', [DoctorController::class, 'UpdateEMR']);
 
-                Route::post('upload_image', 'DoctorController@uploadImage');
-                Route::post('remove_image', 'DoctorController@removeImage');
+                Route::post('upload_image', [DoctorController::class, 'uploadImage']);
+                Route::post('remove_image', [DoctorController::class, 'removeImage']);
             });
         });
 
         Route::namespace('Hospital')->prefix('hospital')->group(function () {
             //abass api code goes here
-            Route::post('hospital-login', 'HospitalAuthController@hospitalLogin');
+            Route::post('hospital-login', [HospitalAuthController::class, 'hospitalLogin']);
 
-            Route::post('add-test-Hospital', 'HospitalController@testHospital');
+            Route::post('add-test-Hospital', [HospitalController::class, 'testHospital']);
 
             Route::middleware('auth:hospital_api')->group(function () {
-                Route::post('add-doctor', 'HospitalController@addDoctor');
-                Route::get('dashboard', 'HospitalController@getDashboard');
-                Route::put('update', 'HospitalController@update');
-                Route::post('forget-password', 'HospitalAuthController@hospitalForgetPassword');
-                Route::post('reset-password', 'HospitalAuthController@hospitalResetPassword');
-                Route::get('verify-reset-token', 'HospitalAuthController@hospitalVerifyPassword');
+                Route::post('add-doctor', [HospitalController::class, 'addDoctor']);
+                Route::get('dashboard', [HospitalController::class, 'getDashboard']);
+                Route::put('update', [HospitalController::class, 'update']);
+                Route::post('forget-password', [HospitalAuthController::class, 'hospitalForgetPassword']);
+                Route::post('reset-password', [HospitalAuthController::class, 'hospitalResetPassword']);
+                Route::get('verify-reset-token', [HospitalAuthController::class, 'hospitalVerifyPassword']);
 
-                Route::get('setting', 'SettingsController@index');
-                Route::post('setting', 'SettingsController@settings');
+                Route::get('setting', [SettingsController::class, 'index']);
+                Route::post('setting', [SettingsController::class, 'settings']);
             });
         });
     });
