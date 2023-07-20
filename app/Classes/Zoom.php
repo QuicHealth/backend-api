@@ -155,6 +155,7 @@ class Zoom
 
     public function createMeeting($json = [], $user_id = 'me')
     {
+
         try {
             $response = $this->CLIENT->request('POST', "/v2/users/{$user_id}/meetings", [
                 "headers" => [
@@ -169,6 +170,10 @@ class Zoom
 
             throw new Exception("Not able to find error");
         } catch (Exception $e) {
+
+            if ($e->getCode() == 0) {
+                return array('status' => false, 'message' => 'Token not found, Generate a new Token');
+            }
             if ($e->getCode() == 401 && $this->refreshToken()) {
                 return $this->createMeeting($user_id, $json);
             }

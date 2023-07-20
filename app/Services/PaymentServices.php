@@ -43,7 +43,6 @@ class PaymentServices
                 'payment_gateway_type' =>  $data['payment_gateway_type'],
             ];
 
-
             $payment = Payment::create($payload);
 
             if ($payment) {
@@ -69,10 +68,12 @@ class PaymentServices
                 // create zoom meeting.
                 $zoomMeeting = new ZoomServices();
 
+                $userFullname = $appointment->user->firstname . " " . $appointment->user->lastname;
+
                 $data = [
                     'appointment_id' => $appointment->id,
                     'topic' => 'Appointment with ' . $appointment->doctor->name,
-                    'agenda' => $appointment->user->name . ' will be have a consultions with ' . $appointment->doctor->name,
+                    'agenda' => $userFullname . ' will be have a consultions with ' . $appointment->doctor->name,
                     'duration' => 30,
 
                 ];

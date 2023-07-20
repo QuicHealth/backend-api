@@ -59,7 +59,7 @@ class ZoomServices
 
             $meeting = $this->createMeeting($meetingData);
 
-            if ($meeting) {
+            if ($meeting['status'] == true) {
 
                 $start_at = new Carbon($meeting['data']['start_time']);
 

@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/quicheal/repositories/backend-api/
+    - /bin/cp -r * $DEPLOYPATH

@@ -90,12 +90,12 @@ class WaveController extends Controller
 
         if ($status == 'cancelled') {
             $this->saveNotPaid($data);
-            return redirect('http://localhost:3000/select-appointment');
+            redirect('http://localhost:3000/select-appointment');
             return response([
                 'status' => $status,
                 'data' => $data
             ], 500);
-        } else if ($status == 'successful') {
+        } else if ($status == 'completed') {
             $curl = curl_init();
 
             $txid = request()->transaction_id;
@@ -141,7 +141,7 @@ class WaveController extends Controller
 
             if ($response) {
                 // return $res;
-                return redirect('http://localhost:3000/payment-confirm');
+                redirect('http://localhost:3000/payment-confirm');
             } else {
                 return response([
                     'status' => "error",
