@@ -12,13 +12,14 @@ class Details extends Model
     protected $fillable = [
         "appointment_id",
         "purpose",
-        "length",
-        "treatments",
+        "symptoms",
+        "allergies",
+        "medications",
         "others",
     ];
 
     public function appointment()
     {
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Appointment::class);
     }
 }

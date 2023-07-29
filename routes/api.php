@@ -78,6 +78,7 @@ Route::prefix('v1')->group(function () {
                 Route::put('reschedule-appointment/{id}', [AppointmentController::class, 'rescheduleAppointment']);
                 Route::post('cancel-appointment/{id}', [AppointmentController::class, 'cancelAppointment']);
                 Route::get('appointment-report/{id}', [AppointmentController::class, 'viewAppointmentReport']);
+                Route::post('/appointment/update', [AppointmentController::class, 'updateAppointment']);
 
                 // Notifications
                 Route::get('notifications', [PatientController::class, 'getAllNotification']);
@@ -96,8 +97,11 @@ Route::prefix('v1')->group(function () {
                 // Route::get('redirect', 'ZoomMeetingController@redirect');
                 Route::post('refresh-token', [ZoomMeetingController::class, 'refreshToken']);
                 Route::post('create-zoom-meeting', [ZoomMeetingController::class, 'createZoomMeeting']);
+                Route::post('update-meeting', [ZoomMeetingController::class, 'updateZoomStatus']);
+
 
                 Route::get('get-zoom-meetings', [ZoomMeetingController::class, 'getMeetingsByPatient']);
+                Route::get('get-meeting-status/{meeting_id}', [ZoomMeetingController::class, 'getZoomStatus']);
             });
             // Payment APIs
 

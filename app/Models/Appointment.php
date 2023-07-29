@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\DB;
 
 class Appointment extends Model
 {
@@ -20,7 +19,7 @@ class Appointment extends Model
     [
         'user_id',
         'doctor_id',
-        'date',
+        'day',
         'start',
         'end',
         'status',

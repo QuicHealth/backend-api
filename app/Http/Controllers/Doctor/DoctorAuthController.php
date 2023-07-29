@@ -50,4 +50,9 @@ class DoctorAuthController extends Controller
 
         $this->authSerivce->resetPassword($request->all());
     }
+
+    public function logout(Request $request)
+    {
+        $this->authSerivce->logout($request->token);
+    }
 }

@@ -105,6 +105,7 @@ class ZoomMeetingController extends Controller
                     'user_id' => $getappint->user_id,
                     'doctor_id' => $getappint->doctor_id,
                     'appointment_id' => $getappint->id,
+                    'status' => 'pending',
                     'meeting_id' => $meeting['data']['id'],
                     'topic' => $meeting['data']['topic'],
                     'start_at' => $start_at->format('Y-m-d H:i:s'),
@@ -117,7 +118,7 @@ class ZoomMeetingController extends Controller
                 if ($create) {
                     return response()->json([
                         'status' => true,
-                        'message' => 'success',
+                        'message' => 'success, meeting created',
                         'data' => $create
                     ], 200);
                 }
@@ -137,10 +138,9 @@ class ZoomMeetingController extends Controller
         }
     }
 
-
     public function getMeetingsByPatient()
     {
-        $meetings = zoom::where('user_id', auth()->user()->id)->get();
+        $meetings = zoom::where('user_id', auth()->user()->id)->with('appointment')->get();
 
         if ($meetings) {
             return response()->json([
@@ -155,5 +155,90 @@ class ZoomMeetingController extends Controller
             'message' => 'error',
             'data' => []
         ], 422);
+    }
+
+    public function getZoomStatus($meeting_id)
+    {
+        $zoom = Zoom::find($meeting_id);
+
+        if (!$zoom) {
+            return response()->json([
+                'status' => false,
+                'message' => 'sorry, meeting not found',
+            ], 404);
+        }
+
+        // check if the meeting still valid
+        if ($zoom->status !== 'pending') {
+            return response()->json([
+                'status' => false,
+                'message' => 'sorry, this meeting currently ongoin or cancelled or has passed',
+            ], 422);
+        }
+
+        $currentTime = Carbon::now();
+        $startTime = Carbon::parse($zoom->start_at);
+        $minuteDifference = $startTime->diffInMinutes($currentTime);
+
+        // check if meeting time has passed
+        if ($startTime->isPast() && $minuteDifference >= 30) {
+
+            $zoom->update([
+                'status' => 'passed'
+            ]);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'sorry, this meeting time has passed',
+            ], 422);
+        }
+
+        // check if its time for the meeting
+        if ($zoom->status == 'pending' && $startTime->isPast() &&  $minuteDifference  <= 30) {
+
+            $zoom->update([
+                'status' => 'ongoing'
+            ]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success, you can proceed to join the meeting',
+            // 'data' => $zoom
+        ], 200);
+    }
+
+    public function updateZoomStatus(Request $request)
+    {
+        $meeting_id = $request->meeting_id;
+        $status = $request->status;
+
+        $zoom = Zoom::find($meeting_id);
+
+        if (!$zoom) {
+            return response()->json([
+                'status' => false,
+                'message' => 'sorry, meeting does not exit',
+            ], 404);
+        }
+
+        $update = $zoom->update([
+            'status' => $status
+        ]);
+
+        if ($update) {
+            // update timeslot
+
+
+            return response()->json([
+                'status' => true,
+                'message' => 'meeting  status updated successful!',
+            ], 202);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'sorry, meeting status could not be updated',
+            ], 422);
+        }
     }
 }

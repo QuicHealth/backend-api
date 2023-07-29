@@ -26,7 +26,7 @@ class ScheduleResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'date' => $this->date,
+            'day' => $this->day,
             'doctor_id' => $this->doctor_id,
             'doctor' => new DoctorResource($this->whenLoaded('doctor')),
             'timeslot' =>  TimeslotResource::collection($this->timeslot),

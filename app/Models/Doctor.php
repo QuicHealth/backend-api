@@ -41,14 +41,14 @@ class Doctor extends Authenticatable implements JWTSubject
 
     public function getHospitalAttribute()
     {
-        return DB::table('hospitals')->where('id', $this->hospital_id)
-            ->where('deleted_at', null)
-            ->first();
+        // return DB::table('hospitals')->where('id', $this->hospital_id)
+        //     ->where('deleted_at', null)
+        //     ->first();
     }
 
     public function getSpecialtiesAttribute()
     {
-        return DB::table('specialties')->where('id', $this->specialty)->first();
+        // return DB::table('specialties')->where('id', $this->specialty)->first();
     }
 
     public function schedule()

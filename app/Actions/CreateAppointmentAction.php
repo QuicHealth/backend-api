@@ -55,8 +55,6 @@ class CreateAppointmentAction
                 ], 404);
             }
 
-
-
             $appointment =  $this->createAppointment($user_id);
 
             if ($appointment) {
@@ -64,7 +62,7 @@ class CreateAppointmentAction
                 return response([
                     'status' => true,
                     'message' => 'Success! Appointment created',
-                    'Appointments' => $appointment,
+                    'Appointments' => Appointment::whereId($appointment->id)->with("doctor")->first(),
                 ], 202);
             } else {
 
@@ -82,7 +80,7 @@ class CreateAppointmentAction
     public function checkAppointmentBooking()
     {
         $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
-            ->where('date', $this->validated['date'])
+            ->where('day', $this->validated['day'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
             ->first();
@@ -119,7 +117,7 @@ class CreateAppointmentAction
         $appointment = Appointment::create([
             "user_id" => $user_id,
             "doctor_id" => $this->validated['doctor_id'],
-            "date" => $this->validated['date'],
+            "day" => $this->validated['day'],
             "start" => $this->validated['time_slots']['start'],
             "end" => $this->validated['time_slots']['end'],
             "status" => 'pending',
@@ -158,7 +156,7 @@ class CreateAppointmentAction
     public function checkSchedules()
     {
         $checkschedules = $this->schedule->where('doctor_id', $this->validated['doctor_id'])
-            ->where('date', $this->validated['date'])
+            ->where('day', $this->validated['day'])
             ->whereHas('timeslot', function ($query) {
                 $query->where('start', $this->validated['time_slots']['start']);
                 $query->where('end', $this->validated['time_slots']['end']);

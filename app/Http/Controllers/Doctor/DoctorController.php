@@ -16,6 +16,7 @@ use App\Actions\SetAvailablityAction;
 use App\Services\NotificationService;
 use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
+use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
 
 class DoctorController extends Controller
@@ -61,20 +62,20 @@ class DoctorController extends Controller
 
     public function getDoctorsDashboard(Request $request)
     {
-        // $doctor = Doctor::where("id", auth('doctor_api')->user()->id)
-        //     ->with(['hospital', 'schedule', 'appointments'])
-        //     ->first();
+        $doctor = Doctor::where("id", auth('doctor_api')->user()->id)
+            ->with(['hospital', 'schedule', 'appointments'])
+            ->first();
         $totalPendingAppointments  = Appointment::where('user_id', auth('doctor_api')->user()->id)->where('status', 'pending')->count();
         $totalSuccussfulAppointments  = Appointment::where('user_id', auth('doctor_api')->user()->id)->where('status', 'successful')->count();
-        $allPendingAppointments = Appointment::where('user_id', auth('doctor_api')->user()->id)->get();
+        // $allPendingAppointments = Appointment::where('user_id', auth('doctor_api')->user()->id)->with('doctor')->get();
 
         // dd($doctor);DoctorResource::collection
         return response([
             'status' => true,
-            // 'doctor' => new DoctorResource($doctor),
+            'doctor' => new DoctorResource($doctor),
             'totalPendingAppointments' => $totalPendingAppointments,
             'totalSuccussfulAppointments' => $totalSuccussfulAppointments,
-            'allPendingAppointments' => $allPendingAppointments
+            // 'allPendingAppointments' => $allPendingAppointments
         ]);
 
         // return response()->json(['success' => true, 'doctor' => new DoctorResource($doctor)]);

@@ -72,10 +72,9 @@ class PaymentServices
 
                 $data = [
                     'appointment_id' => $appointment->id,
-                    'topic' => 'Appointment with ' . $appointment->doctor->name,
+                    'topic' =>   $userFullname . ' consultation with ' . $appointment->doctor->name,
                     'agenda' => $userFullname . ' will be have a consultions with ' . $appointment->doctor->name,
                     'duration' => 30,
-
                 ];
 
                 $meeting = $zoomMeeting->create($data);

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Zoom extends Model
 {
@@ -21,11 +21,12 @@ class Zoom extends Model
         'duration',
         'password',
         'start_url',
-        'join_url'
+        'join_url',
+        'status' // pending, ongoing, cancelled, passed
     ];
 
     public function appointment()
     {
-        return $this->belongsTo(Application::class);
+        return $this->belongsTo(Appointment::class);
     }
 }

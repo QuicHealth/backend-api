@@ -15,12 +15,12 @@ class ZoomServices
 
     public function create(array $data)
     {
-        $getappint = Appointment::where('id', $data['appointment_id'])
+        $getappointment = Appointment::where('id', $data['appointment_id'])
             ->where('user_id', auth()->user()->id)
             ->where('payment_status', 'PAID')
             ->first();
 
-        if (!$getappint) {
+        if (!$getappointment) {
             return response()->json([
                 'status' => false,
                 'message' => 'Sorry, you have not Paid this appointment',
@@ -28,7 +28,7 @@ class ZoomServices
             ], 422);
         }
 
-        $appointmentTime = $getappint->date . '' . $getappint->start;
+        $appointmentTime = $getappointment->date . '' . $getappointment->start;
 
         $tempDate = new DateTime($appointmentTime);
 
@@ -64,9 +64,9 @@ class ZoomServices
                 $start_at = new Carbon($meeting['data']['start_time']);
 
                 $create = Zoom::create([
-                    'user_id' => $getappint->user_id,
-                    'doctor_id' => $getappint->doctor_id,
-                    'appointment_id' => $getappint->id,
+                    'user_id' => $getappointment->user_id,
+                    'doctor_id' => $getappointment->doctor_id,
+                    'appointment_id' => $getappointment->id,
                     'meeting_id' => $meeting['data']['id'],
                     'topic' => $meeting['data']['topic'],
                     'start_at' => $start_at->format('Y-m-d H:i:s'),
@@ -79,7 +79,7 @@ class ZoomServices
                 if ($create) {
                     return response()->json([
                         'status' => true,
-                        'message' => 'success',
+                        'message' => 'success, meeting created',
                         'data' => $create
                     ], 200);
                 }

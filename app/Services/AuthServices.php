@@ -54,4 +54,18 @@ class AuthServices
     public function sendEmail($email, $token)
     {
     }
+
+    public function logout($token)
+    {
+        // logout user
+
+        if (auth($token)->check()) {
+
+            auth($token)->logout();
+
+            return response()->json([
+                'message' => 'Successfully logged out'
+            ]);
+        }
+    }
 }

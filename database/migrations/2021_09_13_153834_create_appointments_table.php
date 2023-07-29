@@ -17,7 +17,7 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('doctor_id');
-            $table->string('date');
+            $table->string('day');
             $table->string('start');
             $table->string('end');
             $table->string('status');

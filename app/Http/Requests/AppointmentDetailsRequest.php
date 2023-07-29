@@ -26,8 +26,9 @@ class AppointmentDetailsRequest extends FormRequest
         return [
             'appointment_id' => ['required'],
             'purpose' => ['required'],
-            'length' => ['required'],
-            "treatments"  => ['required'],
+            'symptoms' => ['required'],
+            'allergies' => ['required'],
+            "medications"  => ['required'],
             "others"  => ['required'],
         ];
     }

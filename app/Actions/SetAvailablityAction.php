@@ -2,7 +2,6 @@
 
 namespace App\Actions;
 
-use Carbon\Carbon;
 use App\Models\Schedule;
 use App\Models\Timeslot;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -14,8 +13,8 @@ class SetAvailablityAction
     public function handle($validated)
     {
         $setSchedule = Schedule::updateOrCreate(
-            ['doctor_id' => $validated['doctor_id'], 'date' =>  $validated['date']],
-            ['date' =>  $validated['date']]
+            ['doctor_id' => $validated['doctor_id'], 'day' =>  $validated['day']],
+            ['day' =>  $validated['day']]
         );
 
         if ($setSchedule) {

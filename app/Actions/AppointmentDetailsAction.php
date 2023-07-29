@@ -5,7 +5,6 @@ namespace App\Actions;
 use App\Models\Details;
 use App\Models\Appointment;
 use Lorisleiva\Actions\Concerns\AsAction;
-use App\Http\Requests\AppointmentDetailsRequest;
 
 class AppointmentDetailsAction
 {
@@ -24,8 +23,9 @@ class AppointmentDetailsAction
 
                 [
                     'purpose' => $data['purpose'],
-                    'length' => $data['length'],
-                    'treatments' => $data['treatments'],
+                    'symptoms' =>  $data['symptoms'],
+                    'allergies' => $data['allergies'],
+                    'medications' => $data['medications'],
                     'others' => $data['others']
                 ]
             );
