@@ -28,9 +28,6 @@ class AppointmentController extends Controller
         $validated = $request->validated();
 
         $user_id = Auth::user($request->token)->id;
-        // $date = Carbon::now()->toFormattedDateString();
-
-        // Appointment::truncate();
 
         return CreateAppointmentAction::run($validated, $user_id);
     }
@@ -87,7 +84,7 @@ class AppointmentController extends Controller
 
     public function appointmentByPaymentStatus(Request $request)
     {
-        $appointments = Appointment::where('user_id', Auth::user($request->token)->id)
+        $appointments = Appointment::where('user_id', Auth::user()->id)
             ->where('payment_status', 'PAID')
             ->with(['doctor', 'zoomMeeting'])
             ->get();

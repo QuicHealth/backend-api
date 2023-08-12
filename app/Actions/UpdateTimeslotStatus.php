@@ -12,13 +12,15 @@ class UpdateTimeslotStatus
 
     public function handle($doctor_id, $day, $time_slots, $selected = true)
     {
-
         $schedule = $this->getScheduleID($doctor_id, $day);
 
-        Timeslot::where('schedule_id', $schedule->id)
+        $updateTimeslot = Timeslot::where('schedule_id', $schedule->id)
             ->where('start', $time_slots['start'])
             ->where('end', $time_slots['end'])
             ->update(['selected' => $selected]);
+
+
+        return $updateTimeslot;
 
         // return $time;
     }

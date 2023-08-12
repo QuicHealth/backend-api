@@ -88,7 +88,10 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof AuthenticationException) {
-            return $this->notAllowedResponse($e->getMessage());
+            // return $this->notAllowedResponse($e->getMessage());
+            if (!$request->expectsJson()) {
+                return response()->json(['message' => 'Not Authenticated'], 403);
+            }
         }
 
         if ($e instanceof AuthorizationException) {

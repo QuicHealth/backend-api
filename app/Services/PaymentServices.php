@@ -94,17 +94,24 @@ class PaymentServices
 
             return $response;
         }
+
+        if ($payment_gateway == 'paystack') {
+
+            $response = $this->verifyPaystackPayment($tx_id);
+
+            return $response;
+        }
     }
 
     public function updateTimeslot($appointment)
     {
         $doctor_id = $appointment->doctor_id;
-        $date = $appointment->date;
+        $day = $appointment->day;
         $time_slots = [
             "start" =>  $appointment->start_time,
             "end" =>  $appointment->end_time,
         ];
-        return UpdateTimeslotStatus::run($doctor_id, $date, $time_slots);
+        return UpdateTimeslotStatus::run($doctor_id, $day, $time_slots);
     }
 
     public function verifyFlutterwavePayment($tx_id)
@@ -114,5 +121,9 @@ class PaymentServices
         $response = $wave->verifyTransaction($tx_id);
 
         return $response;
+    }
+
+    public function verifyPaystackPayment()
+    {
     }
 }

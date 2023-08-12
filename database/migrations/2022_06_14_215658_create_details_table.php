@@ -17,8 +17,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('appointment_id');
             $table->text('purpose');
-            $table->string('length');
-            $table->text('treatments');
+            $table->text('symptoms');
+            $table->string('allergies');
+            $table->text('medications');
             $table->text('others');
             $table->timestamps();
 

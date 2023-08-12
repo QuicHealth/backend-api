@@ -31,8 +31,6 @@ class SettingService
     {
         $this->settingsDB =  $this->model->where('id', $this->userId)->first();
 
-        // dd($this->settingsDB);
-
         return $this;
     }
 

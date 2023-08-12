@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Doctor;
 use App\Models\Zoom;
 use App\Models\Doctor;
 use App\Models\Report;
+use App\Models\Account;
 use App\Models\Details;
 use App\Models\Schedule;
 use App\Models\Appointment;
@@ -271,6 +272,23 @@ class DoctorController extends Controller
         ]);
     }
 
+    public function history()
+    {
+        $healthRecord = Report::where('doctor_id', auth('doctor_api')->user()->id)->with('appointments')->get();
+
+        if ($healthRecord) {
+            return response()->json([
+                'status' => 'success',
+                'data' => $healthRecord
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No health record found'
+            ]);
+        }
+    }
+
     public function getEMR($appointment_id)
     {
         $record = Report::where('appointments_id', $appointment_id)->first();
@@ -337,7 +355,6 @@ class DoctorController extends Controller
     }
 
     public function markNotificationAsRead(Request $request)
-
     {
         $user_type = "doctor";
 
@@ -346,5 +363,58 @@ class DoctorController extends Controller
         $markAsRead = new NotificationService($user_type, auth('doctor_api')->user()->id);
 
         return $markAsRead->notification($notification_id)->update();
+    }
+
+    public function account(Request $request)
+    {
+        $doctor_id = auth('doctor_api')->user()->id;
+        $this->validate($request, [
+            'bank' => ['required', 'string'],
+            'account_name' => ['required', 'string', 'min:3'],
+            'account_number' => ['required', 'numeric', 'max:11', 'unique:accounts,account_number,except,' . $doctor_id],
+            'amount' => ['required', 'numeric'],
+        ]);
+
+        // using laraval updateOrCreate() method
+        $account = Account::updateOrCreate(
+            ['doctor_id' => auth('doctor_api')->user()->id],
+            [
+                'bank' => $request->bank,
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+                'amount' => $request->amount,
+            ]
+        );
+
+        if ($account) {
+            return response([
+                'status' => true,
+                'message' => 'Account details saved successfully',
+                'data' => $account
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Error saving account Details'
+        ]);
+    }
+
+    public function getAccountDetails()
+    {
+        $account = Account::where('doctor_id', auth('doctor_api')->user()->id)->first();
+
+        if ($account) {
+            return response([
+                'status' => true,
+                'message' => 'Account details found',
+                'data' => $account
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Account details not found'
+        ]);
     }
 }

@@ -148,9 +148,14 @@ Route::prefix('v1')->group(function () {
                 Route::get('notifications', [DoctorController::class, 'getAllNotification']);
                 Route::post('notification', [DoctorController::class, 'markNotificationAsRead']);
 
+                Route::get('doctor/accout-details', [DoctorController::class, 'getAccountDetails']);
+                Route::post('doctor/accout-details', [DoctorController::class, 'account']);
+
+
                 // Route::post('write-report/{appointment_id}', 'ReportController@store');
                 Route::post('add-emr', [DoctorController::class, 'recordHealthHistory']);
                 Route::get('get-emr/{appointment_id}', [DoctorController::class, 'getEMR']);
+                Route::get('get-history', [DoctorController::class, 'history']);
                 Route::post('update-emr/{appointment_id}', [DoctorController::class, 'UpdateEMR']);
 
                 Route::post('upload_image', [DoctorController::class, 'uploadImage']);

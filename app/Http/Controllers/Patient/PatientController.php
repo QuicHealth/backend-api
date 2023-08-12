@@ -140,7 +140,7 @@ class PatientController extends Controller
     }
     public function getRandomHospitals()
     {
-        $hospitals = Hospital::inRandomOrder()->limit(4)->with('doctors')->get();
+        $hospitals = Hospital::inRandomOrder()->limit(4)->with('doctors', 'settings')->get();
 
         return response([
             'status' => true,
@@ -150,7 +150,7 @@ class PatientController extends Controller
 
     public function getRandomDoctors()
     {
-        $doctors = Doctor::inRandomOrder()->limit(4)->with(['schedule', 'hospital'])->get();
+        $doctors = Doctor::inRandomOrder()->limit(4)->with(['schedule', 'hospital', 'account'])->get();
 
         return response([
             'status' => true,
@@ -161,7 +161,7 @@ class PatientController extends Controller
     public function getDoctors()
     {
         $doctors = Doctor::where('status', 1)
-            ->with(['schedule', 'hospital'])
+            ->with(['schedule', 'hospital', 'account'])
             ->paginate(12);
 
         return response([
@@ -173,7 +173,7 @@ class PatientController extends Controller
     public function getDoctor($id)
     {
         $doctor = Doctor::where('unique_id', $id)
-            ->with(['schedule', 'hospital'])
+            ->with(['schedule', 'hospital', 'account'])
             ->first();
         if (!$doctor) {
             return response([
