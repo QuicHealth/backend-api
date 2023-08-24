@@ -66,7 +66,7 @@ class AppointmentController extends Controller
     public function getAll(Request $request)
     {
         $appointments = Appointment::where('user_id', Auth::user($request->token)->id)
-            ->with('doctor')
+            ->with('doctor', 'zoomMeeting')
             ->get();
 
         if ($appointments) {
@@ -89,7 +89,10 @@ class AppointmentController extends Controller
             ->with(['doctor', 'zoomMeeting'])
             ->get();
 
+
+
         if ($appointments) {
+
             // update appointment zoomMeeting status
             foreach ($appointments as $appointment) {
 

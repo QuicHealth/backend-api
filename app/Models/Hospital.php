@@ -12,14 +12,13 @@ class Hospital extends Authenticatable implements JWTSubject
 {
     use SoftDeletes, HasFactory;
 
-    protected $appends = ['doctors'];
 
     protected $fillable = [
         'name', 'email', 'phone', 'image', 'featured', 'status', 'latitude', 'city', 'state', 'country', 'address', 'description'
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'created_at', 'updated_at',
     ];
 
     /**
@@ -28,11 +27,6 @@ class Hospital extends Authenticatable implements JWTSubject
     public function doctors()
     {
         return $this->hasMany(Doctor::class);
-    }
-
-    public function getDoctorsAttribute()
-    {
-        return $this->doctors()->get();
     }
 
     /**

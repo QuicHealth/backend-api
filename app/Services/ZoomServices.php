@@ -28,6 +28,16 @@ class ZoomServices
             ], 422);
         }
 
+        $checkZoom = Zoom::where('appointment_id', $data['appointment_id'])->first();
+
+        if ($checkZoom->status !== 'cancelled') {
+            return response()->json([
+                'status' => false,
+                'message' => 'Sorry, meeting already created for this appointment',
+                'data' => []
+            ], 422);
+        }
+
         $appointmentTime = $getappointment->date . '' . $getappointment->start;
 
         $tempDate = new DateTime($appointmentTime);
@@ -74,6 +84,7 @@ class ZoomServices
                     'password' => $meeting['data']['password'],
                     'start_url' => $meeting['data']['start_url'],
                     'join_url' => $meeting['data']['join_url'],
+                    'status' => 'pending'
                 ]);
 
                 if ($create) {

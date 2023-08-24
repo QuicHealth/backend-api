@@ -25,7 +25,9 @@ class CreateAppointmentRequest extends FormRequest
     {
         return [
             'doctor_id' => ['required'],
-            'day' => ['required'],
+            'day' => ['required', 'string'],
+            'date' => ['required', 'date_format:d-m-Y'],
+            "time_slots"  => ['required', 'array'],
             "time_slots.start"  => ['required', 'date_format:H:i'],
             "time_slots.end"  => ['required', 'date_format:H:i'],
         ];

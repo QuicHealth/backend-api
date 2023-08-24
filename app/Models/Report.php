@@ -11,6 +11,10 @@ class Report extends Model
 
     protected $guarded = [];
 
+    protected $hidden = [
+        'deleted_at', 'created_at', 'updated_at'
+    ];
+
     public function doctor()
     {
         return $this->belongsTo(Doctor::class);

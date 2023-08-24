@@ -29,6 +29,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::fallback(function () {
+    return response()->json([
+        'message' => 'Endpoint Not Found. If error persists, contact admin'
+    ], 404);
+});
+
 Route::prefix('v1')->group(function () {
 
     Route::middleware('cors')->group(function () {
@@ -148,8 +154,8 @@ Route::prefix('v1')->group(function () {
                 Route::get('notifications', [DoctorController::class, 'getAllNotification']);
                 Route::post('notification', [DoctorController::class, 'markNotificationAsRead']);
 
-                Route::get('doctor/accout-details', [DoctorController::class, 'getAccountDetails']);
-                Route::post('doctor/accout-details', [DoctorController::class, 'account']);
+                Route::get('get-account-details', [DoctorController::class, 'getAccountDetails']);
+                Route::post('save-account', [DoctorController::class, 'account']);
 
 
                 // Route::post('write-report/{appointment_id}', 'ReportController@store');

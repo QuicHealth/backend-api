@@ -29,6 +29,7 @@ class DoctorResource extends JsonResource
                 'address' => $this->address,
                 'specialty' => $this->specialty,
                 'hospital' => $this->whenLoaded('hospital'),
+                'account' => $this->whenLoaded('account'),
                 // 'hospital' =>  HospitalResource::collection($this->whenLoaded('hospital')),
                 'appointments' => AppointmentResource::collection($this->whenLoaded('appointments')),
                 'availablity' => ScheduleResource::collection($this->whenLoaded('schedule')),

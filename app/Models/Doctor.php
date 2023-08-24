@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Concerns\HasRelationships;
@@ -14,9 +12,11 @@ class Doctor extends Authenticatable implements JWTSubject
 {
     use SoftDeletes, HasFactory, HasRelationships;
 
-    protected $appends = ['hospital', 'specialties'];
-
     protected $guarded = [];
+
+    protected $hidden = [
+        'password', 'remember_token', 'deleted_at', 'created_at', 'updated_at'
+    ];
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
@@ -37,18 +37,6 @@ class Doctor extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
-    }
-
-    public function getHospitalAttribute()
-    {
-        // return DB::table('hospitals')->where('id', $this->hospital_id)
-        //     ->where('deleted_at', null)
-        //     ->first();
-    }
-
-    public function getSpecialtiesAttribute()
-    {
-        // return DB::table('specialties')->where('id', $this->specialty)->first();
     }
 
     public function schedule()

@@ -18,6 +18,10 @@ class Details extends Model
         "others",
     ];
 
+    protected $hidden = [
+        'deleted_at', 'created_at', 'updated_at'
+    ];
+
     public function appointment()
     {
         return $this->belongsTo(Appointment::class);

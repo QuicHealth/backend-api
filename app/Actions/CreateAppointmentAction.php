@@ -81,6 +81,7 @@ class CreateAppointmentAction
     {
         $checkAppointmentBooking = Appointment::where('doctor_id', $this->validated['doctor_id'])
             ->where('day', $this->validated['day'])
+            ->where('date', $this->validated['date'])
             ->where('start', $this->validated['time_slots']['start'])
             ->where('end', $this->validated['time_slots']['end'])
             ->first();
@@ -105,7 +106,8 @@ class CreateAppointmentAction
                 ];
             }
         }
-
+        // $checkschedules = $this->schedule->where('doctor_id', $this->validated['doctor_id'])
+        //     ->where('day', $this->validated['day'])->first();
         return [
             'status' => 'success',
             'message' => 'Time slot available',
@@ -118,6 +120,7 @@ class CreateAppointmentAction
             "user_id" => $user_id,
             "doctor_id" => $this->validated['doctor_id'],
             "day" => $this->validated['day'],
+            "date" => $this->validated['date'],
             "start" => $this->validated['time_slots']['start'],
             "end" => $this->validated['time_slots']['end'],
             "status" => 'pending',

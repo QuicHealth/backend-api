@@ -161,7 +161,7 @@ class PatientController extends Controller
     public function getDoctors()
     {
         $doctors = Doctor::where('status', 1)
-            ->with(['schedule', 'hospital', 'account'])
+            ->with('schedule', 'hospital', 'account')
             ->paginate(12);
 
         return response([

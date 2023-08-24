@@ -4,15 +4,14 @@ namespace App\Exceptions;
 
 use Exception;
 use Throwable;
+use ErrorException;
 use App\Traits\HasResponse;
-use Illuminate\Support\Facades\Log;
+use BadMethodCallException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
-use App\Events\NotifyTeamMembersOfServerErrorEvent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
@@ -66,6 +65,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+
         if ($e instanceof ModelNotFoundException && $request->wantsJson()) {
             return response()->json(
                 [
@@ -102,6 +102,16 @@ class Handler extends ExceptionHandler
             return $this->serverErrorResponse($e->getMessage());
         }
 
-        return $this->serverErrorResponse(__('errors.server_error'), new Exception($e->getMessage()));
+        // instanceof server error
+        if ($e instanceof ErrorException || $e->getCode() == 0) {
+            return $this->serverErrorResponse(__('errors.server_error'), new Exception($e->getMessage()));
+        }
+
+        if ($e instanceof BadMethodCallException) {
+
+            return $this->serverErrorResponse(__('errors.server_error'), new Exception($e->getMessage()));
+        }
+        //default laravel response
+        return parent::render($request, $e);
     }
 }

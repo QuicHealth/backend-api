@@ -19,6 +19,7 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
+use Illuminate\Validation\Rule;
 
 class DoctorController extends Controller
 {
@@ -274,12 +275,14 @@ class DoctorController extends Controller
 
     public function history()
     {
-        $healthRecord = Report::where('doctor_id', auth('doctor_api')->user()->id)->with('appointments')->get();
+        // $healthRecord = Report::where('doctor_id', auth('doctor_api')->user()->id)->with('appointments')->get();
+        // $detail = Details::where('appointment_id', auth('doctor_api')->user()->id)->with('appointments')->get();
+        $appointmentHistory = Appointment::where('doctor_id', auth('doctor_api')->user()->id)->with('report', 'details')->get();
 
-        if ($healthRecord) {
+        if ($appointmentHistory) {
             return response()->json([
                 'status' => 'success',
-                'data' => $healthRecord
+                'data' => $appointmentHistory
             ]);
         } else {
             return response()->json([
@@ -371,7 +374,7 @@ class DoctorController extends Controller
         $this->validate($request, [
             'bank' => ['required', 'string'],
             'account_name' => ['required', 'string', 'min:3'],
-            'account_number' => ['required', 'numeric', 'max:11', 'unique:accounts,account_number,except,' . $doctor_id],
+            'account_number' => ['required', 'numeric', Rule::unique('accounts')->ignore($doctor_id)],
             'amount' => ['required', 'numeric'],
         ]);
 
