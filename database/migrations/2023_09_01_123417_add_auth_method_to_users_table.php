@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('reports', function (Blueprint $table) {
-            $table->text('diagnosis')->after('appointment_id')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('auth_type')->after('dob')->default('email');
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('reports', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

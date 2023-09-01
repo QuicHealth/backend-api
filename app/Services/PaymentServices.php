@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\Appointment;
 use App\Classes\Flutterwave\Wave;
 use App\Actions\UpdateTimeslotStatus;
+use App\Classes\Paystack\Paystack;
 
 class PaymentServices
 {
@@ -123,7 +124,12 @@ class PaymentServices
         return $response;
     }
 
-    public function verifyPaystackPayment()
+    public function verifyPaystackPayment($tx_id)
     {
+        $paystack = new Paystack();
+
+        $response = $paystack->verifyTransaction($tx_id);
+
+        return $response;
     }
 }

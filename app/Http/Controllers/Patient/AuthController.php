@@ -4,29 +4,30 @@ namespace App\Http\Controllers\Patient;
 
 use App\Models\User;
 use Illuminate\Support\Str;
-use App\Jobs\MailSendingJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\PatientResource;
 use App\Http\Controllers\helpController;
-use App\Notifications\UserRegisterNotification;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response as RES;
 
 class AuthController extends Controller
 {
+    protected const AUTH_TYPE = "google";
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'firstname' => 'required|string|between:2,100',
             'lastname' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
-            'gender' => 'required|string',
-            'phone' => 'required|string|unique:users',
-            'dob' => 'required|string',
+            'gender' => 'sometimes|string',
+            'phone' => 'sometimes|string|unique:users',
+            'dob' => 'sometimes|string',
             'password' => 'required|string|confirmed|min:6',
         ]);
 
@@ -43,9 +44,6 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
-        $user->gender = $request->gender;
-        $user->dob = $request->dob;
-        $user->phone = $request->phone;
         $user->password = bcrypt($request->password);
 
 
@@ -102,6 +100,64 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function authenicateWithGoogle(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'bail|required',
+            'given_name' => 'bail|required',
+            'family_name' => 'bail|required',
+            'sub' => 'bail|required',
+            'picture' => 'sometimes',
+
+        ]);
+
+        if ($validator->fails()) {
+            $status = false;
+            $message = 'error';
+            $data = $validator->errors()->toArray();
+            $code = RES::HTTP_BAD_REQUEST;
+            return helpController::getResponse($status, $code, $message,  $data);
+        }
+
+        $email = $request->email;
+        $firstname = $request->given_name;
+        $lastname = $request->family_name;
+        $password = $request->sub;
+        $photo = $request->picture;
+
+        $credentials = [$email, $password];
+
+        $checkEmail = User::whereEmail($email)->first();
+
+        if (!empty($checkEmail)) {
+            if ($checkEmail->auth_type != self::AUTH_TYPE) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Sign up was not by google please use the form'
+                ]);
+            }
+
+            return $this->getAuthToken($credentials);
+        }
+
+        $user = new User();
+
+        $user->email = $email;
+        $user->password = Hash::make($password);
+        $user->firstname = $firstname;
+        $user->lastname = $lastname;
+        $user->email_verified_at = Carbon::now();
+        $user->unique_id = uniqid();
+        $user->auth_type = self::AUTH_TYPE;
+        $user->profile_pic_link = $photo;
+
+        if ($user->save()) {
+            // login the user in
+            return $this->getAuthToken($credentials);
+        }
+    }
+
 
     public function forget_password(Request $request)
     {
@@ -183,6 +239,22 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json(['status' => true, 'msg' => "Password reset was successful"]);
+    }
+
+    protected function getAuthToken($credentials)
+    {
+        if ($token = JWTAuth::attempt($credentials)) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Login Successful',
+                'token' => $this->createNewToken($token)
+            ]);
+        } else {
+            return response()->json([
+                'status' => true,
+                'message' => 'Auth failed, please reach out to our support team'
+            ]);
+        }
     }
 
     /**

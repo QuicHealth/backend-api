@@ -42,6 +42,7 @@ Route::prefix('v1')->group(function () {
         Route::namespace('Patient')->group(function () {
 
             Route::post('register', [AuthController::class, 'register']);
+            Route::post('authenicateWithGoogle', [AuthController::class, 'authenicateWithGoogle']);
             Route::post('login', [AuthController::class, 'login']);
 
             Route::middleware('auth:api')->group(function () {
