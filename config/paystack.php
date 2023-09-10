@@ -3,16 +3,28 @@
 return [
 
     /**
-     * Public Key From Paystack Dashboard
+     * Live Public Key From Paystack Dashboard
      *
      */
-    'publicKey' => env('PAYSTACK_PUBLIC_KEY'),
+    'livePublicKey' => env('PS_LIVE_PUBLIC_KEY'),
 
     /**
-     * Secret Key From Paystack Dashboard
+     * Live Secret Key From Paystack Dashboard
      *
      */
-    'secretKey' => env('PAYSTACK_SECRET_KEY'),
+    'liveSecretKey' => env('PS_LIVE_SECRET_KEY'),
+
+    /**
+     * Test Public Key From Paystack Dashboard
+     *
+     */
+    'testPublicKey' => env('PS_TEST_PUBLIC_KEY'),
+
+    /**
+     * Test Secret Key From Paystack Dashboard
+     *
+     */
+    'testSecretKey' => env('PS_TEST_SECRET_KEY'),
 
     /**
      * Paystack Payment URL

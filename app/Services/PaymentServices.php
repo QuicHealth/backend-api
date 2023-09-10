@@ -24,9 +24,9 @@ class PaymentServices
         }
 
         // check payment status
-        $verification =  $this->verifyPayment($data['transaction_id'], $data['payment_gateway_type'], $appointment);
+        $verification =  $this->verifyPayment($data['transaction_id'], $data['tx_ref'], $data['payment_gateway_type']);
 
-        if ($verification['status'] === 'success') {
+        if ($verification['status'] === 'success' || $verification['status'] === true) {
 
             // update timeslot
             $this->updateTimeslot($appointment);
@@ -87,7 +87,7 @@ class PaymentServices
         }
     }
 
-    protected function verifyPayment($tx_id, $payment_gateway, $appointment)
+    protected function verifyPayment($tx_id, $tx_ref, $payment_gateway)
     {
         if ($payment_gateway == 'flutterwave') {
 
@@ -98,7 +98,7 @@ class PaymentServices
 
         if ($payment_gateway == 'paystack') {
 
-            $response = $this->verifyPaystackPayment($tx_id);
+            $response = $this->verifyPaystackPayment($tx_ref);
 
             return $response;
         }

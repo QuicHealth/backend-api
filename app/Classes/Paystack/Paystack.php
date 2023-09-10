@@ -13,7 +13,7 @@ class Paystack
 
     public function __construct()
     {
-        $this->secretKey = config('paystack.secretKey');
+        $this->secretKey = config('paystack.testSecretKey');
         $this->baseUrl = 'https://api.paystack.co';
         $this->secretHash = config('paystack.secretHash');
     }

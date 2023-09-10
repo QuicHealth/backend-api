@@ -98,7 +98,7 @@ class AppointmentController extends Controller
 
                 // get the zoomMeeting start_time and check if the meeting is ongoing, or passed
 
-                $meetingTime = Carbon::parse($appointment->zoomMeeting->start_time);
+                $meetingTime = Carbon::parse($appointment->zoomMeeting->start_at);
 
                 $currentTime = Carbon::now();
 

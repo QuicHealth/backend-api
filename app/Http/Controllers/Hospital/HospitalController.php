@@ -143,7 +143,7 @@ class HospitalController extends Controller
             'email' => 'required|email|unique:doctors',
             'phone' => 'required',
             'address' => 'required|string',
-            'specialty' => 'required|integer',
+            'specialty' => 'required|string',
         ]);
 
         $password = rand(111111, 999999);

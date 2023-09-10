@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppointmentResource extends JsonResource
@@ -19,9 +20,9 @@ class AppointmentResource extends JsonResource
         return [
             'id' => $this->id,
             'patient_id' => $this->user_id,
+            'user' => User::find($this->user_id),
             'doctor_id' => $this->doctor_id,
             'day' => $this->day,
-            // 'day_id' => $this->day_id,
             'status' => $this->status,
             'start' => $this->start,
             'end' => $this->end,
