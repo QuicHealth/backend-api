@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Models\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use CloudinaryLabs\CloudinaryLaravel\CloudinaryEngine;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -81,5 +82,12 @@ class Helpers
             'message' => 'Notification not sent'
 
         ];
+    }
+
+    public static function updateAppointment($created_at)
+    {
+        $appointmentCreatedTime = Carbon::parse($created_at);
+
+        $currentTime = Carbon::now();
     }
 }

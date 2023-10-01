@@ -10,6 +10,7 @@ use App\Models\Appointment;
 use App\Models\Notification;
 use Illuminate\Http\Response;
 use App\Events\NotificationReceived;
+use Illuminate\Support\Carbon;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Notifications\CreateAppointmentNotification;
 
@@ -93,6 +94,30 @@ class CreateAppointmentAction
             // }
 
             if ($checkAppointmentBooking->payment_status == 'pending') {
+
+                $appointmentCreatedTime = Carbon::parse($checkAppointmentBooking->created_at);
+
+                $currentTime = Carbon::now();
+
+                $differentInMinutes = $appointmentCreatedTime->diffInMinutes($currentTime);
+
+                if ($differentInMinutes >= 10) {
+
+                    // if the different in minutes is greater than 10 mins
+
+                    if ($checkAppointmentBooking->delete()) {
+                        return [
+                            'status' => 'success',
+                            'message' => 'Time slot available',
+                        ];
+                    }
+
+                    return [
+                        'status' => 'error',
+                        'message' => 'something went wrong',
+                    ];
+                }
+
                 return [
                     'status' => 'warning',
                     'message' => 'Time slot have already been selected but have not been paid, select another time slot',

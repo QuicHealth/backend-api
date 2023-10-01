@@ -22,6 +22,7 @@ class AppointmentResource extends JsonResource
             'patient_id' => $this->user_id,
             'user' => User::find($this->user_id),
             'doctor_id' => $this->doctor_id,
+            'date' => $this->date,
             'day' => $this->day,
             'status' => $this->status,
             'start' => $this->start,

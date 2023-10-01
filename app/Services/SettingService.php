@@ -37,6 +37,8 @@ class SettingService
     public function get(): array
     {
         return [
+            "firstname" =>  $this->settingsDB->firstname,
+            "lastname" =>  $this->settingsDB->lastname,
             "image" =>  $this->settingsDB->profile_pic_link,
             "email" =>  $this->settingsDB->email,
             "phone" =>  $this->settingsDB->phone,
