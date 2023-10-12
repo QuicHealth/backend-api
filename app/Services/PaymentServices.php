@@ -16,6 +16,7 @@ class PaymentServices
         // check if appointment exist in the database
         $appointment = Appointment::find($data['customer']['appointments_id']);
 
+
         if (!$appointment) {
             return response()->json([
                 'status' => 'error',
@@ -31,20 +32,22 @@ class PaymentServices
             // update timeslot
             $this->updateTimeslot($appointment);
 
-            $payload = [
-                'user_id' => $data['customer']['user_id'],
-                'appointments_id' => $data['customer']['appointments_id'],
-                'amount' => $data['amount'],
-                'paymentStatus' => $verification['data']['status'],
-                'tx_ref' => $data['tx_ref'],
-                'transaction_id' => $data['transaction_id'],
-                'charged_amount' => $data['charged_amount'],
-                'currency' => $data['currency'],
-                'processor_response' => $data['charge_response_message'],
-                'payment_gateway_type' =>  $data['payment_gateway_type'],
-            ];
+            $payment = Payment::updateOrCreate(
+                [
+                    'tx_ref' => $data['tx_ref'], 'transaction_id' => $data['transaction_id']
+                ],
+                [
+                    'user_id' => $data['customer']['user_id'],
+                    'appointments_id' => $data['customer']['appointments_id'],
+                    'amount' => $data['amount'],
+                    'paymentStatus' => $verification['data']['status'],
+                    'charged_amount' => $data['charged_amount'],
+                    'currency' => $data['currency'],
+                    'processor_response' => $data['charge_response_message'],
+                    'payment_gateway_type' =>  $data['payment_gateway_type'],
+                ]
+            );
 
-            $payment = Payment::create($payload);
 
             if ($payment) {
                 // send email to patient
@@ -64,7 +67,6 @@ class PaymentServices
                 // update appointment payment status
                 $appointment->payment_status = 'PAID';
                 $appointment->save();
-
 
                 // create zoom meeting.
                 $zoomMeeting = new ZoomServices();
@@ -109,9 +111,10 @@ class PaymentServices
         $doctor_id = $appointment->doctor_id;
         $day = $appointment->day;
         $time_slots = [
-            "start" =>  $appointment->start_time,
-            "end" =>  $appointment->end_time,
+            "start" =>  $appointment->start,
+            "end" =>  $appointment->end,
         ];
+
         return UpdateTimeslotStatus::run($doctor_id, $day, $time_slots);
     }
 

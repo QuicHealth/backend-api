@@ -10,6 +10,8 @@ use App\Models\Details;
 use App\Models\Schedule;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Models\DoctorProfile;
+use Illuminate\Validation\Rule;
 use App\Services\SettingService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +21,6 @@ use App\Http\Requests\ScheduleRequest;
 use App\Http\Requests\SettingsRequest;
 use App\Http\Resources\DoctorResource;
 use App\Http\Resources\ScheduleResource;
-use Illuminate\Validation\Rule;
 
 class DoctorController extends Controller
 {
@@ -67,8 +68,8 @@ class DoctorController extends Controller
         $doctor = Doctor::where("id", auth('doctor_api')->user()->id)
             ->with(['hospital', 'schedule', 'appointments'])
             ->first();
-        $totalPendingAppointments  = Appointment::where('user_id', auth('doctor_api')->user()->id)->where('status', 'pending')->count();
-        $totalSuccussfulAppointments  = Appointment::where('user_id', auth('doctor_api')->user()->id)->where('status', 'successful')->count();
+        $totalPendingAppointments  = Appointment::where('doctor_id', auth('doctor_api')->user()->id)->where('status', 'pending')->count();
+        $totalSuccussfulAppointments  = Appointment::where('doctor_id', auth('doctor_api')->user()->id)->where('status', 'successful')->count();
         // $allPendingAppointments = Appointment::where('user_id', auth('doctor_api')->user()->id)->with('doctor')->get();
 
         // dd($doctor);DoctorResource::collection
@@ -412,6 +413,57 @@ class DoctorController extends Controller
                 'status' => true,
                 'message' => 'Account details found',
                 'data' => $account
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Account details not found'
+        ]);
+    }
+
+    public function healthProfile(Request $request)
+    {
+        $hospital = Doctor::find(auth('doctor_api')->user()->id)->hospital;
+
+        $this->validate($request, [
+            'bio' => ['required', 'string'],
+            'fee' => ['required', 'numeric'],
+        ]);
+
+        // using laraval updateOrCreate() method
+        $profile = DoctorProfile::updateOrCreate(
+            ['doctor_id' => auth('doctor_api')->user()->id],
+            [
+                'bio' => $request->bio,
+                'fee' => $request->fee,
+                'hospital' => $hospital->name,
+            ]
+        );
+
+        if ($profile) {
+            return response([
+                'status' => true,
+                'message' => 'Account details saved successfully',
+                'data' => $profile
+            ]);
+        }
+
+        return response([
+            'status' => false,
+            'message' => 'Error saving account Details'
+        ]);
+    }
+
+    public function getHealthProfile()
+    {
+        $profile = DoctorProfile::where('doctor_id', auth('doctor_api')->user()->id)->first();
+
+        if ($profile) {
+            return response([
+                'status' => true,
+                'message' => 'Account details found',
+                'data' => $profile
             ]);
         }
 

@@ -158,6 +158,9 @@ Route::prefix('v1')->group(function () {
                 Route::get('get-account-details', [DoctorController::class, 'getAccountDetails']);
                 Route::post('save-account', [DoctorController::class, 'account']);
 
+                Route::get('get-health-profile', [DoctorController::class, 'getHealthProfile']);
+                Route::post('save-health-profile', [DoctorController::class, 'healthProfile']);
+
 
                 // Route::post('write-report/{appointment_id}', 'ReportController@store');
                 Route::post('add-emr', [DoctorController::class, 'recordHealthHistory']);

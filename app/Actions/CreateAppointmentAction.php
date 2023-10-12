@@ -103,7 +103,7 @@ class CreateAppointmentAction
 
                 if ($differentInMinutes >= 10) {
 
-                    // if the different in minutes is greater than 10 mins
+                    // if the different in minutes is greater than 10 mins then deleted that appointment
 
                     if ($checkAppointmentBooking->delete()) {
                         return [

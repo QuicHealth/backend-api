@@ -126,7 +126,7 @@ class AuthController extends Controller
         $password = $request->sub;
         $photo = $request->picture;
 
-        $credentials = [$email, $password];
+        $credentials = ['email' => $email, 'password' => $password];
 
         $checkEmail = User::whereEmail($email)->first();
 
@@ -244,11 +244,17 @@ class AuthController extends Controller
     protected function getAuthToken($credentials)
     {
         if ($token = JWTAuth::attempt($credentials)) {
-            return response()->json([
-                'status' => true,
-                'message' => 'Login Successful',
-                'token' => $this->createNewToken($token)
-            ]);
+            $user = User::whereEmail($credentials['email'])->first();
+
+            $status = true;
+            $message = 'Login Successful';
+            $code = RES::HTTP_OK;
+            $data = [
+                'user' => new PatientResource($user),
+                'token' => $this->createNewToken($token),
+            ];
+
+            return helpController::getResponse($status, $code, $message,  $data);
         } else {
             return response()->json([
                 'status' => true,

@@ -71,4 +71,9 @@ class Doctor extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Account::class);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(DoctorProfile::class);
+    }
 }
