@@ -21,6 +21,7 @@ class TimeslotResource extends JsonResource
             'end' => $this->end,
             'selected' => $this->selected,
             'status' => $this->status,
+            'availablity' => $this->availablity,
         ];
     }
 }

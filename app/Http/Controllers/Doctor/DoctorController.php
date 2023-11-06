@@ -42,7 +42,11 @@ class DoctorController extends Controller
 
     public function getSchedule()
     {
-        $schedule = Schedule::where('doctor_id', auth('doctor_api')->user()->id)->with('timeslot')->get();
+        $schedule = Schedule::where('doctor_id',  auth('doctor_api')->user()->id)
+            ->where('availablity', true)
+            ->whereRelation('timeslot', 'availablity', true)
+            ->get();
+
         return response([
             'status' => true,
             'data' => $schedule
@@ -53,7 +57,8 @@ class DoctorController extends Controller
     {
         $schedule = Schedule::where('doctor_id', auth('doctor_api')->user()->id)
             ->where('date', $date)
-            ->with('timeslot')
+            ->where('availablity', true)
+            ->whereRelation('timeslot', 'availablity', true)
             ->get();
 
         return response([
@@ -61,7 +66,6 @@ class DoctorController extends Controller
             'scheduling' =>  ScheduleResource::collection($schedule)
         ]);
     }
-
 
     public function getDoctorsDashboard(Request $request)
     {
@@ -444,14 +448,14 @@ class DoctorController extends Controller
         if ($profile) {
             return response([
                 'status' => true,
-                'message' => 'Account details saved successfully',
+                'message' => 'Health Profile details saved successfully',
                 'data' => $profile
             ]);
         }
 
         return response([
             'status' => false,
-            'message' => 'Error saving account Details'
+            'message' => 'Error saving Health Profile Details'
         ]);
     }
 
@@ -462,14 +466,14 @@ class DoctorController extends Controller
         if ($profile) {
             return response([
                 'status' => true,
-                'message' => 'Account details found',
+                'message' => 'Health Profile details found',
                 'data' => $profile
             ]);
         }
 
         return response([
             'status' => false,
-            'message' => 'Account details not found'
+            'message' => 'Health Profile details not found'
         ]);
     }
 }

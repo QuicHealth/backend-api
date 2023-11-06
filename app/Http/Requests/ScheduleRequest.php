@@ -26,12 +26,14 @@ class ScheduleRequest extends FormRequest
         return [
             'doctor_id' => ['required'],
             'day' => ['required'],
-            // 'date' => ['required'],
+            'availablity' => ['sometimes', 'boolean'],
+            'date' => ['sometimes'],
             'time_slots' => ['required'],
             "time_slots.*.start"  => "date_format:H:i|distinct",
             "time_slots.*.end"  => "date_format:H:i|distinct",
             "time_slots.*.selected"  => "required",
             "time_slots.*.status"  => "required",
+            "time_slots.*.availablity"  => "sometimes|boolean",
         ];
     }
 }

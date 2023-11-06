@@ -10,6 +10,7 @@ class DoctorProfile extends Model
     use HasFactory;
 
     protected $fillable = [
+        'doctor_id',
         'bio',
         'fee',
         'hospital'

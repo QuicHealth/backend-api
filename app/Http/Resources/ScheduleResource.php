@@ -29,6 +29,7 @@ class ScheduleResource extends JsonResource
             'day' => $this->day,
             'recursion' => $this->recursion,
             'doctor_id' => $this->doctor_id,
+            'availablity' => $this->availablity,
             'doctor' => new DoctorResource($this->whenLoaded('doctor')),
             'timeslot' =>  TimeslotResource::collection($this->timeslot),
             // 'timeslot' =>  TimeslotResource::collection($this->whenLoaded('timeslot')),
