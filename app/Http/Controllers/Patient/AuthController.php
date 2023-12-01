@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Patient;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\HealthProfile;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -50,13 +51,14 @@ class AuthController extends Controller
         $user->save();
         // $user->notify(new UserRegisterNotification($user));
 
-
         if (!$user->save()) {
             $status = false;
             $message = 'Registration Unsuccessful';
             $code = RES::HTTP_UNAUTHORIZED;
             return helpController::getResponse($status, $code, $message);
         }
+
+        $this->createHealthProfileForNewUser($user->id);
 
         $status = true;
         $message = 'Registration successful, please login to continue';
@@ -153,11 +155,21 @@ class AuthController extends Controller
         $user->profile_pic_link = $photo;
 
         if ($user->save()) {
+
+            $this->createHealthProfileForNewUser($user->id);
+
             // login the user in
             return $this->getAuthToken($credentials);
         }
     }
 
+    protected function createHealthProfileForNewUser($userId)
+    {
+
+        $healthProfile = new HealthProfile();
+        $healthProfile->user_id = $userId;
+        $healthProfile->save();
+    }
 
     public function forget_password(Request $request)
     {

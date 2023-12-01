@@ -165,6 +165,26 @@ class DoctorController extends Controller
         }
     }
 
+    public function findAppointment($unique_id)
+    {
+
+        $appointments = Appointment::whereUniqueId($unique_id)
+            ->with(['user', 'user.healthProfile', 'zoomMeeting', 'details'])
+            ->first();
+
+        if ($appointments) {
+            return response([
+                'status' => true,
+                'Appointments' => $appointments,
+            ], http_response_code());
+        } else {
+            return response([
+                'status' => false,
+                'message' => 'You dont have any appointments',
+            ], http_response_code());
+        }
+    }
+
     public function getAppointmentDetail($appointment_id)
     {
         $details = Details::where('appointment_id', $appointment_id)->first();

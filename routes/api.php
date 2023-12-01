@@ -166,6 +166,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('add-emr', [DoctorController::class, 'recordHealthHistory']);
                 Route::get('get-emr/{appointment_id}', [DoctorController::class, 'getEMR']);
                 Route::get('get-history', [DoctorController::class, 'history']);
+                Route::get('find-appointment/{unique_id}', [DoctorController::class, 'findAppointment']);
                 Route::post('update-emr/{appointment_id}', [DoctorController::class, 'UpdateEMR']);
 
                 Route::post('upload_image', [DoctorController::class, 'uploadImage']);
