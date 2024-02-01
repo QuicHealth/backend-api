@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -81,5 +82,21 @@ class User extends Authenticatable implements JWTSubject
     {
         // Return email address only...
         return $this->email;
+    }
+
+    public function UserOtp()
+    {
+        return $this->hasMany(UserOtp::class);
+    }
+
+    /**
+     * Send a password reset notification to the user.
+     *
+     * @param  string  $token
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        
+        $this->notify(new ResetPasswordNotification($token, $this->fullname));
     }
 }

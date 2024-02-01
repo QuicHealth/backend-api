@@ -44,6 +44,8 @@ Route::prefix('v1')->group(function () {
             Route::post('register', [AuthController::class, 'register']);
             Route::post('authenicateWithGoogle', [AuthController::class, 'authenicateWithGoogle']);
             Route::post('login', [AuthController::class, 'login']);
+            Route::get('/forgot-password', [AuthController::class, 'forget_password']);
+            Route::post('/reset-password/{token}', [AuthController::class, 'reset_password']);
 
             Route::middleware('auth:api')->group(function () {
 

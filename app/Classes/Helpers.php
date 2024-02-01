@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use Illuminate\Support\Str;
 use App\Models\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -89,5 +90,42 @@ class Helpers
         $appointmentCreatedTime = Carbon::parse($created_at);
 
         $currentTime = Carbon::now();
+    }
+
+    public static function createOtp($length)
+    {
+        $digits = '';
+        $numbers = range(0, 9);
+        shuffle($numbers);
+        for ($i = 0; $i < $length; $i++) {
+            $digits;
+            $digits .= $numbers[$i];
+        }
+        return $digits;
+    }
+
+    public static function CurrencyFormatter($number)
+    {
+        $abbrevs = array(12 => "T", 9 => "B", 6 => "M", 3 => "K", 0 => "");
+        foreach ($abbrevs as $exponent => $abbrev) {
+            if ($number >= pow(10, $exponent)) {
+                $display_num = $number / pow(10, $exponent);
+                $decimals = ($exponent >= 3 && round($display_num) < 100) ? 1 : 0;
+                return  env('CURRENCY_NAIRA') . number_format($display_num, $decimals) . $abbrev;
+            }
+        }
+    }
+
+    public static function filter_user_identity($identity)
+    {
+        return filter_var($identity, FILTER_VALIDATE_EMAIL) ? 'email' : 'phone';
+    }
+
+    public static function formatPhoneNumber($phoneNumber)
+    {
+        if (Str::startsWith($phoneNumber, '0')) {
+            return Str::replaceFirst('0', '234', $phoneNumber);
+        }
+        return $phoneNumber;
     }
 }

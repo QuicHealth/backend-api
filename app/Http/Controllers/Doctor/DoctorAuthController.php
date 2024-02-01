@@ -39,6 +39,7 @@ class DoctorAuthController extends Controller
             'message' => 'Check your email to reset your password',
             'token' => $token
         ]);
+        
     }
 
     public function reset_password(Request $request)

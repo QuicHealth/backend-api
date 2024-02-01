@@ -11,6 +11,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -73,6 +74,10 @@ class Handler extends ExceptionHandler
                 ],
                 404
             );
+        }
+
+        if ($e instanceof TransportException) {
+            return response()->json(['error' => 'Sorry, We could not sent the email'], 501);
         }
         if ($e instanceof MethodNotAllowedHttpException) {
 

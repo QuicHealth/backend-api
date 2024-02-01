@@ -15,16 +15,16 @@ class CreateHealthProfilesTable extends Migration
     {
         Schema::create('health_profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('blood_group');
-            $table->string('genotype');
-            $table->string('martial_status');
-            $table->text('medication');
-            $table->text('family_medical_history');
-            $table->text('health_condition');
-            $table->text('peculiar_cases');
-            $table->text('allergies');
-            $table->text('Occupation');
-            $table->text('past_medical_history');
+            $table->string('blood_group')->nullable();
+            $table->string('genotype')->nullable();
+            $table->string('martial_status')->nullable();
+            $table->text('medication')->nullable();
+            $table->text('family_medical_history')->nullable();
+            $table->text('health_condition')->nullable();
+            $table->text('peculiar_cases')->nullable();
+            $table->text('allergies')->nullable();
+            $table->text('Occupation')->nullable();
+            $table->text('past_medical_history')->nullable();
             $table->timestamps();
         });
     }

@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Patient;
 
 use App\Models\User;
 use Illuminate\Support\Str;
+use App\Services\OtpService;
 use Illuminate\Http\Request;
 use App\Models\HealthProfile;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\PatientResource;
 use App\Http\Controllers\helpController;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use Symfony\Component\HttpFoundation\Response as RES;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -45,6 +47,9 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
+        $user->gender = $request->gender;
+        $user->phone = $request->phone;
+        $user->dob = $request->dob;
         $user->password = bcrypt($request->password);
 
 
@@ -173,38 +178,48 @@ class AuthController extends Controller
 
     public function forget_password(Request $request)
     {
-        $this->validate($request, [
-            'email' => 'required',
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
         ]);
 
-        $user = User::where('email', $request->input('email'))->first();
-
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'msg' => "Account not found"
-            ]);
+        if ($validator->fails()) {
+            $status = false;
+            $message = 'error';
+            $data = $validator->errors()->toArray();
+            $code = RES::HTTP_BAD_REQUEST;
+            return helpController::getResponse($status, $code, $message,  $data);
         }
 
-        $user->remember_token = mt_rand(99999, 99999999) . Str::random(12) . mt_rand(99999, 99999999) . Str::random(12);
-        $user->save();
+        // check if user exist
+        // $user = User::whereEmail($request->input('email'))->first();
 
-        $link = env('APP_FRONTEND') . "/reset-password/" . $user->remember_token;
+        // if (!$user) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'msg' => "Account not found"
+        //     ]);
+        // }
 
-        $data = [
-            'email' => $request->email,
-            'name' => 'Reset Password',
-            'view' => 'mail.mail',
-            'subject' => 'Reset Password',
-            'content' => '<p>Click on the below link to reset your password <p><a href="' . $link . '">' . $link . '</a></p></p>'
-        ];
+        $response = Password::sendResetLink(
+            $request->only('email')
+        );
 
-        // MailSendingJob::dispatch($data);
 
-        return response()->json([
-            'status' => true,
-            'msg' => "Reset mail has been sent"
-        ]);
+        switch ($response) {
+            case Password::RESET_LINK_SENT:
+                return trans($response);
+
+            default:
+                throw ValidationException::withMessages(['email' => trans($response)]);
+        }
+        // Send the otp
+        // $otp = new OtpService($user, "email", "Forget Password");
+        // return $otp->send();
+
+        // return response()->json([
+        //     'status' => true,
+        //     'msg' => "OTP has been sent"
+        // ]);
     }
 
     public function verify_password(Request $request)
@@ -230,27 +245,80 @@ class AuthController extends Controller
         return response()->json(['status' => true, 'msg' => "correct token, redirect to reset password page"]);
     }
 
-    public function reset_password(Request $request)
+    public function send_email_verification(Request $request)
     {
-        $this->validate($request, [
-            'password' => 'required|confirmed',
-            'token' => 'required'
+        //
+    }
+
+    public function verify_email(Request $request)
+    {
+    }
+
+
+    public function send_sms_verification(Request $request)
+    {
+        //
+    }
+
+    public function verify_phone(Request $request)
+    {
+    }
+
+    public function reset_password(Request $request, $token)
+    {
+        // $this->validate($request, [
+        //     'password' => 'required|confirmed',
+        //     'token' => 'required'
+        // ]);
+
+        // $user = User::where('remember_token', $request->input('token'))->first();
+
+        // if (!$user) {
+        //     return response()->json([
+        //         'status' => false,
+        //         'msg' => "Account not found"
+        //     ]);
+        // }
+
+        // $user->password = bcrypt($request->input('password'));
+        // $user->remember_token = mt_rand(99999, 99999999) . Str::random(12) . mt_rand(99999, 99999999) . Str::random(12);
+        // $user->save();
+
+        // return response()->json(['status' => true, 'msg' => "Password reset was successful"]);
+
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed',
         ]);
 
-        $user = User::where('remember_token', $request->input('token'))->first();
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+            'token' => $token,
+            'password_confirmation' => $request->password_confirmation
 
-        if (!$user) {
-            return response()->json([
-                'status' => false,
-                'msg' => "Account not found"
-            ]);
+        ];
+
+        $response = Password::reset(
+            $credentials,
+            function (User $user, string $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password)
+                ])->setRememberToken(Str::random(60));
+
+                $user->save();
+
+                // event(new PasswordReset($user));
+            }
+        );
+
+        switch ($response) {
+            case Password::PASSWORD_RESET:
+                return trans($response);
+
+            default:
+                throw ValidationException::withMessages(['token' => trans(Password::INVALID_TOKEN)]);
         }
-
-        $user->password = bcrypt($request->input('password'));
-        $user->remember_token = mt_rand(99999, 99999999) . Str::random(12) . mt_rand(99999, 99999999) . Str::random(12);
-        $user->save();
-
-        return response()->json(['status' => true, 'msg' => "Password reset was successful"]);
     }
 
     protected function getAuthToken($credentials)
