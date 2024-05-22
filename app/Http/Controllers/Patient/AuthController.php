@@ -190,20 +190,9 @@ class AuthController extends Controller
             return helpController::getResponse($status, $code, $message,  $data);
         }
 
-        // check if user exist
-        // $user = User::whereEmail($request->input('email'))->first();
-
-        // if (!$user) {
-        //     return response()->json([
-        //         'status' => false,
-        //         'msg' => "Account not found"
-        //     ]);
-        // }
-
         $response = Password::sendResetLink(
             $request->only('email')
         );
-
 
         switch ($response) {
             case Password::RESET_LINK_SENT:
@@ -212,14 +201,6 @@ class AuthController extends Controller
             default:
                 throw ValidationException::withMessages(['email' => trans($response)]);
         }
-        // Send the otp
-        // $otp = new OtpService($user, "email", "Forget Password");
-        // return $otp->send();
-
-        // return response()->json([
-        //     'status' => true,
-        //     'msg' => "OTP has been sent"
-        // ]);
     }
 
     public function verify_password(Request $request)

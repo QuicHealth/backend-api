@@ -2,29 +2,45 @@
 
 namespace App\Services;
 
+use App\Classes\Helpers;
+use Illuminate\Support\Facades\Http;
+
 class SmsService
 {
     private $api_key;
 
     private $termii_data;
 
+    private $Base_URL;
+
     public function __construct($data)
     {
         $this->api_key = config("termii.api_key");
 
+        $this->Base_URL = config('termii.base_URL');
+
         $data = [
             'api_key' => $this->api_key,
             "type" => "plain",
-            "from" => "N-Alert",
-            "channel" => "dnd"
+            "from" => "Quichealth",
+            "channel" => "generic"
         ];
 
         $this->termii_data = json_encode($data);
     }
 
-    public function makeRequest($method)
+    private function base($url): string
     {
-        
+        return  $this->Base_URL . '/' . $url;
+    }
+
+    private function makeRequest($method, $url, $data = [])
+    {
+        if ($method === 'POST') {
+            $request = Http::post($this->base($url), $data);
+            // $status = $request->status();
+            return $request;
+        }
     }
 
     public function sendForgetPasswordSms($phone, $code)
@@ -32,10 +48,16 @@ class SmsService
         return true;
     }
 
-    public function sendOtp($phone, $code)
+    public function sendOtp($phone, $sms)
     {
-        $this->termii_data['to'] = $phone;
-        $this->termii_data['sms'] = $code;
+        $this->termii_data['to'] = Helpers::formatPhoneNumber($phone);
+        $this->termii_data['sms'] = $sms;
+
+        $data = json_encode($this->termii_data);
+
+        $request = $this->makeRequest('POST', 'sms/send', $data);
+
+        return $request;
     }
 
     public function accountVerificationSmsService($phone, $otp)
